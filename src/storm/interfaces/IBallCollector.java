@@ -1,6 +1,6 @@
 package storm.interfaces;
 
-public interface IBallCollecter {
+public interface IBallCollector {
     
     public void startCollecting();
     public void stopCollecting();
