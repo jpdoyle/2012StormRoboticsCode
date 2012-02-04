@@ -2,7 +2,7 @@ package storm.interfaces;
 
 public interface IDriveTrain {
     
-    public void addToQueue(int type, double leftSpeed, double rightSpeed, double distance);
+    public void addToQueue(int type, double speed, double distance);
     public void resetQueue();
     public void executeQueue();
     public boolean isQueueFinished();
