@@ -1,24 +1,132 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package storm.logic;
 
-import storm.interfaces.IRobotLogic;
+import edu.wpi.first.wpilibj.Joystick;
+import storm.RobotState;
+import storm.interfaces.*;
 
-/**
- *
- * @author Developer
- */
 public class Teleop implements IRobotLogic {
+    
+    // Modules
+    IDriveTrain driveTrain;
+    ITargetTracker targetTracker;
+    IShooter shooter;
+    IBallCollector kanayerBelt;
+    Joystick driveJoystick;
+    Joystick shootJoystick;
+    
+    // Allowed booleans
+    boolean driveAllowed;
+    
+    boolean isAimed;
+    
+    //Button booleans
+    boolean[] buttonPressed;
 
     public void doInit() {
+        driveJoystick = RobotState.joystickDrive;
+        shootJoystick = RobotState.joystickShoot;
+        
+        driveAllowed = true;
+        
+        isAimed = false;
+        
+        buttonPressed = new boolean[RobotState.NUM_BUTTONS];
+        for (int i = 0; i < buttonPressed.length; i++) {
+            buttonPressed[i] = false;
+        }
     }
 
     public void doContinuous() {
+        
+        isAimed = targetTracker.doAim();
+        
+        shooter.doShoot();
+        
+        kanayerBelt.run();
+        
     }
 
     public void doPeriodic() {
+        
+        // Aim robot
+        if (buttonPressed(RobotState.JOYSTICK_BUTTON_AUTO_AIM)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_AUTO_AIM, true);
+            targetTracker.startLocking();
+            driveAllowed = false;
+        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_AUTO_AIM)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_AUTO_AIM, false);
+            targetTracker.stopLocking();
+            driveAllowed = true;
+        }
+        
+        // Shoot shooter
+        if (buttonPressed(RobotState.JOYSTICK_BUTTON_SHOOT)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_SHOOT, true);
+            if (isAimed)
+                shooter.startShoot(targetTracker.getDistance());
+        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_SHOOT)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_SHOOT, false);
+        }
+        
+        // Manually override collector - in
+        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN, true);
+            kanayerBelt.startCollecting(IBallCollector.MOTOR_SPEED_IN);
+        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN, false);
+        }
+        
+        // Manually override collector - out
+        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT, true);
+            kanayerBelt.startCollecting(IBallCollector.MOTOR_SPEED_OUT);
+        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT, false);
+        }
+        
+        // Manually override collector - stop
+        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP, true);
+            kanayerBelt.stopCollecting();
+        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP, false);
+        }
+        
+        // Manually override collector - return control
+        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL, true);
+            kanayerBelt.returnControl();
+        } else if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL)) {
+            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL, false);
+        }
+        
+        // Drive if robot is not aiming
+        if (driveAllowed) {
+            double leftYValue = driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_LEFT);
+            double rightYValue = driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_RIGHT);
+            driveTrain.drive(leftYValue, rightYValue);
+        }
+        
+    }
+    
+    // Button pressed once
+    private boolean buttonPressed(int button) {
+        return shootJoystick.getRawButton(button) && !getButtonState(button);
+    }
+    
+    // Button released
+    private boolean buttonReleased(int button) {
+        return !shootJoystick.getRawButton(button) && getButtonState(button);
+    }
+    
+    // Get button state from array
+    private boolean getButtonState(int button) {
+        return buttonPressed[button-1];
+    }
+    
+    // Set button state in array
+    private void setButtonState(int button, boolean state) {
+        buttonPressed[button-1] = state;
     }
     
 }

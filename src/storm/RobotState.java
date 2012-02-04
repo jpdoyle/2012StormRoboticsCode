@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 public class RobotState {
     
+    /*
     private static RobotState instance;
     
     public static RobotState getInstance() {
@@ -12,6 +13,7 @@ public class RobotState {
 	    instance = new RobotState();
 	return instance;
     }
+    */
     
     private RobotState() {}
     
@@ -30,6 +32,19 @@ public class RobotState {
     // Joysticks
     public static final int PORT_JOYSTICK_DRIVE = 1;
     public static final int PORT_JOYSTICK_SHOOT = 2;
+    
+    // Joystick Axiseses
+    public static final int JOYSTICK_AXIS_DRIVE_LEFT  = 1;
+    public static final int JOYSTICK_AXIS_DRIVE_RIGHT = 2;
+    
+    // Joystick Buttons
+    public static final int NUM_BUTTONS                              = 10;
+    public static final int JOYSTICK_BUTTON_AUTO_AIM                 = 1;
+    public static final int JOYSTICK_BUTTON_SHOOT                    = 2;
+    public static final int JOYSTICK_BUTTON_COLLECTOR_START_IN       = 3;
+    public static final int JOYSTICK_BUTTON_COLLECTOR_START_OUT      = 4;
+    public static final int JOYSTICK_BUTTON_COLLECTOR_STOP           = 5;
+    public static final int JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL = 6;
     
     // Sensors
     public static final int PORT_IR_BALL_IN = 1;

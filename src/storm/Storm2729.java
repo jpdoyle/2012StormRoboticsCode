@@ -10,6 +10,7 @@ package storm;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import storm.interfaces.IRobotLogic;
+import storm.logic.Teleop;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,16 +24,12 @@ public class Storm2729 extends IterativeRobot {
     IRobotLogic hybrid;
     IRobotLogic teleop;
     
-    RobotState robotState;
-    
     //***** This is called when the robot is first turned on *****//
     
     public void robotInit() {
 	
-	robotState = RobotState.getInstance();
-	
 	//autonomous = new THING
-	//teleop = new THING
+	teleop = new Teleop();
 	
 	
 

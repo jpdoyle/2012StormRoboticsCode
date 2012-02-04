@@ -30,7 +30,7 @@ public class BallCollector implements IBallCollector {
         ready = new DigitalInput(IRready);       
     }
  
-    public void startCollecting(int direction) {
+    public void startCollecting(double direction) {
         bottomMotor1.set(direction);
         bottomMotor2.set(direction);
         manual = true;

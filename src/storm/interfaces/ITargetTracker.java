@@ -7,4 +7,6 @@ public interface ITargetTracker {
     
     public boolean doAim();
     
+    public double getDistance();
+    
 }

@@ -29,19 +29,21 @@ public class Shooter implements IShooter {
         transferMotor = new Victor(transferMotorChannel);
         transfer = new DigitalInput(IRtransfer);
         ready = new DigitalInput(IRready);
-        int state = 0;
     }
     
-    public void startShoot(double velocity) {
+    public void startShoot(double distance) {
         //find out speed motor needs, move ball until ready to shoot,and start shooting process
-        motorSpeed = getMotorSpeed(velocity);
+        motorSpeed = getMotorSpeed(distance);
         if (!ready.get() == false){
             transferMotor.set(1);
         }
+        state = 0;
         shooting = true;
     }
 
-    public void doShoot(int state) {
+    public void doShoot() {
+        if (!shooting) return;
+        
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
         shooterMotor.set(motorSpeed);
         if (shooterMotor.get() == motorSpeed){
@@ -56,10 +58,6 @@ public class Shooter implements IShooter {
             shooting = false;
             state = 0;
         }
-    }
-
-    public boolean isShooting() {
-        return shooting;
     }
     
     private double getMotorSpeed(double velocity) { 
