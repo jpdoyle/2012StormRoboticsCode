@@ -3,6 +3,6 @@ package storm.interfaces;
 public interface IMotorEncoder {
     
     public void resetDistance();
-    public double getDistance();
+    public double getDistance(int oneIsLeftTwoIsRight);
     
 }

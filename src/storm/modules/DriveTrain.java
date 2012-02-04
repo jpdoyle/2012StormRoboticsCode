@@ -20,8 +20,8 @@ public class DriveTrain implements IDriveTrain {
     RobotDrive lowDrive;
     boolean highgear = true;
     Queue queue = new Queue();
-    Encoder leftEncoder = new Encoder(1, 2);
-    Encoder rightEncoder = new Encoder(3, 4);
+    public static Encoder leftEncoder = new Encoder(1, 2);
+    public static Encoder rightEncoder = new Encoder(3, 4);
 
     public DriveTrain (int motorChannelL1,int motorChannelL2,int motorChannelR1,int motorChannelR2 ){
         leftMotor1 = new Victor(motorChannelL1);
