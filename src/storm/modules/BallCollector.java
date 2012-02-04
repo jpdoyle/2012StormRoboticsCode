@@ -17,38 +17,29 @@ import storm.interfaces.IBallCollector;
  */
 public class BallCollector implements IBallCollector {
     
-    SpeedController motor;
-    DigitalInput in, out, ready;
+    SpeedController bottomMotor1, bottomMotor2;
+    DigitalInput in, transfer, ready;
     int ballCount;
-    
- //need to ask about another IR sensor for whether the ball actually goes in   
-    
-    public BallCollector(int motorChannel, int IR1, int IR2, int IR3) {
-        motor = new Victor(motorChannel);
-        in = new DigitalInput(IR1);
-        out = new DigitalInput(IR2);
-        ready = new DigitalInput(IR3);
-        
+    boolean manual;
+          
+    public BallCollector(int bottomMotorChannel1,int bottomMotorChannel2, int IRin, int IRtransfer, int IRready) {
+        bottomMotor1 = new Victor(bottomMotorChannel1);
+        bottomMotor2 = new Victor(bottomMotorChannel2);      
+        in = new DigitalInput(IRin);
+        transfer = new DigitalInput(IRtransfer);
+        ready = new DigitalInput(IRready);       
     }
-
-    public void startCollecting() {
-        motor.set(1.0);
+ 
+    public void startCollecting(int direction) {
+        bottomMotor1.set(direction);
+        bottomMotor2.set(direction);
+        manual = true;
     }
 
     public void stopCollecting() {
-        motor.set(0);
-    }
-
-    public void addBall() {
-        if (in.get() == true){
-            ballCount ++ ;
-        }
-    }
-
-    public void removeBall() {
-        if (out.get() == true){
-            ballCount -- ;
-        }
+        bottomMotor1.set(0);
+        bottomMotor2.set(0);
+        manual = true;
     }
 
     public int getNumBalls() {
@@ -56,6 +47,23 @@ public class BallCollector implements IBallCollector {
     }
 
     public void run() {
+        if (!in.get() == true) {
+            ballCount ++;
+        }
+        if (!transfer.get() == true) {
+            ballCount --;
+        }
+        if (manual) return;
+        if (ballCount == 3){
+            stopCollecting();
+        }
+        if (ballCount >= 3 && !in.get() == true){
+            bottomMotor1.set(-1);
+            bottomMotor2.set(-1);
+        }
     }
-    
+
+    public void returnControl() {
+        manual = false;
+    }   
 }
