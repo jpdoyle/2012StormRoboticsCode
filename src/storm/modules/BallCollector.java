@@ -54,5 +54,8 @@ public class BallCollector implements IBallCollector {
     public int getNumBalls() {
         return ballCount;
     }
+
+    public void run() {
+    }
     
 }

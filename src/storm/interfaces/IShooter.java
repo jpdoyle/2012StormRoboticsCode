@@ -2,6 +2,8 @@ package storm.interfaces;
 
 public interface IShooter {
     
-    public void Shoot(double velocity);
+    public void startShoot(double velocity);
+    public void doShoot();
+    public boolean isShooting();
     
 }

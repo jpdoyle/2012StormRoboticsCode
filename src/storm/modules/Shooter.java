@@ -33,6 +33,16 @@ public class Shooter implements IShooter {
         motor.set(velocity);
                
     }
+
+    public void startShoot(double velocity) {
+    }
+
+    public void doShoot() {
+    }
+
+    public boolean isShooting() {
+        return false;
+    }
     
     
     

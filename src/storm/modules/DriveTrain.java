@@ -27,5 +27,34 @@ public class DriveTrain implements IDriveTrain {
         rightMotor1.set(rightSpeed);
         rightMotor2.set(rightSpeed);
     }
+
+    public void addToQueue(int type, double leftSpeed, double rightSpeed, double distance) {
+    }
+
+    public void resetQueue() {
+    }
+
+    public void executeQueue() {
+    }
+
+    public boolean isQueueFinished() {
+        return false;
+    }
+
+    public void resetDistance() {
+    }
+
+    public double getDistance() {
+        return -1;
+    }
+
+    public void switchGear() {
+    }
+
+    public void setHighGear() {
+    }
+
+    public void setLowGear() {
+    }
     
 }
