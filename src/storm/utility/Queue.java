@@ -25,10 +25,10 @@ public class Queue {
 
     }
 
-    public void Start() {
+    public void start() {
         qRunning = true;
     }
-    public void Stop() {
+    public void stop() {
         qRunning = false;
     }
 

@@ -21,7 +21,7 @@ public class DriveTrain implements IDriveTrain {
     boolean highgear = true;
     Queue queue = new Queue();
     Encoder leftEncoder = new Encoder(1, 2);
-    //Encoder rightEncoder = new Encoder(3, 2);
+    Encoder rightEncoder = new Encoder(3, 4);
 
     public DriveTrain (int motorChannelL1,int motorChannelL2,int motorChannelR1,int motorChannelR2 ){
         leftMotor1 = new Victor(motorChannelL1);
@@ -66,18 +66,26 @@ public class DriveTrain implements IDriveTrain {
             case 1:
                 //Forward/Backward
                 drive(queue.getSpeed(), queue.getSpeed());
+                if (leftEncoder.getDistance() >= queue.getDistance()) queue.next();
                 break;
             case 2:
                 //Left/Right
                 drive(queue.getSpeed(), -queue.getSpeed());
+                if (queue.getSpeed() > 0) {
+                    if (leftEncoder.getDistance() >= queue.getDistance()) queue.next();
+                } else {
+                    if (rightEncoder.getDistance() >= queue.getDistance()) queue.next();
+                }
                 break;
             case 3:
                 //Hook Left
                 drive(0, queue.getSpeed());
+                if (rightEncoder.getDistance() >= queue.getDistance()) queue.next();
                 break;
             case 4:
                 //Hook Right
                 drive(queue.getSpeed(), 0);
+                if (leftEncoder.getDistance() >= queue.getDistance()) queue.next();
                 break;
             default:
                 System.out.println("Error: Invalid Type");
