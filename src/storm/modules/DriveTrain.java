@@ -24,6 +24,10 @@ public class DriveTrain implements IDriveTrain {
     public static Encoder leftEncoder = new Encoder(1, 2);
     public static Encoder rightEncoder = new Encoder(3, 4);
 
+    double leftDriveSpeed = 0.0;
+    double rightDriveSpeed = 0.0;
+    double deceleration = 0.1;
+
     Print printer = new Print();
     
     public DriveTrain (int motorChannelL, int motorChannelR){
@@ -37,6 +41,18 @@ public class DriveTrain implements IDriveTrain {
     
     public void drive(double leftSpeed, double rightSpeed) {
 
+        if (leftSpeed == 0) {
+            if (leftDriveSpeed > deceleration) leftDriveSpeed -= deceleration;
+            else if(leftDriveSpeed < -deceleration) leftDriveSpeed -= deceleration;
+            else leftDriveSpeed = 0;
+        } else leftDriveSpeed = leftSpeed;
+
+        if (rightSpeed == 0) {
+            if (rightDriveSpeed > deceleration) rightDriveSpeed -= deceleration;
+            else if(rightDriveSpeed < -deceleration) rightDriveSpeed -= deceleration;
+            else rightDriveSpeed = 0;
+        } else rightDriveSpeed = leftSpeed;
+
 	/*
 	printer.clearScreen();
 	
@@ -46,7 +62,7 @@ public class DriveTrain implements IDriveTrain {
 	printer.setLine(1, "Right: " + rightMotor.get());
 	*/
 	
-        drive.tankDrive(leftSpeed, rightSpeed);
+        drive.tankDrive(leftDriveSpeed, rightDriveSpeed);
 
         /*
         DEPRECATED
