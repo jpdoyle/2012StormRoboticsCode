@@ -4,6 +4,7 @@
  */
 package storm.modules;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.util.AllocationException;
 import storm.interfaces.IDriveTrain;
 import storm.utility.Queue;
 
@@ -25,7 +26,7 @@ public class DriveTrain implements IDriveTrain {
     public DriveTrain (int motorChannelL, int motorChannelR){
         leftMotor = new Victor(motorChannelL);
         rightMotor = new Victor(motorChannelR);
-        drive = new RobotDrive(motorChannelL, motorChannelR);
+	drive = new RobotDrive(leftMotor, rightMotor);
 
     }
     

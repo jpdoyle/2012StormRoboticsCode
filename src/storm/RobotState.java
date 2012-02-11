@@ -20,22 +20,21 @@ public class RobotState {
     //***** GLOBAL CHANNEL CONSTANTS *****//
     
     // Motors
-    public static final int PORT_MOTOR_DRIVE_LEFT_LOW   = 1;
-    public static final int PORT_MOTOR_DRIVE_LEFT_HIGH  = 2;
-    public static final int PORT_MOTOR_DRIVE_RIGHT_LOW  = 3;
-    public static final int PORT_MOTOR_DRIVE_RIGHT_HIGH = 4;
-    public static final int PORT_MOTOR_SHOOTER_WHEEL    = 5;
-    public static final int PORT_MOTOR_3BA              = 6;
-    public static final int PORT_MOTOR_KANAYERBELT      = 7;
-    
+    public static final int PORT_MOTOR_DRIVE_LEFT         = 8;
+    public static final int PORT_MOTOR_DRIVE_RIGHT        = 3;
+    public static final int PORT_MOTOR_SHOOTER_WHEEL      = 5;
+    public static final int PORT_MOTOR_3BA                = 6;
+    public static final int PORT_MOTOR_KANAYERBELT_FEEDER = 7;
+    public static final int PORT_MOTOR_KANAYERBELT_BOTTOM = 1;
+    public static final int PORT_MOTOR_KANAYERBELT_TOP    = 9;
     
     // Joysticks
     public static final int PORT_JOYSTICK_DRIVE = 1;
     public static final int PORT_JOYSTICK_SHOOT = 2;
     
     // Joystick Axiseses
-    public static final int JOYSTICK_AXIS_DRIVE_LEFT  = 1;
-    public static final int JOYSTICK_AXIS_DRIVE_RIGHT = 2;
+    public static final int JOYSTICK_AXIS_DRIVE_LEFT  = 2;
+    public static final int JOYSTICK_AXIS_DRIVE_RIGHT = 4;
     
     // Joystick Buttons
     public static final int NUM_BUTTONS                              = 10;
@@ -47,8 +46,8 @@ public class RobotState {
     public static final int JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL = 6;
     
     // Sensors
-    public static final int PORT_IR_BALL_IN = 1;
-    public static final int PORT_IR_BALL_OUT = 2;
+    public static final int PORT_IR_BALL_IN_1 = 1;
+    public static final int PORT_IR_BALL_IN_2 = 2;
     public static final int PORT_IR_BALL_READY = 3;
     
     
