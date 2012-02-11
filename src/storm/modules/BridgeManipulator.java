@@ -9,18 +9,17 @@ import storm.interfaces.IBridgeManipulator;
 
 public class BridgeManipulator implements IBridgeManipulator {
 
-    private static final int BRIDGEMANIPULATORMOTORCHANNEL = 0;
+    private static final int BRIDGEMANIPULATORMOTORCHANNEL = 1;
     SpeedController banebot;
-    public static Encoder encoder = new Encoder(1, 2);
 
     public void raise() {
       banebot = new Victor(BRIDGEMANIPULATORMOTORCHANNEL);
-
+      banebot.set(-0.5);
     }
 
     public void lower() {
       banebot = new Victor(BRIDGEMANIPULATORMOTORCHANNEL);
-
+      banebot.set(0.5);
     }
 
 }

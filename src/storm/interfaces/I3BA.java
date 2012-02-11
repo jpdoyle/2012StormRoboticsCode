@@ -4,5 +4,6 @@ public interface I3BA {
 
     public void start();
     public void stop();
+    public void retract();
 
 }
