@@ -38,7 +38,7 @@ public class Teleop implements IRobotLogic {
 
     public void doContinuous() {
         
-        isAimed = targetTracker.doAim();
+        isAimed = targetTracker.isAimed();
         
         shooter.doShoot();
         
