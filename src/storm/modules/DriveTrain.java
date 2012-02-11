@@ -6,6 +6,7 @@ package storm.modules;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.util.AllocationException;
 import storm.interfaces.IDriveTrain;
+import storm.utility.Print;
 import storm.utility.Queue;
 
 /**
@@ -23,15 +24,28 @@ public class DriveTrain implements IDriveTrain {
     public static Encoder leftEncoder = new Encoder(1, 2);
     public static Encoder rightEncoder = new Encoder(3, 4);
 
+    Print printer = new Print();
+    
     public DriveTrain (int motorChannelL, int motorChannelR){
         leftMotor = new Victor(motorChannelL);
         rightMotor = new Victor(motorChannelR);
 	drive = new RobotDrive(leftMotor, rightMotor);
+	drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+	drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
 
     }
     
     public void drive(double leftSpeed, double rightSpeed) {
 
+	/*
+	printer.clearScreen();
+	
+	leftMotor.set(leftSpeed);
+	printer.setLine(0, "Left:  " + leftMotor.get());
+	rightMotor.set(rightSpeed);
+	printer.setLine(1, "Right: " + rightMotor.get());
+	*/
+	
         drive.tankDrive(leftSpeed, rightSpeed);
 
         /*

@@ -46,6 +46,7 @@ public class Storm2729 extends IterativeRobot {
     
     // Called at the beginning of autonomous
     public void autonomousInit() {
+	watchdog.feed();
 	hybrid.doInit();
     }
 
@@ -65,6 +66,7 @@ public class Storm2729 extends IterativeRobot {
 
     // Called at the beginning of teleop
     public void teleopInit() {
+	watchdog.feed();
 	teleop.doInit();
     }
 

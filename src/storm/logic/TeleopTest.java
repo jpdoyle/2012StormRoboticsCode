@@ -1,31 +1,26 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package storm.logic;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
 import storm.RobotState;
 import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
 import storm.modules.DriveTrain;
 import storm.utility.Print;
 
-/**
- *
- * @author Storm
- */
 public class TeleopTest implements IRobotLogic {
     
-    IDriveTrain driveTrain;
+    IDriveTrain driveTrain = new DriveTrain(RobotState.PORT_MOTOR_DRIVE_LEFT, RobotState.PORT_MOTOR_DRIVE_RIGHT);
     
     Joystick driveJoystick;
     
     Print printer;
+    
+    DigitalInput di = new DigitalInput(5);
 
     public void doInit() {
-        
-        driveTrain = new DriveTrain(RobotState.PORT_MOTOR_DRIVE_LEFT, RobotState.PORT_MOTOR_DRIVE_RIGHT);
         
         driveJoystick = RobotState.joystickDrive;
         
@@ -37,8 +32,9 @@ public class TeleopTest implements IRobotLogic {
     }
 
     public void doPeriodic() {
-        driveTrain.drive(driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_LEFT),
-			 driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_RIGHT));
+        driveTrain.drive(-driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_LEFT),
+			 -driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_RIGHT));
+	printer.setLine(3, "DigitalInput: " + !di.get());
     }
     
 }
