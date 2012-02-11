@@ -23,10 +23,12 @@ public class DriveTrain implements IDriveTrain {
     Queue queue = new Queue();
     public static Encoder leftEncoder = new Encoder(1, 2);
     public static Encoder rightEncoder = new Encoder(3, 4);
-
-    double leftDriveSpeed = 0.0;
-    double rightDriveSpeed = 0.0;
-    double deceleration = 0.1;
+    
+    private final double deceleration = 0.025;
+    private double lastLeftSpeed = 0.0;
+    private double lastRightSpeed = 0.0;
+    double L = 0.0;
+    double R = 0.0;
 
     Print printer = new Print();
     
@@ -40,8 +42,20 @@ public class DriveTrain implements IDriveTrain {
     }
     
     public void drive(double leftSpeed, double rightSpeed) {
-
-        if (leftSpeed == 0) {
+	
+	if (lastRightSpeed > 0 && rightSpeed < lastRightSpeed) {
+	    if (lastRightSpeed - rightSpeed < deceleration) R = rightSpeed;
+	    else R = lastRightSpeed - deceleration;
+	} else if (lastRightSpeed < 0 && rightSpeed > lastRightSpeed) {
+	    if (lastRightSpeed - rightSpeed > -deceleration) R = rightSpeed;
+	    else R = lastRightSpeed + deceleration;
+	} else R = rightSpeed;
+	
+	lastRightSpeed = R;
+	
+	//***** Old Deceleration Thingy *****\\
+	
+        /*if (leftSpeed == 0) {
             if (leftDriveSpeed > deceleration) leftDriveSpeed -= deceleration;
             else if(leftDriveSpeed < -deceleration) leftDriveSpeed -= deceleration;
             else leftDriveSpeed = 0;
@@ -51,26 +65,10 @@ public class DriveTrain implements IDriveTrain {
             if (rightDriveSpeed > deceleration) rightDriveSpeed -= deceleration;
             else if(rightDriveSpeed < -deceleration) rightDriveSpeed -= deceleration;
             else rightDriveSpeed = 0;
-        } else rightDriveSpeed = leftSpeed;
-
-	/*
-	printer.clearScreen();
+        } else rightDriveSpeed = leftSpeed;*/
 	
-	leftMotor.set(leftSpeed);
-	printer.setLine(0, "Left:  " + leftMotor.get());
-	rightMotor.set(rightSpeed);
-	printer.setLine(1, "Right: " + rightMotor.get());
-	*/
-	
-        drive.tankDrive(leftDriveSpeed, rightDriveSpeed);
+        drive.tankDrive(L, R);
 
-        /*
-        DEPRECATED
-        leftMotor1.set(leftSpeed);
-        leftMotor2.set(leftSpeed);
-        rightMotor1.set(rightSpeed);
-        rightMotor2.set(rightSpeed);
-        */
     }
 
     public void addToQueue(int type, double speed, double distance) {
