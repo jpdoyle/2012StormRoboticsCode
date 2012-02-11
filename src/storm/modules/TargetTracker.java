@@ -95,6 +95,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 		}
 	}
 	private void convexHull() {
+	    /*
 		BinaryImage oldImage = image_;
 		try {
 			image_ = oldImage.convexHull(true);
@@ -109,6 +110,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 				ex.printStackTrace();
 			}
 		}
+	    */
 	}
 	private void findParticles() {
 		//BinaryImage oldImage = image_;
