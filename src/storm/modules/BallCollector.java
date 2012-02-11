@@ -18,15 +18,15 @@ import storm.interfaces.IBallCollector;
 public class BallCollector implements IBallCollector {
     
     SpeedController bottomMotor1, bottomMotor2;
-    DigitalInput in, transfer, ready;
+    DigitalInput in1,in2, ready;
     int ballCount;
     boolean manual;
           
-    public BallCollector(int bottomMotorChannel1,int bottomMotorChannel2, int IRin, int IRtransfer, int IRready) {
+    public BallCollector(int bottomMotorChannel1,int bottomMotorChannel2, int IRin1, int IRin2, int IRready) {
         bottomMotor1 = new Victor(bottomMotorChannel1);
         bottomMotor2 = new Victor(bottomMotorChannel2);      
-        in = new DigitalInput(IRin);
-        transfer = new DigitalInput(IRtransfer);
+        in1 = new DigitalInput(IRin1);
+        in2 = new DigitalInput(IRin2);
         ready = new DigitalInput(IRready);       
     }
  
@@ -47,17 +47,20 @@ public class BallCollector implements IBallCollector {
     }
 
     public void run() {
-        if (!in.get() == true) {
+        if (!in1.get() == true) {
             ballCount ++;
         }
-        if (!transfer.get() == true) {
+        if (!in2.get() == true){
+            ballCount ++;
+        }
+        if (!ready.get() == true) {
             ballCount --;
         }
         if (manual) return;
         if (ballCount == 3){
             stopCollecting();
         }
-        if (ballCount >= 3 && !in.get() == true){
+        if (ballCount >= 3 && ((!in1.get() == true || !in2.get() == true))){
             bottomMotor1.set(-1);
             bottomMotor2.set(-1);
         }

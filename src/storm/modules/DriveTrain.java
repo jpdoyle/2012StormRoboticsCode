@@ -15,34 +15,23 @@ public class DriveTrain implements IDriveTrain {
 
     public static final int STOP_QUEUE = 0;
 
-    SpeedController leftMotor1, leftMotor2, rightMotor1, rightMotor2;
-    RobotDrive highDrive;
-    RobotDrive lowDrive;
+    SpeedController leftMotor, rightMotor;
+    RobotDrive drive;
     boolean highgear = true;
     Queue queue = new Queue();
     public static Encoder leftEncoder = new Encoder(1, 2);
     public static Encoder rightEncoder = new Encoder(3, 4);
 
-    public DriveTrain (int motorChannelL1,int motorChannelL2,int motorChannelR1,int motorChannelR2 ){
-        leftMotor1 = new Victor(motorChannelL1);
-        leftMotor2 = new Victor(motorChannelL2);
-        rightMotor1 = new Victor(motorChannelR1);
-        rightMotor2 = new Victor(motorChannelR2);
-        highDrive = new RobotDrive(motorChannelL1, motorChannelR1);
-        lowDrive = new RobotDrive(motorChannelL2, motorChannelR2);
+    public DriveTrain (int motorChannelL, int motorChannelR){
+        leftMotor = new Victor(motorChannelL);
+        rightMotor = new Victor(motorChannelR);
+        drive = new RobotDrive(motorChannelL, motorChannelR);
 
     }
     
     public void drive(double leftSpeed, double rightSpeed) {
 
-        if (highgear){
-            highDrive.tankDrive(leftSpeed, rightSpeed);
-            lowDrive.tankDrive(0.0, 0.0);
-        }else{
-            lowDrive.tankDrive(leftSpeed, rightSpeed);
-            highDrive.tankDrive(0.0, 0.0);
-        }
-
+        drive.tankDrive(leftSpeed, rightSpeed);
 
         /*
         DEPRECATED

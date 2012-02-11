@@ -18,16 +18,15 @@ import storm.interfaces.IShooter;
 public class Shooter implements IShooter {
 
     SpeedController shooterMotor, transferMotor;
-    DigitalInput transfer, ready;
+    DigitalInput ready;
     boolean shooting;
     double motorSpeed;
     int state;
        
-    public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRtransfer, int IRready) {
+    public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready) {
         
         shooterMotor = new Victor(shooterMotorChannel);
         transferMotor = new Victor(transferMotorChannel);
-        transfer = new DigitalInput(IRtransfer);
         ready = new DigitalInput(IRready);
     }
     
