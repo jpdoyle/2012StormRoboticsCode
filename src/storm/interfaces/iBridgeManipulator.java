@@ -1,6 +1,6 @@
 package storm.interfaces;
 
-public interface iBridgeManipulator {
+public interface IBridgeManipulator {
     
     public void lower();
     public void raise();

@@ -21,13 +21,18 @@ public class BallCollector implements IBallCollector {
     DigitalInput in1,in2, ready;
     int ballCount;
     boolean manual;
+    boolean tripped1, tripped2, readytripped;
           
     public BallCollector(int bottomMotorChannel1,int bottomMotorChannel2, int IRin1, int IRin2, int IRready) {
         bottomMotor1 = new Victor(bottomMotorChannel1);
         bottomMotor2 = new Victor(bottomMotorChannel2);      
         in1 = new DigitalInput(IRin1);
         in2 = new DigitalInput(IRin2);
-        ready = new DigitalInput(IRready);       
+        ready = new DigitalInput(IRready);
+        tripped1 = false;
+        tripped2 = false;
+        readytripped = false;
+        
     }
  
     public void startCollecting(double direction) {
@@ -47,14 +52,23 @@ public class BallCollector implements IBallCollector {
     }
 
     public void run() {
-        if (!in1.get() == true) {
+        if (!in1.get() == true && !tripped1) {
             ballCount ++;
+            tripped1 = true;
+        }else if(!in1.get() == false && tripped1){
+            tripped1 = false;
         }
-        if (!in2.get() == true){
+        if (!in2.get() == true && !tripped2){
             ballCount ++;
+            tripped2 = true;
+        }else if(!in2.get() == false && tripped2){
+            tripped2 = false;
         }
-        if (!ready.get() == true) {
+        if (!ready.get() == true && !readytripped) {
             ballCount --;
+            readytripped = true;
+        }else if(!ready.get() == false && readytripped){
+            readytripped = false;
         }
         if (manual) return;
         if (ballCount == 3){
