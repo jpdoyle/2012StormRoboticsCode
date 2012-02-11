@@ -1,8 +1,8 @@
 package storm.interfaces;
 
-public interface I3BA {
-    
-    public void lower();
-    public void raise();
-    
+public interface i3BA {
+
+    public void start();
+    public void stop();
+
 }
