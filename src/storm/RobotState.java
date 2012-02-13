@@ -63,6 +63,9 @@ public class RobotState {
     public static final int PORT_ENCODER_SHOOTER_SPEED        = 8;
     public static final int PORT_ENCODER_3BA                  = 1; // <-- ANALOG
     
+    // Global State
+    public static int BALL_CONTAINMENT_COUNT = 0;
+    
     
     //***** GLOBAL HARDWARE ****//
     
