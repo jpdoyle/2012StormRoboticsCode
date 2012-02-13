@@ -25,7 +25,7 @@ public class DriveTrain implements IDriveTrain {
     public static Encoder rightEncoder = new Encoder(3, 4);
     
     private final double deceleration = 0.025;
-    private final double acceleration = 0.01;
+    private final double acceleration = 0.045;
     private double lastLeftSpeed = 0.0;
     private double lastRightSpeed = 0.0;
     double driveLeft = 0.0;
@@ -45,19 +45,19 @@ public class DriveTrain implements IDriveTrain {
     public void drive(double leftSpeed, double rightSpeed) {
 	
 	// Left Deceleration
-	if (lastLeftSpeed > 0 && leftSpeed < lastLeftSpeed) {
+	if (leftSpeed == 0 && lastLeftSpeed > 0) {
 	    if (lastLeftSpeed - leftSpeed < deceleration) driveLeft = leftSpeed;
 	    else driveLeft = lastLeftSpeed - deceleration;
-	} else if (lastLeftSpeed < 0 && leftSpeed > lastLeftSpeed) {
+	} else if (leftSpeed == 0 && lastLeftSpeed < 0) {
 	    if (lastLeftSpeed - leftSpeed > -deceleration) driveLeft = leftSpeed;
 	    else driveLeft = lastLeftSpeed + deceleration;
 
         // Left Acceleration
-	} else if (lastLeftSpeed > 0 && leftSpeed > lastLeftSpeed) {
-            if (leftSpeed - lastLeftSpeed < acceleration) driveLeft = leftSpeed;
+	} else if (leftSpeed > lastLeftSpeed) {
+            if (Math.abs(leftSpeed - lastLeftSpeed) < acceleration) driveLeft = leftSpeed;
             else driveLeft = lastLeftSpeed + acceleration;
-        } else if (lastLeftSpeed < 0 && leftSpeed < lastLeftSpeed) {
-            if (leftSpeed - lastLeftSpeed > -acceleration) driveLeft = leftSpeed;
+        } else if (leftSpeed < lastLeftSpeed) {
+            if (Math.abs(leftSpeed - lastLeftSpeed) < acceleration) driveLeft = leftSpeed;
             else driveLeft = lastLeftSpeed - acceleration;
 
         // Left Normal
@@ -66,19 +66,19 @@ public class DriveTrain implements IDriveTrain {
 	lastLeftSpeed = driveLeft;
 	
 	// Right Deceleration
-	if (lastRightSpeed > 0 && rightSpeed < lastRightSpeed) {
+	if (rightSpeed == 0 && lastRightSpeed > 0) {
 	    if (lastRightSpeed - rightSpeed < deceleration) driveRight = rightSpeed;
 	    else driveRight = lastRightSpeed - deceleration;
-	} else if (lastRightSpeed < 0 && rightSpeed > lastRightSpeed) {
+	} else if (rightSpeed == 0 && lastRightSpeed < 0) {
 	    if (lastRightSpeed - rightSpeed > -deceleration) driveRight = rightSpeed;
 	    else driveRight = lastRightSpeed + deceleration;
 
         // Right Acceleration
-	} else if (lastRightSpeed > 0 && rightSpeed > lastRightSpeed) {
-            if (rightSpeed - lastRightSpeed < acceleration) driveRight = rightSpeed;
+	} else if (rightSpeed > lastRightSpeed) {
+            if (Math.abs(rightSpeed - lastRightSpeed) < acceleration) driveRight = rightSpeed;
             else driveRight = lastRightSpeed + acceleration;
-        } else if (lastRightSpeed < 0 && rightSpeed < lastRightSpeed) {
-            if (rightSpeed - lastRightSpeed > -acceleration) driveRight = rightSpeed;
+        } else if (rightSpeed < lastRightSpeed) {
+            if (Math.abs(rightSpeed - lastRightSpeed) < acceleration) driveRight = rightSpeed;
             else driveRight = lastRightSpeed - acceleration;
 
         // Right Normal
