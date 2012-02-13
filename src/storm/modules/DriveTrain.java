@@ -25,6 +25,7 @@ public class DriveTrain implements IDriveTrain {
     public static Encoder rightEncoder = new Encoder(3, 4);
     
     private final double deceleration = 0.025;
+    private final double acceleration = 0.01;
     private double lastLeftSpeed = 0.0;
     private double lastRightSpeed = 0.0;
     double driveLeft = 0.0;
@@ -50,7 +51,17 @@ public class DriveTrain implements IDriveTrain {
 	} else if (lastLeftSpeed < 0 && leftSpeed > lastLeftSpeed) {
 	    if (lastLeftSpeed - leftSpeed > -deceleration) driveLeft = leftSpeed;
 	    else driveLeft = lastLeftSpeed + deceleration;
-	} else driveLeft = leftSpeed;
+
+        // Left Acceleration
+	} else if (lastLeftSpeed > 0 && leftSpeed > lastLeftSpeed) {
+            if (leftSpeed - lastLeftSpeed < acceleration) driveLeft = leftSpeed;
+            else driveLeft = lastLeftSpeed + acceleration;
+        } else if (lastLeftSpeed < 0 && leftSpeed < lastLeftSpeed) {
+            if (leftSpeed - lastLeftSpeed > -acceleration) driveLeft = leftSpeed;
+            else driveLeft = lastLeftSpeed - acceleration;
+
+        // Left Normal
+        } else driveLeft = leftSpeed;
 	
 	lastLeftSpeed = driveLeft;
 	
@@ -61,23 +72,19 @@ public class DriveTrain implements IDriveTrain {
 	} else if (lastRightSpeed < 0 && rightSpeed > lastRightSpeed) {
 	    if (lastRightSpeed - rightSpeed > -deceleration) driveRight = rightSpeed;
 	    else driveRight = lastRightSpeed + deceleration;
-	} else driveRight = rightSpeed;
+
+        // Right Acceleration
+	} else if (lastRightSpeed > 0 && rightSpeed > lastRightSpeed) {
+            if (rightSpeed - lastRightSpeed < acceleration) driveRight = rightSpeed;
+            else driveRight = lastRightSpeed + acceleration;
+        } else if (lastRightSpeed < 0 && rightSpeed < lastRightSpeed) {
+            if (rightSpeed - lastRightSpeed > -acceleration) driveRight = rightSpeed;
+            else driveRight = lastRightSpeed - acceleration;
+
+        // Right Normal
+        } else driveRight = rightSpeed;
 	
 	lastRightSpeed = driveRight;
-	
-	//***** Old Deceleration Thingy *****\\
-	
-        /*if (leftSpeed == 0) {
-            if (leftDriveSpeed > deceleration) leftDriveSpeed -= deceleration;
-            else if(leftDriveSpeed < -deceleration) leftDriveSpeed -= deceleration;
-            else leftDriveSpeed = 0;
-        } else leftDriveSpeed = leftSpeed;
-
-        if (rightSpeed == 0) {
-            if (rightDriveSpeed > deceleration) rightDriveSpeed -= deceleration;
-            else if(rightDriveSpeed < -deceleration) rightDriveSpeed -= deceleration;
-            else rightDriveSpeed = 0;
-        } else rightDriveSpeed = leftSpeed;*/
 	
         drive.tankDrive(driveLeft, driveRight);
 
