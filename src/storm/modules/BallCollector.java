@@ -4,6 +4,7 @@ package storm.modules;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
+import storm.RobotState;
 import storm.interfaces.IBallCollector;
 
 /*
@@ -17,15 +18,14 @@ import storm.interfaces.IBallCollector;
  */
 public class BallCollector implements IBallCollector {
     
-    SpeedController bottomMotor1, bottomMotor2;
+    SpeedController feederMotor, kanayerBeltMotor;
     DigitalInput in1,in2, ready;
-    int ballCount;
     boolean manual;
     boolean tripped1, tripped2, readytripped;
           
-    public BallCollector(int bottomMotorChannel1,int bottomMotorChannel2, int IRin1, int IRin2, int IRready) {
-        bottomMotor1 = new Victor(bottomMotorChannel1);
-        bottomMotor2 = new Victor(bottomMotorChannel2);      
+    public BallCollector(int Feeder,int KanayerBelt, int IRin1, int IRin2, int IRready) {
+        feederMotor = new Victor(Feeder);
+        kanayerBeltMotor = new Victor(KanayerBelt);      
         in1 = new DigitalInput(IRin1);
         in2 = new DigitalInput(IRin2);
         ready = new DigitalInput(IRready);
@@ -36,47 +36,45 @@ public class BallCollector implements IBallCollector {
     }
  
     public void startCollecting(double direction) {
-        bottomMotor1.set(direction);
-        bottomMotor2.set(direction);
+        feederMotor.set(direction);
+        kanayerBeltMotor.set(direction);
         manual = true;
     }
 
     public void stopCollecting() {
-        bottomMotor1.set(0);
-        bottomMotor2.set(0);
-        manual = true;
+	stopCollecting(true);
+    }
+    
+    private void stopCollecting(boolean isManual) {
+        feederMotor.set(-1);
+        kanayerBeltMotor.set(0);
+        manual = isManual;
     }
 
     public int getNumBalls() {
-        return ballCount;
+        return RobotState.BALL_CONTAINMENT_COUNT;
     }
 
     public void run() {
         if (!in1.get() == true && !tripped1) {
-            ballCount ++;
+            RobotState.BALL_CONTAINMENT_COUNT ++;
             tripped1 = true;
         }else if(!in1.get() == false && tripped1){
             tripped1 = false;
         }
         if (!in2.get() == true && !tripped2){
-            ballCount ++;
+            RobotState.BALL_CONTAINMENT_COUNT ++;
             tripped2 = true;
         }else if(!in2.get() == false && tripped2){
             tripped2 = false;
         }
-        if (!ready.get() == true && !readytripped) {
-            ballCount --;
-            readytripped = true;
-        }else if(!ready.get() == false && readytripped){
-            readytripped = false;
-        }
         if (manual) return;
-        if (ballCount == 3){
-            stopCollecting();
+        if (RobotState.BALL_CONTAINMENT_COUNT == 3){
+            stopCollecting(false);
         }
-        if (ballCount >= 3 && ((!in1.get() == true || !in2.get() == true))){
-            bottomMotor1.set(-1);
-            bottomMotor2.set(-1);
+        if (RobotState.BALL_CONTAINMENT_COUNT >= 3 && ((!in1.get() == true || !in2.get() == true))){
+            feederMotor.set(-1);
+            kanayerBeltMotor.set(-1);
         }
     }
 

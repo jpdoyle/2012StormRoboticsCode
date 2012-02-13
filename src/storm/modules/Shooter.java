@@ -6,8 +6,12 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
+import storm.RobotState;
 import storm.interfaces.IShooter;
 /**
  *
@@ -19,7 +23,7 @@ public class Shooter implements IShooter {
     SpeedController shooterMotor, transferMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
-    boolean shooting;
+    boolean shooting, readyTripped;
     double motorSpeed, period;
     int state;
     EncodingType k1x;
@@ -30,6 +34,7 @@ public class Shooter implements IShooter {
         transferMotor = new Victor(transferMotorChannel);
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
+	readyTripped = false;
         counter = new Counter(k1x, hallEffect, hallEffect, false);
         counter.clearDownSource();
         counter.setUpSourceEdge(true, false);
@@ -56,6 +61,12 @@ public class Shooter implements IShooter {
         if (state == 1){
             transferMotor.set(1);        
         }
+	if (!ready.get() == true && !readyTripped) {
+            RobotState.BALL_CONTAINMENT_COUNT --;
+            readyTripped = true;
+        }else if(!ready.get() == false && readyTripped){
+            readyTripped = false;
+        }
         if (!ready.get() == false){
             transferMotor.set(0);
             shooterMotor.set(0);
@@ -65,7 +76,7 @@ public class Shooter implements IShooter {
     }
 
     private double getMotorSpeed(double distance) {
-        //convert velocity from m/s into rpm into motor speed value
+        //convert distance from m/s into rpm into motor speed value
        
         period = counter.getPeriod();
         
