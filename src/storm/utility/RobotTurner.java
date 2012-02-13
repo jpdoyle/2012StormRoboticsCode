@@ -6,6 +6,7 @@
 package storm.utility;
 
 import edu.wpi.first.wpilibj.*;
+import storm.interfaces.IDriveTrain;
 
 /**
  *
@@ -26,6 +27,10 @@ public class RobotTurner {
     }, turn_);
 
     //Gyro gyro;
+    
+    public RobotTurner(IDriveTrain train,Gyro gyro) {
+    
+    }
 
     public void enable() {
         pid_.enable();
@@ -37,6 +42,12 @@ public class RobotTurner {
 
     public void setAngle(double angle) {
         pid_.setSetpoint(angle);
+    }
+    
+    public double getGyroAngle() {
+        // TODO: fix
+        //gyro.getAngle();
+        return 0;
     }
 
 }

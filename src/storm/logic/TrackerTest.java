@@ -5,9 +5,11 @@
 
 package storm.logic;
 
-import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.RobotDrive;
 import storm.interfaces.IRobotLogic;
 import storm.modules.TargetTracker;
+import storm.utility.Print;
 
 /**
  *
@@ -15,33 +17,27 @@ import storm.modules.TargetTracker;
  */
 public class TrackerTest implements IRobotLogic {
     TargetTracker tracker;
-    int counter = 0;
+
+    public TrackerTest(RobotDrive drive,Gyro gyro) {
+        tracker = new TargetTracker(drive,gyro);
+    }
 
     public void doInit() {
-        tracker = new TargetTracker();
-        counter = 0;
-        tracker.startLocking();
+        tracker.startTracking();
     }
 
     public void doContinuous() {
-        DriverStationLCD lcd = DriverStationLCD.getInstance();
-        lcd.println(DriverStationLCD.Line.kMain6, 1, "                     ");
-        lcd.println(DriverStationLCD.Line.kUser2, 1, "                     ");
-        lcd.println(DriverStationLCD.Line.kUser3, 1, "                     ");
-        lcd.println(DriverStationLCD.Line.kUser4, 1, "                     ");
-        lcd.println(DriverStationLCD.Line.kUser5, 1, "                     ");
-        //lcd.println(DriverStationLCD.Line.kUser6, 1, "                     ");
-        System.out.println("beginning aim");
-        ++counter;
-        DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, Integer.toString(counter));
-        tracker.isAimed();
-        lcd.updateLCD();
+        Print print = new Print();
+        boolean aimed = tracker.isAimed();
+        print.printLine(aimed ? "Aimed" : "Not Aimed");
+        if(aimed)
+            print.printLine("Z: " + tracker.getDistance());
     }
 
     public void doPeriodic() {
     }
 
     public void doEnd() {
-        tracker.stopLocking();
+        tracker.stopTracking();
     }
 }
