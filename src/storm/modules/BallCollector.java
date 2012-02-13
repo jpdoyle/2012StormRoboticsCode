@@ -22,6 +22,10 @@ public class BallCollector implements IBallCollector {
     DigitalInput in1,in2, ready;
     boolean manual;
     boolean tripped1, tripped2, readytripped;
+    
+    public final double SPEED_FORWARD = 0.5,
+	    SPEED_BACKWARD = -0.5,
+	    SPEED_OFF = 0.0;
           
     public BallCollector(int Feeder,int KanayerBelt, int IRin1, int IRin2, int IRready) {
         feederMotor = new Victor(Feeder);
@@ -35,10 +39,14 @@ public class BallCollector implements IBallCollector {
         
     }
  
-    public void startCollecting(double direction) {
-        feederMotor.set(direction);
-        kanayerBeltMotor.set(direction);
-        manual = true;
+    public void startCollecting(double speed) {
+        startCollecting(speed, true);
+    }
+    
+    private void startCollecting(double speed, boolean isManual) {
+	feederMotor.set(speed);
+        kanayerBeltMotor.set(speed);
+        manual = isManual;
     }
 
     public void stopCollecting() {
@@ -46,8 +54,8 @@ public class BallCollector implements IBallCollector {
     }
     
     private void stopCollecting(boolean isManual) {
-        feederMotor.set(-1);
-        kanayerBeltMotor.set(0);
+        feederMotor.set(SPEED_BACKWARD);
+        kanayerBeltMotor.set(SPEED_OFF);
         manual = isManual;
     }
 
@@ -56,6 +64,7 @@ public class BallCollector implements IBallCollector {
     }
 
     public void run() {
+	
         if (!in1.get() == true && !tripped1) {
             RobotState.BALL_CONTAINMENT_COUNT ++;
             tripped1 = true;
@@ -73,9 +82,10 @@ public class BallCollector implements IBallCollector {
             stopCollecting(false);
         }
         if (RobotState.BALL_CONTAINMENT_COUNT >= 3 && ((!in1.get() == true || !in2.get() == true))){
-            feederMotor.set(-1);
-            kanayerBeltMotor.set(-1);
-        }
+            feederMotor.set(SPEED_BACKWARD);
+            kanayerBeltMotor.set(SPEED_BACKWARD);   
+        } 
+	startCollecting(SPEED_FORWARD, false);
     }
 
     public void returnControl() {

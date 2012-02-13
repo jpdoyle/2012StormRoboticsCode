@@ -7,6 +7,7 @@ package storm.logic;
 
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
+import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
 import storm.modules.TargetTracker;
 import storm.utility.Print;
@@ -18,7 +19,7 @@ import storm.utility.Print;
 public class TrackerTest implements IRobotLogic {
     TargetTracker tracker;
 
-    public TrackerTest(RobotDrive drive,Gyro gyro) {
+    public TrackerTest(IDriveTrain drive,Gyro gyro) {
         tracker = new TargetTracker(drive,gyro);
     }
 

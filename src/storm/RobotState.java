@@ -24,8 +24,8 @@ public class RobotState {
     public static final int PORT_MOTOR_DRIVE_RIGHT        = 3;
     public static final int PORT_MOTOR_SHOOTER_WHEEL      = 5;
     public static final int PORT_MOTOR_3BA                = 6;
-    public static final int PORT_MOTOR_KANAYERBELT_FEEDER = 7;
-    public static final int PORT_MOTOR_KANAYERBELT_BOTTOM = 1;
+    public static final int PORT_MOTOR_KANAYERBELT_FEEDER = 4;
+    public static final int PORT_MOTOR_KANAYERBELT_BOTTOM = 6;
     public static final int PORT_MOTOR_KANAYERBELT_TOP    = 9;
     
     // Joysticks
@@ -46,9 +46,9 @@ public class RobotState {
     public static final int JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL = 6;
     
     // Sensors
-    public static final int PORT_IR_BALL_IN_1 = 1;
-    public static final int PORT_IR_BALL_IN_2 = 2;
-    public static final int PORT_IR_BALL_READY = 3;
+    public static final int PORT_IR_BALL_IN_1  = 6;
+    public static final int PORT_IR_BALL_IN_2  = 7;
+    public static final int PORT_IR_BALL_READY = 8;
     
     
     // Encoders
