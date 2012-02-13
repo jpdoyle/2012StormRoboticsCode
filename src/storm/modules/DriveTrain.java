@@ -27,8 +27,8 @@ public class DriveTrain implements IDriveTrain {
     private final double deceleration = 0.025;
     private double lastLeftSpeed = 0.0;
     private double lastRightSpeed = 0.0;
-    double L = 0.0;
-    double R = 0.0;
+    double driveLeft = 0.0;
+    double driveRight = 0.0;
 
     Print printer = new Print();
     
@@ -43,15 +43,27 @@ public class DriveTrain implements IDriveTrain {
     
     public void drive(double leftSpeed, double rightSpeed) {
 	
-	if (lastRightSpeed > 0 && rightSpeed < lastRightSpeed) {
-	    if (lastRightSpeed - rightSpeed < deceleration) R = rightSpeed;
-	    else R = lastRightSpeed - deceleration;
-	} else if (lastRightSpeed < 0 && rightSpeed > lastRightSpeed) {
-	    if (lastRightSpeed - rightSpeed > -deceleration) R = rightSpeed;
-	    else R = lastRightSpeed + deceleration;
-	} else R = rightSpeed;
+	// Left Deceleration
+	if (lastLeftSpeed > 0 && leftSpeed < lastLeftSpeed) {
+	    if (lastLeftSpeed - leftSpeed < deceleration) driveLeft = leftSpeed;
+	    else driveLeft = lastLeftSpeed - deceleration;
+	} else if (lastLeftSpeed < 0 && leftSpeed > lastLeftSpeed) {
+	    if (lastLeftSpeed - leftSpeed > -deceleration) driveLeft = leftSpeed;
+	    else driveLeft = lastLeftSpeed + deceleration;
+	} else driveLeft = leftSpeed;
 	
-	lastRightSpeed = R;
+	lastLeftSpeed = driveLeft;
+	
+	// Right Deceleration
+	if (lastRightSpeed > 0 && rightSpeed < lastRightSpeed) {
+	    if (lastRightSpeed - rightSpeed < deceleration) driveRight = rightSpeed;
+	    else driveRight = lastRightSpeed - deceleration;
+	} else if (lastRightSpeed < 0 && rightSpeed > lastRightSpeed) {
+	    if (lastRightSpeed - rightSpeed > -deceleration) driveRight = rightSpeed;
+	    else driveRight = lastRightSpeed + deceleration;
+	} else driveRight = rightSpeed;
+	
+	lastRightSpeed = driveRight;
 	
 	//***** Old Deceleration Thingy *****\\
 	
@@ -67,7 +79,7 @@ public class DriveTrain implements IDriveTrain {
             else rightDriveSpeed = 0;
         } else rightDriveSpeed = leftSpeed;*/
 	
-        drive.tankDrive(L, R);
+        drive.tankDrive(driveLeft, driveRight);
 
     }
 
