@@ -3,6 +3,7 @@ package storm.logic;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
 import storm.RobotState;
 import storm.interfaces.IBallCollector;
 import storm.interfaces.IBridgeManipulator;
@@ -16,7 +17,6 @@ import storm.utility.Print;
 public class TeleopTest implements IRobotLogic {
     
     IDriveTrain driveTrain = new DriveTrain(RobotState.PORT_MOTOR_DRIVE_LEFT, RobotState.PORT_MOTOR_DRIVE_RIGHT);
-    SpeedController shooter = new Jaguar(5);
     IBallCollector ballCollector = new BallCollector(
 		RobotState.PORT_MOTOR_KANAYERBELT_FEEDER,
 		RobotState.PORT_MOTOR_KANAYERBELT_BOTTOM,
@@ -24,7 +24,7 @@ public class TeleopTest implements IRobotLogic {
 		RobotState.PORT_IR_BALL_IN_2,
 		RobotState.PORT_IR_BALL_READY
 	    );
-//    IBridgeManipulator bridgeManipulator = new BridgeManipulator(RobotState.PORT_MOTOR_BRIDGE_MANIPULATOR);
+    IBridgeManipulator bridgeManipulator = new BridgeManipulator(RobotState.PORT_MOTOR_BRIDGE_MANIPULATOR);
     
     Joystick driveJoystick;
     Joystick shootJoystick;
@@ -48,20 +48,20 @@ public class TeleopTest implements IRobotLogic {
     
     public void doPeriodic() {
 	
-//	if (shootJoystick.getRawButton(2)) {
-//	    bridgeManipulator.lower();
-//	} else if (shootJoystick.getRawButton(4)) {
-//	    bridgeManipulator.raise();
-//	}
+	if (shootJoystick.getRawButton(2)) {
+	    bridgeManipulator.lower();
+	} else if (shootJoystick.getRawButton(4)) {
+	    bridgeManipulator.raise();
+	} else {
+	    bridgeManipulator.stop();
+	}
 	
-	/*printer.clearScreen();
-	printer.setLine(0, "Number of Balls: " + ballCollector.getNumBalls());*/
-	
-	/*
+	printer.clearScreen();
+//	printer.setLine(0, "Number of Balls: " + ballCollector.getNumBalls());
+		
         driveTrain.drive(-checkDeadZone(driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_LEFT)),
 			 -checkDeadZone(driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_RIGHT)));
-	shooter.set(-shootJoystick.getRawAxis(2));
-	* */
+//	shooter.set(-shootJoystick.getRawAxis(2));
     }
     
     private double checkDeadZone(double joystickValue) {

@@ -4,5 +4,6 @@ public interface IBridgeManipulator {
     
     public void raise();
     public void lower();
+    public void stop();
     
 }
