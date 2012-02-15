@@ -8,18 +8,24 @@ import edu.wpi.first.wpilibj.*;
 import storm.interfaces.IBridgeManipulator;
 
 public class BridgeManipulator implements IBridgeManipulator {
-
-    private static final int BRIDGEMANIPULATORMOTORCHANNEL = 1;
-    SpeedController banebot;
+    SpeedController bridgeManipulatorMotor;
+    
+    private final double MOTOR_SPEED = 1.0;
+    
+    public BridgeManipulator(int BridgeMotor) {
+	bridgeManipulatorMotor = new Jaguar(BridgeMotor);
+    }
 
     public void raise() {
-      banebot = new Victor(BRIDGEMANIPULATORMOTORCHANNEL);
-      banebot.set(-0.5);
+	bridgeManipulatorMotor.set(MOTOR_SPEED);
     }
 
     public void lower() {
-      banebot = new Victor(BRIDGEMANIPULATORMOTORCHANNEL);
-      banebot.set(0.5);
+	bridgeManipulatorMotor.set(-MOTOR_SPEED);
+    }
+    
+    public void stop() {
+	bridgeManipulatorMotor.set(0.0);
     }
 
 }
