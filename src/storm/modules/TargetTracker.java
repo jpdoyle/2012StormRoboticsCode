@@ -163,7 +163,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             netTable_.putInt("Y", topTarget_.boundingRectTop);
             netTable_.putInt("Width", topTarget_.boundingRectWidth);
             netTable_.putInt("Height", topTarget_.boundingRectHeight);
-            netTable_.putBoolean("Aimed", false);
+            netTable_.putBoolean("Aimed", isAimed());
             netTable_.putDouble("Z", zLoc_);
         netTable_.endTransaction();
     }
