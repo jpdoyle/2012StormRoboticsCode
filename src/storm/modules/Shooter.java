@@ -40,16 +40,16 @@ public class Shooter implements IShooter {
         counter.setUpSourceEdge(true, false);
     }
     
-    public void startShoot() {
+    public void startShoot(double distance) {
+	motorSpeed = getMotorSpeed(distance);
         //find out speed motor needs, move ball until ready to shoot,and start shooting process
         counter.start();
         state = 0;
         shooting = true;
     }
 
-    public void doShoot(double distance) {
+    public void doShoot() {
         if (!shooting) return;
-	motorSpeed = getMotorSpeed(distance);
 
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
         shooterMotor.set(motorSpeed);
