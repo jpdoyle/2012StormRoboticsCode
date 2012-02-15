@@ -24,7 +24,7 @@ public class Shooter implements IShooter {
     DigitalInput ready, hallEffect;
     Counter counter;
     boolean shooting, readyTripped;
-    double motorSpeed, period;
+    double motorSpeed, period, rpm;
     int state;
     EncodingType k1x;
        
@@ -40,19 +40,17 @@ public class Shooter implements IShooter {
         counter.setUpSourceEdge(true, false);
     }
     
-    public void startShoot(double distance) {
+    public void startShoot() {
         //find out speed motor needs, move ball until ready to shoot,and start shooting process
-        motorSpeed = getMotorSpeed(distance);
-        if (!ready.get() == false){
-            transferMotor.set(1);
-        }
         counter.start();
         state = 0;
         shooting = true;
     }
 
-    public void doShoot() {
-        if (!shooting) return;       
+    public void doShoot(double distance) {
+        if (!shooting) return;
+	motorSpeed = getMotorSpeed(distance);
+
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
         shooterMotor.set(motorSpeed);
         if (shooterMotor.get() == motorSpeed){
@@ -79,8 +77,9 @@ public class Shooter implements IShooter {
         //convert distance from m/s into rpm into motor speed value
        
         period = counter.getPeriod();
-        
+        rpm = 60/period;
         distance = distance * 4;
         return distance;
-    }     
+    }
+
 }
