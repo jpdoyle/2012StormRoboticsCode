@@ -1,5 +1,6 @@
 package storm.logic;
 
+import com.sun.squawk.Isolate;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -9,14 +10,15 @@ import storm.interfaces.IBallCollector;
 import storm.interfaces.IBridgeManipulator;
 import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
+import storm.interfaces.IShooter;
 import storm.modules.BallCollector;
 import storm.modules.BridgeManipulator;
 import storm.modules.DriveTrain;
+import storm.modules.Shooter;
 import storm.utility.Print;
 
 public class TeleopTest implements IRobotLogic {
     
-    IDriveTrain driveTrain = new DriveTrain(RobotState.PORT_MOTOR_DRIVE_LEFT, RobotState.PORT_MOTOR_DRIVE_RIGHT);
     IBallCollector ballCollector = new BallCollector(
 		RobotState.PORT_MOTOR_KANAYERBELT_FEEDER,
 		RobotState.PORT_MOTOR_KANAYERBELT_BOTTOM,
@@ -24,7 +26,12 @@ public class TeleopTest implements IRobotLogic {
 		RobotState.PORT_IR_BALL_IN_2,
 		RobotState.PORT_IR_BALL_READY
 	    );
-    IBridgeManipulator bridgeManipulator = new BridgeManipulator(RobotState.PORT_MOTOR_BRIDGE_MANIPULATOR);
+    IShooter shooter = new Shooter(
+		RobotState.PORT_MOTOR_SHOOTER_WHEEL,
+		RobotState.PORT_MOTOR_KANAYERBELT_TOP,
+		RobotState.PORT_IR_BALL_READY,
+		RobotState.PORT_ENCODER_SHOOTER_SPEED
+	    );
     
     Joystick driveJoystick;
     Joystick shootJoystick;
@@ -38,30 +45,26 @@ public class TeleopTest implements IRobotLogic {
         driveJoystick = RobotState.joystickDrive;
 	shootJoystick = RobotState.joystickShoot;
         
-        printer = new Print();
+        printer = Print.getInstance();
         
     }
 
     public void doContinuous() {
 //	ballCollector.run();
+	shooter.doShoot();
     }
+    
+    boolean btn6 = false;
     
     public void doPeriodic() {
 	
-	if (shootJoystick.getRawButton(2)) {
-	    bridgeManipulator.lower();
-	} else if (shootJoystick.getRawButton(4)) {
-	    bridgeManipulator.raise();
-	} else {
-	    bridgeManipulator.stop();
+	if (shootJoystick.getRawButton(6) && !btn6) {
+	    btn6 = true;
+	    shooter.startShoot(1.0);
+	} else if (!shootJoystick.getRawButton(6) && btn6) {
+	    btn6 = false;
 	}
 	
-	printer.clearScreen();
-//	printer.setLine(0, "Number of Balls: " + ballCollector.getNumBalls());
-		
-        driveTrain.drive(-checkDeadZone(driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_LEFT)),
-			 -checkDeadZone(driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_RIGHT)));
-//	shooter.set(-shootJoystick.getRawAxis(2));
     }
     
     private double checkDeadZone(double joystickValue) {

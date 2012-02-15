@@ -31,7 +31,7 @@ public class DriveTrain implements IDriveTrain {
     double driveLeft = 0.0;
     double driveRight = 0.0;
 
-    Print printer = new Print();
+    Print printer = Print.getInstance();
     
     public DriveTrain (int motorChannelL, int motorChannelR){
         leftMotor = new Victor(motorChannelL);
