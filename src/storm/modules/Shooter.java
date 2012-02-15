@@ -27,7 +27,6 @@ public class Shooter implements IShooter {
     double motorSpeed, wantedRPM, period, RPM;
     double [][] RPMtoMotorSpeed;
     int state;
-    EncodingType k1x;
        
     public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
         
@@ -36,7 +35,7 @@ public class Shooter implements IShooter {
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
 	readyTripped = false;
-        counter = new Counter(k1x, hallEffect, hallEffect, false);
+        counter = new Counter(EncodingType.k1X, hallEffect, hallEffect, false);
         counter.clearDownSource();
         counter.setUpSourceEdge(true, false);
 	/*RPMtoMotorSpeed = new double[9][1];
@@ -92,12 +91,14 @@ public class Shooter implements IShooter {
         }else if(!ready.get() == false && readyTripped){
             readyTripped = false;
         }
-        if (!ready.get() == false && state == 3){
-            transferMotor.set(0);
+        if (!ready.get() == false && state == 2){
+            state ++;
+        }if (state == 3){
+	    transferMotor.set(0);
             shooterMotor.set(0);
             shooting = false;
             state = 0;
-        }
+	}
     }
 
     private double getMotorSpeed(double velocity) {
@@ -107,7 +108,7 @@ public class Shooter implements IShooter {
 	RPMtoMotorSpeed[2][0] = 1080;
 	RPMtoMotorSpeed[2][1] = .3;*/
         velocity = 1;
-	wantedRPM = 3000;
+	wantedRPM = 2000;
         return velocity;
     }
     
