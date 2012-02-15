@@ -79,7 +79,7 @@ public class Shooter implements IShooter {
 	  transferMotor.set(0);
 	  shooterMotor.set(motorSpeed);
 	}      
-        if (checkRPM() == wantedRPM && state == 1){
+        if (checkRPM() >= wantedRPM && state == 1){
           state ++;  
         }
         if (state == 2){
