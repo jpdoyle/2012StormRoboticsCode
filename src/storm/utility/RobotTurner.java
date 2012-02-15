@@ -17,19 +17,22 @@ public class RobotTurner {
 
     static final double PID_P = 0,PID_I = 0,PID_D = 0;
 
+    Gyro gyro_;
+    IDriveTrain drive_;
+
+
     PIDOutput turn_ = new PIDOutput() {
 	public void pidWrite(double output) {
-
+            //drive_.drive(output, -output);
 	}
     };
-    PIDController pid_ = new PIDController(PID_P,PID_I,PID_D,new PIDSource() {
+    PIDSource source_ = /*gyro_;*/new PIDSource() {
 	public double pidGet() { return 0; }
-    }, turn_);
-
-    //Gyro gyro;
+    };
+    PIDController pid_ = new PIDController(PID_P,PID_I,PID_D,source_, turn_);
     
-    public RobotTurner(IDriveTrain train,Gyro gyro) {
-    
+    public RobotTurner(IDriveTrain train,int gyroChannel) {
+        gyro_ = new Gyro(gyroChannel);
     }
 
     public void enable() {
@@ -45,9 +48,8 @@ public class RobotTurner {
     }
     
     public double getGyroAngle() {
-        // TODO: fix
-        //gyro.getAngle();
-        return 0;
+        return 0;//gyro_.getAngle();
     }
 
 }
+

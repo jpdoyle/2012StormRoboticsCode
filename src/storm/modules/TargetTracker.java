@@ -46,8 +46,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 
     private final NetworkTable netTable_ = NetworkTable.getTable("Target Tracker");
 
-    public TargetTracker(IDriveTrain drive,Gyro gyro) {
-        turner_ = new RobotTurner(drive,gyro);
+    public TargetTracker(IDriveTrain drive,int gyroChannel) {
+        turner_ = new RobotTurner(drive,gyroChannel);
         netTable_.beginTransaction();
             netTable_.putInt("X", camera_.getResolution().width/2);
             netTable_.putInt("Y",camera_.getResolution().height/2);
@@ -260,3 +260,4 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         turner_.disable();
     }
 }
+
