@@ -18,6 +18,7 @@ import storm.utility.Print;
  */
 public class TrackerTest implements IRobotLogic {
     TargetTracker tracker;
+    Print print;
 
     public TrackerTest(IDriveTrain drive,Gyro gyro) {
         tracker = new TargetTracker(drive,gyro);
@@ -28,11 +29,11 @@ public class TrackerTest implements IRobotLogic {
     }
 
     public void doContinuous() {
-        Print print = new Print();
+        print = Print.getInstance();
         boolean aimed = tracker.isAimed();
-        print.printLine(aimed ? "Aimed" : "Not Aimed");
+        print.println(aimed ? "Aimed" : "Not Aimed");
         if(aimed)
-            print.printLine("Z: " + tracker.getDistance());
+            print.println("Z: " + tracker.getDistance());
     }
 
     public void doPeriodic() {

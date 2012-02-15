@@ -28,7 +28,7 @@ public class BallCollector implements IBallCollector {
 	    SPEED_BACKWARD = 1,
 	    SPEED_OFF = 0;
     
-    Print printer = new Print();
+    Print printer = Print.getInstance();
           
     public BallCollector(int Feeder,int KanayerBelt, int IRin1, int IRin2, int IRready)
     {
