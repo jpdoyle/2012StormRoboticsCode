@@ -51,6 +51,8 @@ public class RobotState {
     public static final int PORT_IR_BALL_IN_2  = 7;
     public static final int PORT_IR_BALL_READY = 8;
     
+    // Gyro
+    public static final int PORT_GYRO_ROBOT_ROTATION = 1;
     
     // Encoders
     public static final int PORT_ENCODER_DRIVE_LEFT_A         = 4;
