@@ -71,7 +71,7 @@ public class Teleop implements IRobotLogic {
         // Manually override collector - in
         if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN)) {
             setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN, true);
-            kanayerBelt.startCollecting(IBallCollector.MOTOR_SPEED_IN);
+            kanayerBelt.startCollecting(1);
         } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN)) {
             setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN, false);
         }
@@ -79,7 +79,7 @@ public class Teleop implements IRobotLogic {
         // Manually override collector - out
         if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT)) {
             setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT, true);
-            kanayerBelt.startCollecting(IBallCollector.MOTOR_SPEED_OUT);
+            kanayerBelt.startCollecting(1);
         } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT)) {
             setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT, false);
         }

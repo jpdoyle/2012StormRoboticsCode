@@ -5,9 +5,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedController;
 import storm.RobotState;
 import storm.interfaces.IBallCollector;
+import storm.interfaces.IBridgeManipulator;
 import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
 import storm.modules.BallCollector;
+import storm.modules.BridgeManipulator;
 import storm.modules.DriveTrain;
 import storm.utility.Print;
 
@@ -22,6 +24,7 @@ public class TeleopTest implements IRobotLogic {
 		RobotState.PORT_IR_BALL_IN_2,
 		RobotState.PORT_IR_BALL_READY
 	    );
+//    IBridgeManipulator bridgeManipulator = new BridgeManipulator(RobotState.PORT_MOTOR_BRIDGE_MANIPULATOR);
     
     Joystick driveJoystick;
     Joystick shootJoystick;
@@ -29,6 +32,8 @@ public class TeleopTest implements IRobotLogic {
     Print printer;
 
     public void doInit() {
+	
+	RobotState.BALL_CONTAINMENT_COUNT = 0;
         
         driveJoystick = RobotState.joystickDrive;
 	shootJoystick = RobotState.joystickShoot;
@@ -38,13 +43,19 @@ public class TeleopTest implements IRobotLogic {
     }
 
     public void doContinuous() {
-	ballCollector.run();
+//	ballCollector.run();
     }
     
     public void doPeriodic() {
 	
-	printer.clearScreen();
-	printer.setLine(0, "Number of Balls: " + ballCollector.getNumBalls());
+//	if (shootJoystick.getRawButton(2)) {
+//	    bridgeManipulator.lower();
+//	} else if (shootJoystick.getRawButton(4)) {
+//	    bridgeManipulator.raise();
+//	}
+	
+	/*printer.clearScreen();
+	printer.setLine(0, "Number of Balls: " + ballCollector.getNumBalls());*/
 	
 	/*
         driveTrain.drive(-checkDeadZone(driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_LEFT)),

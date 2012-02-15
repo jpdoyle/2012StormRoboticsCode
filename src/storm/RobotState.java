@@ -24,6 +24,7 @@ public class RobotState {
     public static final int PORT_MOTOR_DRIVE_RIGHT        = 3;
     public static final int PORT_MOTOR_SHOOTER_WHEEL      = 5;
     public static final int PORT_MOTOR_3BA                = 6;
+    public static final int PORT_MOTOR_BRIDGE_MANIPULATOR = 2;
     public static final int PORT_MOTOR_KANAYERBELT_FEEDER = 4;
     public static final int PORT_MOTOR_KANAYERBELT_BOTTOM = 6;
     public static final int PORT_MOTOR_KANAYERBELT_TOP    = 9;
