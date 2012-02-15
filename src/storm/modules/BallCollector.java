@@ -20,7 +20,7 @@ import storm.utility.Print;
 public class BallCollector implements IBallCollector {
     
     SpeedController feederMotor, kanayerBeltMotor;
-    DigitalInput in1,in2, ready;
+    DigitalInput in1,in2;
     boolean manual, tripped1, tripped2, readytripped;
     int loopCounterSensor1, loopCounterSensor2;
     
@@ -30,13 +30,12 @@ public class BallCollector implements IBallCollector {
     
     Print printer = Print.getInstance();
           
-    public BallCollector(int Feeder,int KanayerBelt, int IRin1, int IRin2, int IRready)
+    public BallCollector(int Feeder,int KanayerBelt, int IRin1, int IRin2)
     {
         feederMotor = new Victor(Feeder);
         kanayerBeltMotor = new Victor(KanayerBelt);      
         in1 = new DigitalInput(IRin1);
         in2 = new DigitalInput(IRin2);
-        ready = new DigitalInput(IRready);
         tripped1 = false;
         tripped2 = false;
         readytripped = false;

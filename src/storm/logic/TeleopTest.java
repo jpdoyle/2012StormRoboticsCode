@@ -23,8 +23,7 @@ public class TeleopTest implements IRobotLogic {
 		RobotState.PORT_MOTOR_KANAYERBELT_FEEDER,
 		RobotState.PORT_MOTOR_KANAYERBELT_BOTTOM,
 		RobotState.PORT_IR_BALL_IN_1,
-		RobotState.PORT_IR_BALL_IN_2,
-		RobotState.PORT_IR_BALL_READY
+		RobotState.PORT_IR_BALL_IN_2
 	    );
     IShooter shooter = new Shooter(
 		RobotState.PORT_MOTOR_SHOOTER_WHEEL,
