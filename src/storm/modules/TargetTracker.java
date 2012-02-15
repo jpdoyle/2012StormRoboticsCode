@@ -71,9 +71,9 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser6, 1, "(" + cameraImg_.getWidth() + "," + cameraImg_.getHeight() + ")");
             }
         } catch (AxisCameraException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
         } catch (NIVisionException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
     }
 
@@ -91,7 +91,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             try {
                 cameraImg_.free();
             } catch (NIVisionException ex) {
-                ex.printStackTrace();
+                //ex.printStackTrace();
             }
         }
     }
@@ -108,7 +108,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             try {
                 oldImage.free();
             } catch (NIVisionException ex) {
-                ex.printStackTrace();
+               // ex.printStackTrace();
             }
         }
     }
@@ -137,7 +137,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 image_.free();
                 oldImage.free();
             } catch (NIVisionException ex1) {
-                ex1.printStackTrace();
+                //ex1.printStackTrace();
             }
         }
     }
@@ -169,8 +169,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     }
 
     private void doAim() {
-        System.gc();
-        System.out.println("tracking target");
+ //       System.out.println("tracking target");
         String stateName = "";
         boolean once = false;
         state_ = 0;
@@ -200,11 +199,11 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 default:
                     return;
             }
-            System.out.println("begin debug output");
-            String line1 = "Angle: " + turner_.getGyroAngle(),
-                   line2 = stateName,
-                   line3 = "Location: (?,?," + zLoc_ + ")",
-                   line4 = "";
+//            System.out.println("begin debug output");
+//            String line1 = "Angle: " + turner_.getGyroAngle(),
+//                   line2 = stateName,
+//                   line3 = "Location: (?,?," + zLoc_ + ")",
+//                   line4 = "";
 //            DriverStationLCD lcd = DriverStationLCD.getInstance();
 //
 //            lcd.println(DriverStationLCD.Line.kMain6, 1, "                     ");
