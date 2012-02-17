@@ -2,8 +2,8 @@ package storm.interfaces;
 
 public interface I3BA {
 
-    public void start();
-    public void stop();
+    public void extend();
     public void retract();
+    public void stop();
 
 }

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import java.util.TimerTask;
 import storm.interfaces.IDriveTrain;
+import storm.utility.Print;
 
 import storm.utility.RobotTurner;
 
@@ -199,6 +200,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 default:
                     return;
             }
+	    Print.getInstance().setLine(4, stateName);
+	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
 //            System.out.println("begin debug output");
 //            String line1 = "Angle: " + turner_.getGyroAngle(),
 //                   line2 = stateName,

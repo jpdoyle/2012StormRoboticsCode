@@ -6,9 +6,8 @@ package storm.logic;
 
 import edu.wpi.first.wpilibj.Joystick;
 import storm.RobotState;
-import storm.interfaces.IBridgeManipulator;
+import storm.interfaces.I3BA;
 import storm.interfaces.IRobotLogic;
-import storm.modules.BridgeManipulator;
 
 /**
  *
@@ -16,7 +15,7 @@ import storm.modules.BridgeManipulator;
  */
 public class BridgeManip3BATest implements IRobotLogic {
     
-    IBridgeManipulator bridgeManipulator = RobotState.bridgeManipulator;
+    I3BA threeBA = RobotState.threeBA;
     
     Joystick shootJoystick = RobotState.joystickShoot;
 
@@ -27,12 +26,12 @@ public class BridgeManip3BATest implements IRobotLogic {
     }
 
     public void doPeriodic() {
-	if (shootJoystick.getRawButton(2)) {
-	    bridgeManipulator.lower();
-	} else if (shootJoystick.getRawButton(4)) {
-	    bridgeManipulator.raise();
+	if (shootJoystick.getRawButton(4)) {
+	    threeBA.extend();
+	} else if (shootJoystick.getRawButton(2)) {
+	    threeBA.retract();
 	} else {
-	    bridgeManipulator.stop();
+	    threeBA.stop();
 	}
     }
 
