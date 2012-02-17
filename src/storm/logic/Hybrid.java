@@ -20,5 +20,8 @@ public class Hybrid implements IRobotLogic {
 
     public void doPeriodic() {
     }
+
+    public void doEnd() {
+    }
     
 }

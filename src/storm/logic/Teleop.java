@@ -128,5 +128,8 @@ public class Teleop implements IRobotLogic {
     private void setButtonState(int button, boolean state) {
         buttonPressed[button-1] = state;
     }
+
+    public void doEnd() {
+    }
     
 }

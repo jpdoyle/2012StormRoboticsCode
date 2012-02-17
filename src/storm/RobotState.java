@@ -2,8 +2,10 @@ package storm;
 
 
 import edu.wpi.first.wpilibj.Joystick;
+import storm.interfaces.*;
+import storm.modules.*;
 
-public class RobotState {
+public abstract class RobotState {
     
     /*
     private static RobotState instance;
@@ -49,7 +51,7 @@ public class RobotState {
     // Sensors
     public static final int PORT_IR_BALL_IN_1  = 6;
     public static final int PORT_IR_BALL_IN_2  = 7;
-    public static final int PORT_IR_BALL_READY = 8;
+    public static final int PORT_IR_BALL_READY = 9;
     
     // Gyro
     public static final int PORT_GYRO_ROBOT_ROTATION = 1;
@@ -63,7 +65,7 @@ public class RobotState {
     public static final int PORT_ENCODER_DRIVE_RIGHT_B        = 7;
     public static final int PORT_ENCODER_DRIVE_RIGHT_A_BACKUP = 6;
     public static final int PORT_ENCODER_DRIVE_RIGHT_B_BACKUP = 7;
-    public static final int PORT_ENCODER_SHOOTER_SPEED        = 8;
+    public static final int PORT_ENCODER_SHOOTER_SPEED        = 5;
     public static final int PORT_ENCODER_3BA                  = 1; // <-- ANALOG
     
     // Global State
@@ -75,9 +77,25 @@ public class RobotState {
     // Joysticks
     public static final Joystick joystickDrive;
     public static final Joystick joystickShoot;
+    
+    // Modules
+    public static final IDriveTrain driveTrain;
+    public static final IBallCollector ballCollector;
+    public static final IBridgeManipulator bridgeManipulator;
+    public static final IShooter shooter;
+    public static final I3BA threeBA;
+    public static final ITargetTracker targetTracker;
+    
     static {
 	joystickDrive = new Joystick(PORT_JOYSTICK_DRIVE);
 	joystickShoot = new Joystick(PORT_JOYSTICK_SHOOT);
+	
+	driveTrain = new DriveTrain(PORT_MOTOR_DRIVE_LEFT, PORT_MOTOR_DRIVE_RIGHT);
+	ballCollector = new BallCollector(PORT_MOTOR_KANAYERBELT_FEEDER, PORT_MOTOR_KANAYERBELT_BOTTOM, PORT_IR_BALL_IN_1, PORT_IR_BALL_IN_2);
+	bridgeManipulator = new BridgeManipulator(PORT_MOTOR_BRIDGE_MANIPULATOR);
+	shooter = new Shooter(PORT_MOTOR_SHOOTER_WHEEL, PORT_MOTOR_KANAYERBELT_TOP, PORT_IR_BALL_READY, PORT_ENCODER_SHOOTER_SPEED);
+	threeBA = new ThreeBA();
+	targetTracker = new TargetTracker(driveTrain, PORT_GYRO_ROBOT_ROTATION);
     }
     
 }

@@ -38,7 +38,6 @@ public class Storm2729 extends IterativeRobot {
         hybrid = new Hybrid();
 	teleop = new TeleopTest();
 	
-	
 
     }
     
@@ -80,6 +79,20 @@ public class Storm2729 extends IterativeRobot {
     public void teleopPeriodic() {
 	watchdog.feed();
         teleop.doPeriodic();
+    }
+    
+    // End Functions
+
+    public void disabledPeriodic() {
+	
+    }
+
+    public void disabledContinuous() {
+	
+    }
+
+    public void disabledInit() {
+	
     }
     
 }

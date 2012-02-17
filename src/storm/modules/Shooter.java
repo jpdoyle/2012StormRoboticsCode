@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
 import storm.RobotState;
 import storm.interfaces.IShooter;
+import storm.utility.Print;
 /**
  *
  * @author Storm
@@ -116,6 +117,9 @@ public class Shooter implements IShooter {
 	//check what the current RPM is
 	period = counter.getPeriod();
         RPM = 60/period;
+	
+	Print.getInstance().setLine(1, "RPM: " + RPM);
+	
 	return RPM;
     }
 
