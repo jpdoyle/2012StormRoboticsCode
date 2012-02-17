@@ -15,7 +15,7 @@ public class ThreeBA implements I3BA {
     DigitalInput limitSwitchBack;
     DigitalInput limitSwitchFront;
     
-    private final double MOTOR_SPEED = 0.25;
+    private final double MOTOR_SPEED = 0.2;
     
     public ThreeBA(int motorChannel, int limitSwitchFrontChannel, int limitSwitchBackChannel) {
 	wormDrive = new Victor(motorChannel);

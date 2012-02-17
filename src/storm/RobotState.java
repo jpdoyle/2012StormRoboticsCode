@@ -25,7 +25,7 @@ public abstract class RobotState {
     public static final int PORT_MOTOR_DRIVE_LEFT         = 8;
     public static final int PORT_MOTOR_DRIVE_RIGHT        = 3;
     public static final int PORT_MOTOR_SHOOTER_WHEEL      = 5;
-    public static final int PORT_MOTOR_3BA                = 1; // <--- Spike
+    public static final int PORT_MOTOR_3BA                = 10;
     public static final int PORT_MOTOR_BRIDGE_MANIPULATOR = 1;
     public static final int PORT_MOTOR_KANAYERBELT_FEEDER = 4;
     public static final int PORT_MOTOR_KANAYERBELT_BOTTOM = 6;
