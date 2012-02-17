@@ -11,8 +11,10 @@ package storm;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Watchdog;
 import storm.interfaces.IRobotLogic;
+import storm.logic.BridgeManip3BATest;
 import storm.logic.Hybrid;
 import storm.logic.TeleopTest;
+import storm.logic.TrackerTest;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,8 +37,8 @@ public class Storm2729 extends IterativeRobot {
 	watchdog = Watchdog.getInstance();
 	
 	//autonomous = new THING
-        hybrid = new Hybrid();
-	teleop = new TeleopTest();
+        hybrid = new TrackerTest();
+	teleop = new BridgeManip3BATest();
 	
 
     }
@@ -84,15 +86,15 @@ public class Storm2729 extends IterativeRobot {
     // End Functions
 
     public void disabledPeriodic() {
-	
+	hybrid.doEnd();
     }
 
     public void disabledContinuous() {
-	
+	hybrid.doEnd();
     }
 
     public void disabledInit() {
-	
+	hybrid.doEnd();
     }
     
 }

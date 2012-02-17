@@ -4,16 +4,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import storm.RobotState;
 import storm.interfaces.IRobotLogic;
 import storm.interfaces.IShooter;
-import storm.modules.Shooter;
 
 public class TeleopTest implements IRobotLogic {
     
-    IShooter shooter = new Shooter(
-		RobotState.PORT_MOTOR_SHOOTER_WHEEL,
-		RobotState.PORT_MOTOR_KANAYERBELT_TOP,
-		RobotState.PORT_IR_BALL_READY,
-		RobotState.PORT_ENCODER_SHOOTER_SPEED
-	    );
+    IShooter shooter = RobotState.shooter;
     
     Joystick driveJoystick;
     Joystick shootJoystick;

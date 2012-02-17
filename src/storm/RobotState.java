@@ -66,7 +66,7 @@ public abstract class RobotState {
     public static final int PORT_ENCODER_DRIVE_RIGHT_A_BACKUP = 6;
     public static final int PORT_ENCODER_DRIVE_RIGHT_B_BACKUP = 7;
     public static final int PORT_ENCODER_SHOOTER_SPEED        = 5;
-    public static final int PORT_ENCODER_3BA                  = 1; // <-- ANALOG
+    public static final int PORT_ENCODER_BRIDGE_MANIPULATOR   = 2; // <-- ANALOG
     
     // Global State
     public static int BALL_CONTAINMENT_COUNT = 0;
@@ -92,7 +92,7 @@ public abstract class RobotState {
 	
 	driveTrain = new DriveTrain(PORT_MOTOR_DRIVE_LEFT, PORT_MOTOR_DRIVE_RIGHT);
 	ballCollector = new BallCollector(PORT_MOTOR_KANAYERBELT_FEEDER, PORT_MOTOR_KANAYERBELT_BOTTOM, PORT_IR_BALL_IN_1, PORT_IR_BALL_IN_2);
-	bridgeManipulator = new BridgeManipulator(PORT_MOTOR_BRIDGE_MANIPULATOR);
+	bridgeManipulator = new BridgeManipulator(PORT_MOTOR_BRIDGE_MANIPULATOR, PORT_ENCODER_BRIDGE_MANIPULATOR);
 	shooter = new Shooter(PORT_MOTOR_SHOOTER_WHEEL, PORT_MOTOR_KANAYERBELT_TOP, PORT_IR_BALL_READY, PORT_ENCODER_SHOOTER_SPEED);
 	threeBA = new ThreeBA();
 	targetTracker = new TargetTracker(driveTrain, PORT_GYRO_ROBOT_ROTATION);
