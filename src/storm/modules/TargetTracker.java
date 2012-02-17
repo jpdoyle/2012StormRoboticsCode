@@ -201,7 +201,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             }
 	    Print.getInstance().setLine(4, stateName);
 	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
-            Thread.yield();
+//            Thread.yield();
 //            System.out.println("begin debug output");
 //            String line1 = "Angle: " + turner_.getGyroAngle(),
 //                   line2 = stateName,
@@ -229,7 +229,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         return zLoc_;
     }
     long period = (long)(1000.0/CAMERA_FREQUENCY);
-    boolean tracking = false,locking = false;
+    volatile boolean tracking = false;
+    boolean locking = false;
     Thread thread = new Thread() {
             public void run() {
                 while(tracking) {
