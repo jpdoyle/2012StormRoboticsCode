@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.AnalogChannel;
 import storm.RobotState;
 import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
+import storm.interfaces.IShooter;
+import storm.interfaces.ITargetTracker;
 import storm.utility.Queue;
 
 /**
@@ -17,6 +19,8 @@ import storm.utility.Queue;
 public class Hybrid implements IRobotLogic {
 
     IDriveTrain driveTrain;
+    IShooter shooter;
+    ITargetTracker targetTracker;
 
     AnalogChannel autoType;
 
@@ -25,6 +29,8 @@ public class Hybrid implements IRobotLogic {
     public Hybrid(int port) {
 
         driveTrain = RobotState.driveTrain;
+        shooter = RobotState.shooter;
+        targetTracker = RobotState.targetTracker;
 
         autoType = new AnalogChannel(port);
 
@@ -93,7 +99,13 @@ public class Hybrid implements IRobotLogic {
     public void doPeriodic() {
 
         if (Q.isRunning()) runQueue();
-        if (driveTrain.getDistance() >= Q.getDistance()) Q.next();
+        if (Q.getType() == 1 || Q.getType() == 2) {
+            if (driveTrain.getDistance() >= Q.getDistance()) Q.next();
+        } else if (Q.getType() == 4) {
+            if (!shooter.isShooting()) Q.next();
+        } else if (Q.getType() == 5) {
+            
+        }
 
     }
 
@@ -109,6 +121,7 @@ public class Hybrid implements IRobotLogic {
             case 2:
                 driveTrain.drive(Q.getSpeed(), -Q.getSpeed());
                 break;
+            case 3:
             default:
                 break;
         }

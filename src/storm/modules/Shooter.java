@@ -134,4 +134,8 @@ public class Shooter implements IShooter {
 
     }
 
+    public boolean isShooting() {
+        return shooting;
+    }
+
 }
