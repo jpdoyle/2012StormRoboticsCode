@@ -7,7 +7,6 @@ package storm.modules;
 import edu.wpi.first.wpilibj.camera.*;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import java.util.TimerTask;
 import storm.interfaces.IDriveTrain;
 import storm.utility.Print;
 
@@ -32,7 +31,10 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     static final double CAMERA_ANGLE_COS = storm.utility.TrigLUT.cos(CAMERA_ANGLE/180*Math.PI);
     // frequency to update camera calculations (in iterations per second)
     // note that this is the upper bound for the frequency, not necessarily the actual frequency
-    static final double CAMERA_FREQUENCY = 10;
+//    static final double CAMERA_FREQUENCY = 10;
+    static final double ASPECT_RATIO = 24/18.0;
+
+    private CriteriaCollection criteria = new CriteriaCollection();
 
     private AxisCamera camera_ = AxisCamera.getInstance();
     private RobotTurner turner_;
@@ -56,6 +58,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             netTable_.putBoolean("Aimed", false);
             netTable_.putDouble("Z", 0);
         netTable_.endTransaction();
+        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 0, 10, true);
     }
 
     private void retrieveImage() {
@@ -116,7 +119,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private void findParticles() {
         BinaryImage oldImage = image_;
         try {
-            image_ = image_.removeSmallObjects(true, 2);
+            image_ = image_.particleFilter(criteria);
 
             ParticleAnalysisReport[] particles = image_.getOrderedParticleAnalysisReports();
             if (particles == null || particles.length == 0) {
@@ -124,7 +127,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             }
             topTarget_ = particles[0];
             for (int i = 1; i < particles.length; ++i) {
-                if (particles[i].center_mass_y < topTarget_.center_mass_y) {
+                if(particles[i].center_mass_y < topTarget_.center_mass_y) {
                     topTarget_ = particles[i];
                 }
             }
@@ -228,7 +231,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     public synchronized double getDistance() {
         return zLoc_;
     }
-    long period = (long)(1000.0/CAMERA_FREQUENCY);
+//    long period = (long)(1000.0/CAMERA_FREQUENCY);
     volatile boolean tracking = false;
     boolean locking = false;
     Thread thread = new Thread() {
