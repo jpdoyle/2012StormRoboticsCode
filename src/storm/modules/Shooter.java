@@ -6,11 +6,8 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
 import storm.RobotState;
 import storm.interfaces.IShooter;
 import storm.utility.Print;
@@ -21,13 +18,15 @@ import storm.utility.Print;
 
 public class Shooter implements IShooter {
 
+    Joystick shootJoystick;
     SpeedController shooterMotor, transferMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
     boolean shooting, readyTripped, closeEnough;
+    boolean btn7;
     double motorSpeed, wantedRPM, period, RPM, RPMdifference, RPMthreshold;
     double [][] RPMtoMotorSpeed;
-    int state, time, timeDifference, currentTime;
+    int state, timeDifference, currentTime;
        
     public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
         
@@ -63,6 +62,8 @@ public class Shooter implements IShooter {
     }
     
     public void startShoot(double velocity) {
+		shootJoystick = RobotState.joystickShoot;
+
 	motorSpeed = getMotorSpeed(velocity);
         //find out speed motor needs, move ball until ready to shoot,and start shooting process
         counter.start();
@@ -73,10 +74,18 @@ public class Shooter implements IShooter {
     long startTime = -1;
 
     public void doShoot() {
-		
+	checkRPM();
+	shooterMotor.set(motorSpeed);
+	if (shootJoystick.getRawButton(7) && !btn7) {
+	    btn7 = true;
+	    motorSpeed = motorSpeed + .1;
+	} else if (!shootJoystick.getRawButton(7) && btn7) {
+	    btn7 = false;
+	}
+	Print.getInstance().setLine(2, "Motor Speed: " + motorSpeed);
+
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
-	if (!shooting) return;
-	//time ++;
+	/*if (!shooting) return;
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
@@ -109,12 +118,11 @@ public class Shooter implements IShooter {
 		shooterMotor.set(0);
 		shooting = false;
 		state = 0;
-		time = 0;
 		RobotState.BALL_CONTAINMENT_COUNT --;
 		break;
 	    default:
 		break;
-	}
+	}*/
     }
 
     private double getMotorSpeed(double velocity) {
@@ -123,7 +131,7 @@ public class Shooter implements IShooter {
 	RPMtoMotorSpeed[1][1] = .2;
 	RPMtoMotorSpeed[2][0] = 1080;
 	RPMtoMotorSpeed[2][1] = .3;*/	
-        velocity = 1; //<-motorSpeed value right now *NOT ACTUAL VELOCITY*
+        velocity = 0; //<-motorSpeed value right now *NOT ACTUAL VELOCITY*
 	//wantedRPM = velocity * 94.13; //needs actual velocity
         wantedRPM = 2000;
 	return velocity;
@@ -134,19 +142,20 @@ public class Shooter implements IShooter {
 	period = counter.getPeriod();
         RPM = 60/period;
 	RPMdifference = RPM - wantedRPM;
-	RPMthreshold = wantedRPM / 10;
+	RPMthreshold = wantedRPM / 10;	
+	Print.getInstance().setLine(1, "RPM: " + RPM);
+	return false;
+	/*
 	if ((System.currentTimeMillis() - startTime) >= 3000)
 	{
 	    return true;
-	}else return false;
+	}else return false;*/
 	
 	/*if (RPMdifference >= -RPMthreshold && RPMdifference <= RPMthreshold)
 	{
 	    closeEnough = true;
 	}else closeEnough = false;
-	Print.getInstance().setLine(1, "RPM: " + RPM);	
 	return closeEnough;*/
-
     }
 
     public boolean isShooting() {
