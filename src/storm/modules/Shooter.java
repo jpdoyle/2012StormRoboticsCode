@@ -103,6 +103,7 @@ public class Shooter implements IShooter {
 		if ((System.currentTimeMillis() - startTime) >= 5000){
 		    state ++;
 		}
+		break;
 	    case 4:
 		transferMotor.set(0);
 		shooterMotor.set(0);
