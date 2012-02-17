@@ -24,8 +24,8 @@ public class Shooter implements IShooter {
     SpeedController shooterMotor, transferMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
-    boolean shooting, readyTripped;
-    double motorSpeed, wantedRPM, period, RPM;
+    boolean shooting, readyTripped, closeEnough;
+    double motorSpeed, wantedRPM, period, RPM, RPMdifference;
     double [][] RPMtoMotorSpeed;
     int state;
        
@@ -73,32 +73,36 @@ public class Shooter implements IShooter {
     public void doShoot() {
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
 	if (!shooting) return;
-	if (state == 0){
-	  transferMotor.set(-1);
-	}
-	if (state == 0 && !ready.get() == true){
-	  transferMotor.set(0);
-	  shooterMotor.set(motorSpeed);
-	}      
-        if (checkRPM() >= wantedRPM && state == 1){
-          state ++;  
-        }
-        if (state == 2){
-            transferMotor.set(-1);        
-        }
-	if (!ready.get() == true && !readyTripped) {
-            RobotState.BALL_CONTAINMENT_COUNT --;
-            readyTripped = true;
-        }else if(!ready.get() == false && readyTripped){
-            readyTripped = false;
-        }
-        if (!ready.get() == false && state == 2){
-            state ++;
-        }if (state == 3){
-	    transferMotor.set(0);
-            shooterMotor.set(0);
-            shooting = false;
-            state = 0;
+	switch (state){
+	    case 0:
+		transferMotor.set(-1);
+		if (!ready.get() == true){
+		    transferMotor.set(0);
+		    shooterMotor.set(motorSpeed);
+		    state ++;
+		}
+		break;
+	    case 1:
+		if (checkRPM() == true){
+		    state ++;
+		}
+		break;
+	    case 2:
+		transferMotor.set(-1);
+		if (!ready.get() == true && !readyTripped) {
+		    RobotState.BALL_CONTAINMENT_COUNT --;
+		    readyTripped = true;
+		}else if(!ready.get() == false && readyTripped){
+		    readyTripped = false;
+		    state ++;
+		}
+		break;
+	    case 3:
+		transferMotor.set(0);
+		shooterMotor.set(0);
+		shooting = false;
+		state = 0;
+		break;
 	}
     }
 
@@ -107,20 +111,23 @@ public class Shooter implements IShooter {
 	/*RPMtoMotorSpeed[1][0] = 720;
 	RPMtoMotorSpeed[1][1] = .2;
 	RPMtoMotorSpeed[2][0] = 1080;
-	RPMtoMotorSpeed[2][1] = .3;*/
-        velocity = 1;
-	wantedRPM = 2000;
+	RPMtoMotorSpeed[2][1] = .3;*/	
+        velocity = 1; //<-motorSpeed valuse right now *NOT ACTUAL VELOCITY*
+	wantedRPM = velocity * 94.13; //needs actual velocity
         return velocity;
     }
     
-    private double checkRPM(){
+    private boolean checkRPM(){
 	//check what the current RPM is
 	period = counter.getPeriod();
         RPM = 60/period;
-	
-	Print.getInstance().setLine(1, "RPM: " + RPM);
-	
-	return RPM;
+	RPMdifference = RPM - wantedRPM;
+	if (RPMdifference >= -10 && RPMdifference <= 10){
+	    closeEnough = true;
+	}else closeEnough = false;
+	Print.getInstance().setLine(1, "RPM: " + RPM);	
+	return closeEnough;	
+
     }
 
 }
