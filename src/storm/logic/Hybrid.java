@@ -122,6 +122,12 @@ public class Hybrid implements IRobotLogic {
                 driveTrain.drive(Q.getSpeed(), -Q.getSpeed());
                 break;
             case 3:
+                break;
+            case 4:
+                if (!shooter.isShooting()) shooter.startShoot(targetTracker.getDistance());
+            case 5:
+                //Bridge Manipulator
+                break;
             default:
                 break;
         }
