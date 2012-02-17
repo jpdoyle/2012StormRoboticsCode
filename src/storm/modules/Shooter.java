@@ -100,7 +100,7 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 3:
-		if ((System.currentTimeMillis() - startTime) >= 1500){
+		if ((System.currentTimeMillis() - startTime) >= 2000){
 		    state ++;
 		}
 		break;
@@ -135,17 +135,17 @@ public class Shooter implements IShooter {
         RPM = 60/period;
 	RPMdifference = RPM - wantedRPM;
 	RPMthreshold = wantedRPM / 10;
-	if ((System.currentTimeMillis() - startTime) >= 4000)
+	if ((System.currentTimeMillis() - startTime) >= 3000)
 	{
 	    return true;
-	}
+	}else return false;
 	
-	if (RPMdifference >= -RPMthreshold && RPMdifference <= RPMthreshold)
+	/*if (RPMdifference >= -RPMthreshold && RPMdifference <= RPMthreshold)
 	{
 	    closeEnough = true;
 	}else closeEnough = false;
 	Print.getInstance().setLine(1, "RPM: " + RPM);	
-	return closeEnough;
+	return closeEnough;*/
 
     }
 
