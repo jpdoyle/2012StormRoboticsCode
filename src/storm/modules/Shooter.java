@@ -21,7 +21,7 @@ import storm.utility.Print;
 
 public class Shooter implements IShooter {
 
-    SpeedController shooterMotor, transferMotor, feederMotor,kanayerBeltMotor;
+    SpeedController shooterMotor, transferMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
     boolean shooting, readyTripped, closeEnough;
@@ -29,12 +29,10 @@ public class Shooter implements IShooter {
     double [][] RPMtoMotorSpeed;
     int state, time, timeDifference, currentTime;
        
-    public Shooter(int shooterMotorChannel,int transferMotorChannel, int feederMotorChannel, int kanayerBeltMotorChannel, int IRready, int hallEffectSensor) {
+    public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
         
         shooterMotor = new Victor(shooterMotorChannel);
         transferMotor = new Victor(transferMotorChannel);
-	feederMotor = new Victor(feederMotorChannel);
-	kanayerBeltMotor = new Victor(kanayerBeltMotorChannel);
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
 	readyTripped = false;
@@ -65,15 +63,11 @@ public class Shooter implements IShooter {
     }
     
     public void startShoot(double velocity) {
-	feederMotor.set(-1);
-	kanayerBeltMotor.set(-1);
-	transferMotor.set(-1);
-	shooterMotor.set(1);
-	/*motorSpeed = getMotorSpeed(velocity);
+	motorSpeed = getMotorSpeed(velocity);
         //find out speed motor needs, move ball until ready to shoot,and start shooting process
         counter.start();
-        state = 0;*/
-        shooting = false;
+        state = 0;
+        shooting = true;
     }
 
     public void doShoot() {
@@ -126,7 +120,7 @@ public class Shooter implements IShooter {
 	RPMtoMotorSpeed[1][1] = .2;
 	RPMtoMotorSpeed[2][0] = 1080;
 	RPMtoMotorSpeed[2][1] = .3;*/	
-        velocity = 1; //<-motorSpeed valuse right now *NOT ACTUAL VELOCITY*
+        velocity = 1; //<-motorSpeed value right now *NOT ACTUAL VELOCITY*
 	wantedRPM = velocity * 94.13; //needs actual velocity
         return velocity;
     }
