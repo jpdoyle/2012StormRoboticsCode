@@ -8,8 +8,7 @@ package storm.logic;
 import storm.RobotState;
 import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
-import storm.modules.DriveTrain;
-import storm.modules.TargetTracker;
+import storm.interfaces.ITargetTracker;
 import storm.utility.Print;
 
 /**
@@ -18,8 +17,8 @@ import storm.utility.Print;
  */
 public class TrackerTest implements IRobotLogic {
     Print print = Print.getInstance();
-    IDriveTrain drive = new DriveTrain(RobotState.PORT_MOTOR_DRIVE_LEFT,RobotState.PORT_MOTOR_DRIVE_RIGHT);
-    TargetTracker tracker = new TargetTracker(drive,RobotState.PORT_GYRO_ROBOT_ROTATION);
+    IDriveTrain drive = RobotState.driveTrain;
+    ITargetTracker tracker = RobotState.targetTracker;
     
     public void doInit() {
         tracker.startTracking();
