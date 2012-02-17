@@ -69,6 +69,8 @@ public class Shooter implements IShooter {
         state = 0;
         shooting = true;
     }
+    int delay = 1000; //milliseconds
+
 
     public void doShoot() {
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
@@ -94,7 +96,11 @@ public class Shooter implements IShooter {
 		    readyTripped = true;
 		}else if(!ready.get() == false && readyTripped){
 		    readyTripped = false;
-		    state ++;
+	    try {
+		Thread.sleep(1000);
+		state ++;
+	    } catch (InterruptedException ex) {
+	    }	   
 		}
 		break;
 	    case 3:
