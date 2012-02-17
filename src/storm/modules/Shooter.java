@@ -134,10 +134,10 @@ public class Shooter implements IShooter {
 	}else if (time < 660){
 	    return false;
 	}
-	if (RPMdifference >= -10 && RPMdifference <= 10){
+	/*if (RPMdifference >= -10 && RPMdifference <= 10){
 	    closeEnough = true;
 	}else closeEnough = false;
-	Print.getInstance().setLine(1, "RPM: " + RPM);	
+	Print.getInstance().setLine(1, "RPM: " + RPM);*/	
 	return closeEnough;	
 
     }
