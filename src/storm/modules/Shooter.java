@@ -106,7 +106,7 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 3:
-		if (time == 330){
+		if (time >= 330){
 		    state ++;
 		}
 	    case 4:
@@ -114,6 +114,8 @@ public class Shooter implements IShooter {
 		shooterMotor.set(0);
 		shooting = false;
 		state = 0;
+		break;
+	    default:
 		break;
 	}
     }
