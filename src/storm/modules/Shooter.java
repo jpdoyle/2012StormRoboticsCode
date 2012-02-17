@@ -100,7 +100,7 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 3:
-		if ((System.currentTimeMillis() - startTime) >= 5000){
+		if ((System.currentTimeMillis() - startTime) >= 1500){
 		    state ++;
 		}
 		break;
@@ -133,7 +133,7 @@ public class Shooter implements IShooter {
 	period = counter.getPeriod();
         RPM = 60/period;
 	RPMdifference = RPM - wantedRPM;
-	if ((System.currentTimeMillis() - startTime) >= 2000){
+	if ((System.currentTimeMillis() - startTime) >= 1000){
 	    return true;
 	} return false;
 
