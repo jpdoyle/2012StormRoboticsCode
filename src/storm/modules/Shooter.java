@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Victor;
-import java.util.Timer;
 import storm.RobotState;
 import storm.interfaces.IShooter;
 import storm.utility.Print;
@@ -25,11 +24,10 @@ public class Shooter implements IShooter {
     SpeedController shooterMotor, transferMotor, feederMotor,kanayerBeltMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
-    Timer timer;
     boolean shooting, readyTripped, closeEnough;
     double motorSpeed, wantedRPM, period, RPM, RPMdifference;
     double [][] RPMtoMotorSpeed;
-    int state;
+    int state, time, timeDifference, currentTime;
        
     public Shooter(int shooterMotorChannel,int transferMotorChannel, int feederMotorChannel, int kanayerBeltMotorChannel, int IRready, int hallEffectSensor) {
         
@@ -39,7 +37,6 @@ public class Shooter implements IShooter {
 	kanayerBeltMotor = new Victor(kanayerBeltMotorChannel);
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
-	timer = new Timer();
 	readyTripped = false;
         counter = new Counter(EncodingType.k1X, hallEffect, hallEffect, false);
         counter.clearDownSource();
@@ -82,6 +79,7 @@ public class Shooter implements IShooter {
     public void doShoot() {
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
 	if (!shooting) return;
+	time ++;
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
@@ -98,19 +96,20 @@ public class Shooter implements IShooter {
 		break;
 	    case 2:
 		transferMotor.set(-1);
+		time = 0;
 		if (!ready.get() == true && !readyTripped) {
 		    RobotState.BALL_CONTAINMENT_COUNT --;
 		    readyTripped = true;
 		}else if(!ready.get() == false && readyTripped){
 		    readyTripped = false;
-	    try {
-		timer.wait(1000);
-		state ++;
-	    } catch (InterruptedException ex) {
-	    }	   
+		    state ++;
 		}
 		break;
 	    case 3:
+		if (time == 330){
+		    state ++;
+		}
+	    case 4:
 		transferMotor.set(0);
 		shooterMotor.set(0);
 		shooting = false;
