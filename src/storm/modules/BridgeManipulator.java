@@ -6,26 +6,44 @@ package storm.modules;
 
 import edu.wpi.first.wpilibj.*;
 import storm.interfaces.IBridgeManipulator;
+import storm.utility.Print;
 
 public class BridgeManipulator implements IBridgeManipulator {
     SpeedController bridgeManipulatorMotor;
     
-    private final double MOTOR_SPEED = 1.0;
+    AnalogChannel rotarySensor;
     
-    public BridgeManipulator(int BridgeMotor) {
-	bridgeManipulatorMotor = new Jaguar(BridgeMotor);
+    private final double MOTOR_SPEED = 1.0;
+    private final double TOP_LIMIT = 1.523;
+    private final double BOTTOM_LIMIT = 3.7;
+    
+    public BridgeManipulator(int bridgeMotorPort, int rotarySensorPort) {
+	bridgeManipulatorMotor = new Jaguar(bridgeMotorPort);
+	rotarySensor = new AnalogChannel(rotarySensorPort);
     }
 
     public void raise() {
-	bridgeManipulatorMotor.set(MOTOR_SPEED);
+//	double rotaryVoltage = getRoundedVoltage();
+	if (rotarySensor.getVoltage() >= TOP_LIMIT)
+	    bridgeManipulatorMotor.set(MOTOR_SPEED);
+	else
+	    stop();
     }
 
     public void lower() {
-	bridgeManipulatorMotor.set(-MOTOR_SPEED);
+//	double rotaryVoltage = getRoundedVoltage();
+	if (rotarySensor.getVoltage() <= BOTTOM_LIMIT)
+	    bridgeManipulatorMotor.set(-MOTOR_SPEED);
+	else
+	    stop();
     }
     
     public void stop() {
 	bridgeManipulatorMotor.set(0.0);
+    }
+    
+    private double getRoundedVoltage() { // Rounds voltage to one point of precision
+	return ((int) (rotarySensor.getVoltage() * 10.0)) / 10.0;
     }
 
 }
