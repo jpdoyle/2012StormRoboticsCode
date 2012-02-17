@@ -77,6 +77,7 @@ public class Shooter implements IShooter {
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
+		time = 0;
 		if (!ready.get() == true){
 		    transferMotor.set(0);
 		    shooterMotor.set(motorSpeed);
@@ -91,11 +92,7 @@ public class Shooter implements IShooter {
 	    case 2:
 		transferMotor.set(-1);
 		time = 0;
-		if (!ready.get() == true && !readyTripped) {
-		    RobotState.BALL_CONTAINMENT_COUNT --;
-		    readyTripped = true;
-		}else if(!ready.get() == false && readyTripped){
-		    readyTripped = false;
+		if (!ready.get() == false) {
 		    state ++;
 		}
 		break;
@@ -108,6 +105,8 @@ public class Shooter implements IShooter {
 		shooterMotor.set(0);
 		shooting = false;
 		state = 0;
+		time = 0;
+		RobotState.BALL_CONTAINMENT_COUNT --;
 		break;
 	    default:
 		break;
@@ -130,6 +129,11 @@ public class Shooter implements IShooter {
 	period = counter.getPeriod();
         RPM = 60/period;
 	RPMdifference = RPM - wantedRPM;
+	if (time >= 660){
+	    return true;
+	}else if (time < 660){
+	    return false;
+	}
 	if (RPMdifference >= -10 && RPMdifference <= 10){
 	    closeEnough = true;
 	}else closeEnough = false;
