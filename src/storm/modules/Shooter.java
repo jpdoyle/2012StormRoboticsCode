@@ -69,35 +69,38 @@ public class Shooter implements IShooter {
         state = 0;
         shooting = true;
     }
+    
+    long startTime = -1;
 
     public void doShoot() {
+		
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
 	if (!shooting) return;
-	time ++;
+	//time ++;
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
-		time = 0;
 		if (!ready.get() == true){
 		    transferMotor.set(0);
 		    shooterMotor.set(motorSpeed);
+		    startTime = System.currentTimeMillis();
 		    state ++;
 		}
 		break;
 	    case 1:
-		if (checkRPM()){
+		if (checkRPM() == true){
 		    state ++;
 		}
 		break;
 	    case 2:
 		transferMotor.set(-1);
-		time = 0;
 		if (!ready.get() == false) {
+		    startTime = System.currentTimeMillis();
 		    state ++;
 		}
 		break;
 	    case 3:
-		if (time >= 330){
+		if ((System.currentTimeMillis() - startTime) >= 5000){
 		    state ++;
 		}
 	    case 4:
@@ -129,16 +132,16 @@ public class Shooter implements IShooter {
 	period = counter.getPeriod();
         RPM = 60/period;
 	RPMdifference = RPM - wantedRPM;
-	if (time >= 660){
+	if ((System.currentTimeMillis() - startTime) >= 2000){
 	    return true;
-	}else if (time < 660){
-	    return false;
-	}
+	} return false;
+
+	
 	/*if (RPMdifference >= -10 && RPMdifference <= 10){
 	    closeEnough = true;
 	}else closeEnough = false;
-	Print.getInstance().setLine(1, "RPM: " + RPM);*/	
-	return closeEnough;	
+	Print.getInstance().setLine(1, "RPM: " + RPM);	
+	return closeEnough;	*/
 
     }
 
