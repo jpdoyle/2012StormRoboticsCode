@@ -25,7 +25,7 @@ public class Shooter implements IShooter {
     DigitalInput ready, hallEffect;
     Counter counter;
     boolean shooting, readyTripped, closeEnough;
-    double motorSpeed, wantedRPM, period, RPM, RPMdifference;
+    double motorSpeed, wantedRPM, period, RPM, RPMdifference, RPMthreshold;
     double [][] RPMtoMotorSpeed;
     int state, time, timeDifference, currentTime;
        
@@ -124,8 +124,9 @@ public class Shooter implements IShooter {
 	RPMtoMotorSpeed[2][0] = 1080;
 	RPMtoMotorSpeed[2][1] = .3;*/	
         velocity = 1; //<-motorSpeed value right now *NOT ACTUAL VELOCITY*
-	wantedRPM = velocity * 94.13; //needs actual velocity
-        return velocity;
+	//wantedRPM = velocity * 94.13; //needs actual velocity
+        wantedRPM = 2000;
+	return velocity;
     }
     
     private boolean checkRPM(){
@@ -133,16 +134,18 @@ public class Shooter implements IShooter {
 	period = counter.getPeriod();
         RPM = 60/period;
 	RPMdifference = RPM - wantedRPM;
-	if ((System.currentTimeMillis() - startTime) >= 1000){
+	RPMthreshold = wantedRPM / 10;
+	if ((System.currentTimeMillis() - startTime) >= 4000)
+	{
 	    return true;
-	} return false;
-
+	}
 	
-	/*if (RPMdifference >= -10 && RPMdifference <= 10){
+	if (RPMdifference >= -RPMthreshold && RPMdifference <= RPMthreshold)
+	{
 	    closeEnough = true;
 	}else closeEnough = false;
 	Print.getInstance().setLine(1, "RPM: " + RPM);	
-	return closeEnough;	*/
+	return closeEnough;
 
     }
 
