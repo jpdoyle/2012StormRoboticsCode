@@ -59,6 +59,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             netTable_.putDouble("Z", 0);
         netTable_.endTransaction();
         criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 0, 10, true);
+        thread.start();
     }
 
     private void retrieveImage() {
@@ -145,6 +146,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         }
     }
 
+
+
     public synchronized boolean isAimed() {
         if(Double.isNaN(zLoc_))
             return false;
@@ -203,7 +206,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                     return;
             }
 	    Print.getInstance().setLine(4, stateName);
-	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
+//	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
 //            Thread.yield();
 //            System.out.println("begin debug output");
 //            String line1 = "Angle: " + turner_.getGyroAngle(),
@@ -237,7 +240,12 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     Thread thread = new Thread() {
             public void run() {
                 long prevTime = System.currentTimeMillis();
-                while(tracking) {
+                for(;;) {
+                    if(!tracking) {
+                        Thread.yield();
+                        prevTime = System.currentTimeMillis();
+                        continue;
+                    }
                     doAim();
                     long currTime = System.currentTimeMillis();
                     Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
@@ -247,10 +255,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         };
 
     public void startTracking() {
-        if(tracking)
-            return;
         tracking = true;
-        thread.start();
     }
     public void stopTracking() {
         tracking = false;

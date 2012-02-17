@@ -109,7 +109,7 @@ public class Print {
         return getPrintStream(0,lines_.length);
     }
 
-    private void update() {
+    private synchronized void update() {
         lcd_.println(DriverStationLCD.Line.kMain6, 1, lines_[0]);
         lcd_.println(DriverStationLCD.Line.kUser2, 1, lines_[1]);
         lcd_.println(DriverStationLCD.Line.kUser3, 1, lines_[2]);
