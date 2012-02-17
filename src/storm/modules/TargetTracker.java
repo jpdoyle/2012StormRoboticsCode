@@ -99,7 +99,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private void convexHull() {
         BinaryImage oldImage = image_;
         try {
-            image_ = oldImage.convexHull(true);
+            image_ = oldImage.convexHull(false);
             ++state_;
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
@@ -116,7 +116,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private void findParticles() {
         BinaryImage oldImage = image_;
         try {
-            image_ = image_.removeSmallObjects(true, 4);
+            image_ = image_.removeSmallObjects(true, 2);
 
             ParticleAnalysisReport[] particles = image_.getOrderedParticleAnalysisReports();
             if (particles == null || particles.length == 0) {
@@ -124,7 +124,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             }
             topTarget_ = particles[0];
             for (int i = 1; i < particles.length; ++i) {
-                if (particles[i].center_mass_x < topTarget_.center_mass_x) {
+                if (particles[i].center_mass_y < topTarget_.center_mass_y) {
                     topTarget_ = particles[i];
                 }
             }
