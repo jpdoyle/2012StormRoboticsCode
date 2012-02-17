@@ -6,11 +6,8 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Victor;
 import storm.RobotState;
 import storm.interfaces.IShooter;
 import storm.utility.Print;
@@ -24,6 +21,7 @@ public class Shooter implements IShooter {
     SpeedController shooterMotor, transferMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
+    Timer timer;
     boolean shooting, readyTripped, closeEnough;
     double motorSpeed, wantedRPM, period, RPM, RPMdifference;
     double [][] RPMtoMotorSpeed;
@@ -35,6 +33,7 @@ public class Shooter implements IShooter {
         transferMotor = new Victor(transferMotorChannel);
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
+	timer = new Timer();
 	readyTripped = false;
         counter = new Counter(EncodingType.k1X, hallEffect, hallEffect, false);
         counter.clearDownSource();
@@ -95,7 +94,7 @@ public class Shooter implements IShooter {
 		}else if(!ready.get() == false && readyTripped){
 		    readyTripped = false;
 	    try {
-		Thread.sleep(1000);
+		timer.wait(1000);
 		state ++;
 	    } catch (InterruptedException ex) {
 	    }	   
