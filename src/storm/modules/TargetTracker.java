@@ -4,7 +4,6 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.camera.*;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -84,7 +83,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             image_ = cameraImg_.thresholdRGB(THRESHOLD[0][0], THRESHOLD[0][1], THRESHOLD[1][0], THRESHOLD[1][1], THRESHOLD[2][0], THRESHOLD[2][1]);
             ++state_;
         } catch (NIVisionException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             if (image_ == null) {
                 state_ = 0;
             }
@@ -103,7 +102,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             image_ = oldImage.convexHull(true);
             ++state_;
         } catch (NIVisionException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             state_ = 0;
         } finally {
             try {
@@ -131,7 +130,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             }
             ++state_;
         } catch (NIVisionException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             state_ = 0;
         } finally {
             try {
@@ -228,24 +227,28 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     public synchronized double getDistance() {
         return zLoc_;
     }
-    java.util.Timer timer = new java.util.Timer();
-    boolean tracking = false,locking = false;
+    long period = (long)(1000.0/CAMERA_FREQUENCY);
+    Thread thread = new Thread() {
+            public void run() {
+                for(;;) {
+                    doAim();
+                    try {
+                        Thread.sleep(period);
+                    } catch (InterruptedException ex) {
+//                  ex.printStackTrace();
+                    }
+                }
+            }
+        };
+    boolean locking = false;
 
     public void startTracking() {
-        if(tracking)
+        if(thread.isAlive())
             return;
-        tracking = true;
-        timer.schedule(new TimerTask() {
-
-            public void run() {
-                doAim();
-            }
-        }, (long)(1000/CAMERA_FREQUENCY), (long)(1000/CAMERA_FREQUENCY));
-
+        thread.start();
     }
     public void stopTracking() {
-        timer.cancel();
-        tracking = false;
+        thread.interrupt();
     }
 
     public void startLocking() {
