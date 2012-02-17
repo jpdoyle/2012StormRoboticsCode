@@ -6,8 +6,12 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Victor;
+import java.util.Timer;
 import storm.RobotState;
 import storm.interfaces.IShooter;
 import storm.utility.Print;
@@ -18,7 +22,7 @@ import storm.utility.Print;
 
 public class Shooter implements IShooter {
 
-    SpeedController shooterMotor, transferMotor;
+    SpeedController shooterMotor, transferMotor, feederMotor,kanayerBeltMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
     Timer timer;
@@ -27,10 +31,12 @@ public class Shooter implements IShooter {
     double [][] RPMtoMotorSpeed;
     int state;
        
-    public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
+    public Shooter(int shooterMotorChannel,int transferMotorChannel, int feederMotorChannel, int kanayerBeltMotorChannel, int IRready, int hallEffectSensor) {
         
         shooterMotor = new Victor(shooterMotorChannel);
         transferMotor = new Victor(transferMotorChannel);
+	feederMotor = new Victor(feederMotorChannel);
+	kanayerBeltMotor = new Victor(kanayerBeltMotorChannel);
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
 	timer = new Timer();
@@ -62,11 +68,15 @@ public class Shooter implements IShooter {
     }
     
     public void startShoot(double velocity) {
-	motorSpeed = getMotorSpeed(velocity);
+	feederMotor.set(-1);
+	kanayerBeltMotor.set(-1);
+	transferMotor.set(-1);
+	shooterMotor.set(1);
+	/*motorSpeed = getMotorSpeed(velocity);
         //find out speed motor needs, move ball until ready to shoot,and start shooting process
         counter.start();
-        state = 0;
-        shooting = true;
+        state = 0;*/
+        shooting = false;
     }
 
     public void doShoot() {
@@ -82,7 +92,7 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 1:
-		if (checkRPM() == true){
+		if (checkRPM()){
 		    state ++;
 		}
 		break;
