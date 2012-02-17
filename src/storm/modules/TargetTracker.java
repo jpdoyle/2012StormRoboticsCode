@@ -233,13 +233,12 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     boolean locking = false;
     Thread thread = new Thread() {
             public void run() {
+                long prevTime = System.currentTimeMillis();
                 while(tracking) {
                     doAim();
-                    try {
-                        Thread.sleep(period);
-                    } catch (InterruptedException ex) {
-//                  ex.printStackTrace();
-                    }
+                    long currTime = System.currentTimeMillis();
+                    Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
+                    prevTime = currTime;
                 }
             }
         };
