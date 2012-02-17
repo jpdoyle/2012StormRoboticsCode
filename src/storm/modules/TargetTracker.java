@@ -24,9 +24,9 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                                       {200, 255}};
     static final double FOV = 47;
     // z value required for vision target rectangle fill the view vertically
-    static final double Z_BASE = 7.7;
+    static final double Z_BASE = .77;
     // offset of camera lens from center of robot
-    //static final double CAMERA_OFFSET = 1.65;
+    //static final double CAMERA_OFFSET = .165;
     // angle between horizontal and the camera's view
     static final double CAMERA_ANGLE = 23;
     static final double CAMERA_ANGLE_COS = storm.utility.TrigLUT.cos(CAMERA_ANGLE/180*Math.PI);
@@ -201,6 +201,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             }
 	    Print.getInstance().setLine(4, stateName);
 	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
+            Thread.yield();
 //            System.out.println("begin debug output");
 //            String line1 = "Angle: " + turner_.getGyroAngle(),
 //                   line2 = stateName,
@@ -228,9 +229,10 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         return zLoc_;
     }
     long period = (long)(1000.0/CAMERA_FREQUENCY);
+    boolean tracking = false,locking = false;
     Thread thread = new Thread() {
             public void run() {
-                for(;;) {
+                while(tracking) {
                     doAim();
                     try {
                         Thread.sleep(period);
@@ -240,15 +242,15 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 }
             }
         };
-    boolean locking = false;
 
     public void startTracking() {
-        if(thread.isAlive())
+        if(tracking)
             return;
+        tracking = true;
         thread.start();
     }
     public void stopTracking() {
-        thread.interrupt();
+        tracking = false;
     }
 
     public void startLocking() {
