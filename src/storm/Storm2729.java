@@ -11,10 +11,7 @@ package storm;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Watchdog;
 import storm.interfaces.IRobotLogic;
-import storm.logic.BridgeManip3BATest;
-import storm.logic.Hybrid;
-import storm.logic.TeleopTest;
-import storm.logic.TrackerTest;
+import storm.logic.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,7 +35,7 @@ public class Storm2729 extends IterativeRobot {
 	
 	//autonomous = new THING
         hybrid = new TrackerTest();
-	teleop = new BridgeManip3BATest();
+	teleop = new ShooterTest();
 	
 
     }
