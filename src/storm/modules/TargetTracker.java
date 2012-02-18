@@ -19,7 +19,7 @@ import storm.utility.RobotTurner;
 public class TargetTracker implements storm.interfaces.ITargetTracker {
 
     static final int[][] THRESHOLD = {{0, 150},
-                                      {240, 255},
+                                      {220, 255},
                                       {200, 255}};
     static final NIVision.Range[] ranges = { new NIVision.Range(THRESHOLD[0][0], THRESHOLD[0][1]),
                                              new NIVision.Range(THRESHOLD[1][0], THRESHOLD[1][1]),
