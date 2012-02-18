@@ -25,10 +25,6 @@ public class TrackerTest implements IRobotLogic {
     }
 
     public void doContinuous() {
-        boolean aimed = tracker.isAimed();
-        print.setLine(0,aimed ? "Aimed" : "Not Aimed");
-        if(aimed)
-            print.setLine(1,"Z: " + tracker.getDistance());
     }
 
     public void doPeriodic() {

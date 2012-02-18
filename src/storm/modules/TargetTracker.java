@@ -155,7 +155,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         } //finally {
 //            try {
 //                image_.free();
-////                oldImage.free();
+//                oldImage.free();
 //            } catch (NIVisionException ex1) {
 //                //ex1.printStackTrace();
 //            }
@@ -165,15 +165,13 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 
 
     public synchronized boolean isAimed() {
-        if(Double.isNaN(zLoc_))
-            return false;
         double angle = turner_.getGyroAngle();
         return angle >= angleRange_[0] && angle <= angleRange_[1];
     }
 
     private synchronized void findDetails() {
         // magnitude along an axis projecting directly from the center of the camera's lens
-        double cameraZ = Z_BASE * topTarget_.imageWidth / topTarget_.boundingRectWidth;
+        double cameraZ = (Z_BASE * topTarget_.imageWidth) / topTarget_.boundingRectWidth;
         // magnitude along an axis in the direction of the camera, but parallel to the ground
         zLoc_ = cameraZ * CAMERA_ANGLE_COS;
         angleRange_[0] = angle_ + topTarget_.boundingRectLeft / (double) topTarget_.imageWidth * FOV - FOV / 2;
@@ -185,10 +183,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private void doAim() {
  //       System.out.println("tracking target");
         String stateName = "";
-        boolean once = false;
         state_ = 0;
-        while (!once || state_ != 0) {
-            once = true;
+        do {
 //            long startTime = System.currentTimeMillis();
             switch (state_) {
                 case 0:
@@ -243,7 +239,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //            System.out.println(line3);
 //
 //            lcd.updateLCD();
-        }
+        } while(state_ != 0);
     }
 
     public synchronized double getDistance() {
@@ -263,6 +259,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                     }
                     doAim();
                     long currTime = System.currentTimeMillis();
+                    Print.getInstance().setLine(0,isAimed() ? "Aimed" : "Not Aimed");
+                    Print.getInstance().setLine(1,"Z: " + zLoc_);
                     Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
 //                    Print.getInstance().setLine(4, mostExpensiveOp_);
 //                    Print.getInstance().setLine(5, mostExpensiveTime_/1000.0 + " seconds");
