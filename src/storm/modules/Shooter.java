@@ -23,11 +23,21 @@ public class Shooter implements IShooter {
     DigitalInput ready, hallEffect;
     Counter counter;
     Joystick shootJoystick;
-    boolean shooting, readyTripped, closeEnough;
+    boolean shooting,
+	    readyTripped;
     boolean btn7;
-    double motorSpeed, wantedRPM, period, RPM, RPMdifference, RPMthreshold;
-    double [][] RPMtoMotorSpeed;
-    int state, timeDifference, currentTime;
+    double motorSpeed,
+	    calculatedMotorSpeed,
+	    wantedRPM,
+	    period,
+	    RPMcurrent,
+	    RPMdifference,
+	    RPMthreshold,
+	    RPMold;
+    int state,
+	    timeDifference,
+	    currentTime,
+	    goodRangeCount;
        
     public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
         
@@ -39,51 +49,39 @@ public class Shooter implements IShooter {
         counter = new Counter(EncodingType.k1X, hallEffect, hallEffect, false);
         counter.clearDownSource();
         counter.setUpSourceEdge(true, false);
-	/*RPMtoMotorSpeed = new double[9][1];
-	RPMtoMotorSpeed[0][0] = 360;
-	RPMtoMotorSpeed[0][1] = .1;
-	RPMtoMotorSpeed[1][0] = 720;
-	RPMtoMotorSpeed[1][1] = .2;
-	RPMtoMotorSpeed[2][0] = 1080;
-	RPMtoMotorSpeed[2][1] = .3;
-	RPMtoMotorSpeed[3][0] = 1440;
-	RPMtoMotorSpeed[3][1] = .4;
-	RPMtoMotorSpeed[4][0] = 1800;
-	RPMtoMotorSpeed[4][1] = .5;
-	RPMtoMotorSpeed[5][0] = 2160;
-	RPMtoMotorSpeed[5][1] = .6;
-	RPMtoMotorSpeed[6][0] = 2520;
-	RPMtoMotorSpeed[6][1] = .7;
-	RPMtoMotorSpeed[7][0] = 2880;
-	RPMtoMotorSpeed[7][1] = .8;
-	RPMtoMotorSpeed[8][0] = 3240;
-	RPMtoMotorSpeed[8][1] = .9;
-	RPMtoMotorSpeed[9][0] = 3600;
-	RPMtoMotorSpeed[9][1] = 1;*/
     }
     
-    public void startShoot(double velocity) {
+    public void startShoot(double distance) {
 	shootJoystick = RobotState.joystickShoot;
 
-	motorSpeed = getMotorSpeed(velocity);
-        //find out speed motor needs, move ball until ready to shoot,and start shooting process
+	motorSpeed = getMotorSpeed(distance);
         counter.start();
         state = 0;
         shooting = true;
+	goodRangeCount = 0;
     }
     
     long startTime = -1;
 
     public void doShoot() {
 	if (!shooting) return;
-	checkRPM();
 	shooterMotor.set(motorSpeed);
+	checkRPM();
 	transferMotor.set(-1);
 	if (shootJoystick.getRawButton(7) && !btn7) {
 	    btn7 = true;
-	    motorSpeed = motorSpeed + .1;
+	    state ++;
 	} else if (!shootJoystick.getRawButton(7) && btn7) {
 	    btn7 = false;
+	}
+	switch (state){
+	    case 0: wantedRPM = 2000;
+		break;
+	    case 1: wantedRPM = 3300;
+		break;
+	    case 2: wantedRPM = 2200;
+		break;
+	    case 3: wantedRPM = 3000;
 	}
 	Print.getInstance().setLine(2, "Motor Speed: " + motorSpeed);
 
@@ -131,37 +129,52 @@ public class Shooter implements IShooter {
 	}*/
     }
 
-    private double getMotorSpeed(double velocity) {
-        //convert velocity from m/s into rpm into motor speed value
-	/*RPMtoMotorSpeed[1][0] = 720;
-	RPMtoMotorSpeed[1][1] = .2;
-	RPMtoMotorSpeed[2][0] = 1080;
-	RPMtoMotorSpeed[2][1] = .3;*/	
-        velocity = 0; //<-motorSpeed value right now *NOT ACTUAL VELOCITY*
-	//wantedRPM = velocity * 94.13; //needs actual velocity
-        wantedRPM = 2000;
-	return velocity;
+    private double getMotorSpeed(double distance) {
+        //convert distance into rpm into motor speed value
+	wantedRPM = 333.33*distance + 850.63 ;
+	calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
+	return calculatedMotorSpeed;
     }
     
     private boolean checkRPM(){
 	//check what the current RPM is
 	period = counter.getPeriod();
-        RPM = 60/period;
-	RPMdifference = RPM - wantedRPM;
-	RPMthreshold = wantedRPM / 10;	
-	Print.getInstance().setLine(1, "RPM: " + RPM);
-	return false;
+        RPMcurrent = 60/period;
+	RPMdifference = RPMold - RPMcurrent;
+	RPMold = RPMcurrent;
+	RPMthreshold = wantedRPM / 25;	
+	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	
-	/*if ((System.currentTimeMillis() - startTime) >= 3000)
+	if ((System.currentTimeMillis() - startTime) >= 3000)
 	{
 	    return true;
-	}else return false;*/
-	
-	/*if (RPMdifference >= -RPMthreshold && RPMdifference <= RPMthreshold)
+	}	
+	if (RPMcurrent >= wantedRPM)
 	{
-	    closeEnough = true;
-	}else closeEnough = false;
-	return closeEnough;*/
+	    if (RPMdifference > 0){
+		//do nothing
+	    }else {
+		motorSpeed += .0003*RPMdifference;
+		shooterMotor.set(motorSpeed);
+	    }
+	    
+	    
+	}else {
+	    if (RPMdifference < 0){
+		//do nothing
+	    }else {
+		motorSpeed += .0003*RPMdifference;
+		shooterMotor.set(motorSpeed);
+	    }
+	}
+	
+	if (Math.abs(RPMdifference) < RPMthreshold){
+	    goodRangeCount ++;
+	}else goodRangeCount = 0;
+	
+	if(goodRangeCount > 3){
+	    return true;
+	}else return false;
     }
 
     public boolean isShooting() {
