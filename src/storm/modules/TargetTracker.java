@@ -43,8 +43,11 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private ColorImage cameraImg_;
     private BinaryImage image_;
     private ParticleAnalysisReport topTarget_ = null;
-    private double[] angleRange_ = {Double.NaN, Double.NaN};
-    private double zLoc_ = Double.NaN;
+    private double[] angleRange_ = {0,0};
+    private double zLoc_ = 0;
+//
+//    private String mostExpensiveOp_ = "";
+//    private long mostExpensiveTime_ = 0;
 
     private final NetworkTable netTable_ = NetworkTable.getTable("Target Tracker");
 
@@ -101,35 +104,40 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     }
 
     private void convexHull() {
-        BinaryImage oldImage = image_;
+//        BinaryImage oldImage = image_;
         try {
-            image_ = oldImage.convexHull(false);
+            NIVision.convexHull(image_.image, image_.image, 1);
+//            image_ = oldImage.convexHull(false);
             ++state_;
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
             state_ = 0;
-        } finally {
-            try {
-                oldImage.free();
-            } catch (NIVisionException ex) {
-               // ex.printStackTrace();
-            }
-        }
+        }// finally {
+//            try {
+//                oldImage.free();
+//            } catch (NIVisionException ex) {
+//               // ex.printStackTrace();
+//            }
+//        }
     }
 
     private void findParticles() {
-        BinaryImage oldImage = image_;
+//        BinaryImage oldImage = image_;
         try {
-            image_ = image_.particleFilter(criteria);
+            NIVision.particleFilter(image_.image, image_.image, criteria);
+//            image_ = image_.particleFilter(criteria);
 
-            ParticleAnalysisReport[] particles = image_.getOrderedParticleAnalysisReports();
-            if (particles == null || particles.length == 0) {
-                throw new NIVisionException("No particles found");
+            int numParticles = image_.getNumberParticles();
+            if(numParticles <= 0) {
+                image_.free();
+                state_ = 0;
+                return;
             }
-            topTarget_ = particles[0];
-            for (int i = 1; i < particles.length; ++i) {
-                if(particles[i].center_mass_y < topTarget_.center_mass_y) {
-                    topTarget_ = particles[i];
+            topTarget_ = image_.getParticleAnalysisReport(0);
+            for (int i = 1; i < numParticles; ++i) {
+                ParticleAnalysisReport report = image_.getParticleAnalysisReport(i);
+                if(report.center_mass_y < topTarget_.center_mass_y) {
+                    topTarget_ = report;
                 }
             }
             ++state_;
@@ -139,7 +147,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         } finally {
             try {
                 image_.free();
-                oldImage.free();
+//                oldImage.free();
             } catch (NIVisionException ex1) {
                 //ex1.printStackTrace();
             }
@@ -164,14 +172,6 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         angleRange_[1] = angle_ + (topTarget_.boundingRectLeft + topTarget_.boundingRectWidth) / (double) topTarget_.imageWidth * FOV - FOV / 2;
         turner_.setAngle((angleRange_[0] + angleRange_[1]) / 2);
         state_ = 0;
-        netTable_.beginTransaction();
-            netTable_.putInt("X", topTarget_.boundingRectLeft);
-            netTable_.putInt("Y", topTarget_.boundingRectTop);
-            netTable_.putInt("Width", topTarget_.boundingRectWidth);
-            netTable_.putInt("Height", topTarget_.boundingRectHeight);
-            netTable_.putBoolean("Aimed", isAimed());
-            netTable_.putDouble("Z", zLoc_);
-        netTable_.endTransaction();
     }
 
     private void doAim() {
@@ -181,6 +181,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         state_ = 0;
         while (!once || state_ != 0) {
             once = true;
+//            long startTime = System.currentTimeMillis();
             switch (state_) {
                 case 0:
                     stateName = "Retrieving image";
@@ -205,6 +206,12 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 default:
                     return;
             }
+//            long endTime = System.currentTimeMillis();
+//
+//            if(endTime-startTime > mostExpensiveTime_) {
+//                mostExpensiveOp_ = stateName;
+//                mostExpensiveTime_ = endTime-startTime;
+//            }
 	    Print.getInstance().setLine(4, stateName);
 //	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
 //            Thread.yield();
@@ -249,7 +256,17 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                     doAim();
                     long currTime = System.currentTimeMillis();
                     Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
-                    prevTime = currTime;
+//                    Print.getInstance().setLine(4, mostExpensiveOp_);
+//                    Print.getInstance().setLine(5, mostExpensiveTime_/1000.0 + " seconds");
+                    netTable_.beginTransaction();
+                        netTable_.putInt("X", topTarget_.boundingRectLeft);
+                        netTable_.putInt("Y", topTarget_.boundingRectTop);
+                        netTable_.putInt("Width", topTarget_.boundingRectWidth);
+                        netTable_.putInt("Height", topTarget_.boundingRectHeight);
+                        netTable_.putBoolean("Aimed", isAimed());
+                        netTable_.putDouble("Z", zLoc_);
+                    netTable_.endTransaction();
+                    prevTime = System.currentTimeMillis();
                 }
             }
         };
