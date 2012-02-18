@@ -82,11 +82,11 @@ public abstract class RobotState {
     
     // Modules
     public static final IDriveTrain driveTrain;
-    public static final IBallCollector ballCollector;
+    public static final IBallCollector ballCollector = null;
     public static final IBridgeManipulator bridgeManipulator;
-    public static final IShooter shooter;
+    public static final IShooter shooter = null;
     public static final I3BA threeBA;
-    public static final ITargetTracker targetTracker;
+    public static final ITargetTracker targetTracker = null;
     public static final BallController ballController;
     
     static {
@@ -94,11 +94,11 @@ public abstract class RobotState {
 	joystickShoot = new Joystick(PORT_JOYSTICK_SHOOT);
 	
 	driveTrain = new DriveTrain(PORT_MOTOR_DRIVE_LEFT, PORT_MOTOR_DRIVE_RIGHT);
-	ballCollector = new BallCollector(PORT_MOTOR_KANAYERBELT_FEEDER, PORT_MOTOR_KANAYERBELT_BOTTOM, PORT_IR_BALL_IN_1, PORT_IR_BALL_IN_2);
+//	ballCollector = new BallCollector(PORT_MOTOR_KANAYERBELT_FEEDER, PORT_MOTOR_KANAYERBELT_BOTTOM, PORT_IR_BALL_IN_1, PORT_IR_BALL_IN_2);
 	bridgeManipulator = new BridgeManipulator(PORT_MOTOR_BRIDGE_MANIPULATOR, PORT_ENCODER_BRIDGE_MANIPULATOR);
-	shooter = new Shooter(PORT_MOTOR_SHOOTER_WHEEL, PORT_MOTOR_KANAYERBELT_TOP, PORT_IR_BALL_READY, PORT_ENCODER_SHOOTER_SPEED);
+//	shooter = new Shooter(PORT_MOTOR_SHOOTER_WHEEL, PORT_MOTOR_KANAYERBELT_TOP, PORT_IR_BALL_READY, PORT_ENCODER_SHOOTER_SPEED);
 	threeBA = new ThreeBA(PORT_MOTOR_3BA, PORT_LIMIT_SWITCH_3BA_FRONT, PORT_LIMIT_SWITCH_3BA_BACK);
-	targetTracker = new TargetTracker(driveTrain, PORT_GYRO_ROBOT_ROTATION);
+//	targetTracker = new TargetTracker(driveTrain, PORT_GYRO_ROBOT_ROTATION);
 	ballController = new BallController(ballCollector, shooter);
     }
     
