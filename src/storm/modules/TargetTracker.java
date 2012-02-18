@@ -4,13 +4,12 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import storm.utility.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import storm.interfaces.IDriveTrain;
+import storm.utility.AxisCamera;
 import storm.utility.Print;
-
 import storm.utility.RobotTurner;
 
 /**
