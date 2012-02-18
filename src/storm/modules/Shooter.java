@@ -71,17 +71,19 @@ public class Shooter implements IShooter {
 	if (shootJoystick.getRawButton(7) && !btn7) {
 	    btn7 = true;
 	    state ++;
+	    switch (state){
+		case 0: motorSpeed = getMotorSpeed(1);
+		    break;
+		case 1: motorSpeed = getMotorSpeed(5);
+		    break;
+		case 2: motorSpeed = getMotorSpeed(3);
+		    break;
+		case 3: motorSpeed = getMotorSpeed(7);
+		    break;
+	    }
+
 	} else if (!shootJoystick.getRawButton(7) && btn7) {
 	    btn7 = false;
-	}
-	switch (state){
-	    case 0: motorSpeed = getMotorSpeed(1);
-		break;
-	    case 1: motorSpeed = getMotorSpeed(5);
-		break;
-	    case 2: motorSpeed = getMotorSpeed(3);
-		break;
-	    case 3: motorSpeed = getMotorSpeed(7);
 	}
 	Print.getInstance().setLine(2, "Motor Speed: " + motorSpeed);
 
