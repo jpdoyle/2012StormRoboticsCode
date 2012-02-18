@@ -45,7 +45,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private int state_ = 0;
     private Image cameraImg_;
     private BinaryImage image_;
-    private ParticleAnalysisReport topTarget_ = null;
+    private volatile ParticleAnalysisReport topTarget_ = null;
     private double[] angleRange_ = {0,0};
     private double zLoc_ = 0;
 //
