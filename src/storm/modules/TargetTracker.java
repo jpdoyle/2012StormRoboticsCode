@@ -102,13 +102,13 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
             state_ = 0;
-        } finally {
-            try {
-                cameraImg_.free();
-            } catch (NIVisionException ex) {
-                //ex.printStackTrace();
-            }
-        }
+        } //finally {
+//            try {
+//                cameraImg_.free();
+//            } catch (NIVisionException ex) {
+//                //ex.printStackTrace();
+//            }
+//        }
     }
 
     private void convexHull() {
@@ -152,14 +152,14 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
             state_ = 0;
-        } finally {
-            try {
-                image_.free();
-//                oldImage.free();
-            } catch (NIVisionException ex1) {
-                //ex1.printStackTrace();
-            }
-        }
+        } //finally {
+//            try {
+//                image_.free();
+////                oldImage.free();
+//            } catch (NIVisionException ex1) {
+//                //ex1.printStackTrace();
+//            }
+//        }
     }
 
 
