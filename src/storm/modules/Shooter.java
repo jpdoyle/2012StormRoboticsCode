@@ -59,20 +59,22 @@ public class Shooter implements IShooter {
         state = 0;
         shooting = true;
 	goodRangeCount = 0;
+	startTime = System.currentTimeMillis();
+
     }
     
     long startTime = -1;
 
     public void doShoot() {
 	if (!shooting) return;
-	shooterMotor.set(motorSpeed);
 	checkRPM();
 	transferMotor.set(-1);
 	if (shootJoystick.getRawButton(7) && !btn7) {
 	    btn7 = true;
 	    state ++;
+	    
 	    switch (state){
-		case 0: motorSpeed = getMotorSpeed(1);
+		case 0: motorSpeed = getMotorSpeed(1);		
 		    break;
 		case 1: motorSpeed = getMotorSpeed(5);
 		    break;
@@ -81,6 +83,8 @@ public class Shooter implements IShooter {
 		case 3: motorSpeed = getMotorSpeed(7);
 		    break;
 	    }
+	    shooterMotor.set(motorSpeed);
+	    startTime = System.currentTimeMillis();
 
 	} else if (!shootJoystick.getRawButton(7) && btn7) {
 	    btn7 = false;
@@ -152,6 +156,9 @@ public class Shooter implements IShooter {
 	{
 	    return true;
 	}	
+	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
+
+	
 	if (RPMcurrent >= wantedRPM)
 	{
 	    if (RPMdifference > 0){
