@@ -4,7 +4,8 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import edu.wpi.first.wpilibj.camera.*;
+import storm.utility.AxisCamera;
+import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import storm.interfaces.IDriveTrain;
@@ -21,6 +22,9 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     static final int[][] THRESHOLD = {{0, 150},
                                       {240, 255},
                                       {200, 255}};
+    static final NIVision.Range[] ranges = { new NIVision.Range(THRESHOLD[0][0], THRESHOLD[0][1]),
+                                             new NIVision.Range(THRESHOLD[1][0], THRESHOLD[1][1]),
+                                             new NIVision.Range(THRESHOLD[2][0], THRESHOLD[2][1]) };
     static final double FOV = 47;
     // z value required for vision target rectangle fill the view vertically
     static final double Z_BASE = .77;
@@ -40,7 +44,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private RobotTurner turner_;
     private double angle_ = 0;
     private int state_ = 0;
-    private ColorImage cameraImg_;
+    private Image cameraImg_;
     private BinaryImage image_;
     private ParticleAnalysisReport topTarget_ = null;
     private double[] angleRange_ = {0,0};
@@ -62,6 +66,12 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             netTable_.putDouble("Z", 0);
         netTable_.endTransaction();
         criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 0, 10, true);
+        try {
+            cameraImg_ = new HSLImage();
+            image_ = new FancyBinaryImage();
+        } catch (NIVisionException ex) {
+            throw new NullPointerException("Cannot track targets without valid images");
+        }
         thread.start();
     }
 
@@ -71,29 +81,28 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             if (!camera_.freshImage()) {
                 return;
             }
-            cameraImg_ = camera_.getImage();
-            if (cameraImg_ != null) {
-                ++state_;
-//                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser6, 1, "                     ");
-//                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser6, 1, "(" + cameraImg_.getWidth() + "," + cameraImg_.getHeight() + ")");
-            }
+            camera_.getImage(cameraImg_);
+            ++state_;
         } catch (AxisCameraException ex) {
+            state_ = 0;
             //ex.printStackTrace();
         } catch (NIVisionException ex) {
+            state_ = 0;
             //ex.printStackTrace();
         }
     }
 
+    private void threshold(Image in,Image out) throws NIVisionException {
+        NIVision.colorThreshold(out.image, in.image, NIVision.ColorMode.IMAQ_RGB, ranges[0].getPointer(), ranges[1].getPointer(), ranges[2].getPointer());
+    }
+
     private void matchThreshold() {
         try {
-            image_ = null;
-            image_ = cameraImg_.thresholdRGB(THRESHOLD[0][0], THRESHOLD[0][1], THRESHOLD[1][0], THRESHOLD[1][1], THRESHOLD[2][0], THRESHOLD[2][1]);
+            threshold(cameraImg_,image_);
             ++state_;
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
-            if (image_ == null) {
-                state_ = 0;
-            }
+            state_ = 0;
         } finally {
             try {
                 cameraImg_.free();
