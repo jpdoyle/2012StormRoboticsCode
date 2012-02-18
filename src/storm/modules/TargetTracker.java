@@ -37,7 +37,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //    static final double CAMERA_FREQUENCY = 10;
     static final double ASPECT_RATIO = 24/18.0;
 
-    private CriteriaCollection criteria = new CriteriaCollection();
+//    private CriteriaCollection criteria = new CriteriaCollection();
 
     private AxisCamera camera_ = AxisCamera.getInstance();
     private RobotTurner turner_;
@@ -64,7 +64,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             netTable_.putBoolean("Aimed", false);
             netTable_.putDouble("Z", 0);
         netTable_.endTransaction();
-        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 0, 10, true);
+//        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 0, 10, true);
         try {
             cameraImg_ = new HSLImage();
             image_ = new FancyBinaryImage();
@@ -132,7 +132,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private void findParticles() {
 //        BinaryImage oldImage = image_;
         try {
-            NIVision.particleFilter(image_.image, image_.image, criteria);
+            NIVision.sizeFilter(image_.image, image_.image, false, 2, true);
+//            NIVision.particleFilter(image_.image, image_.image, criteria);
 //            image_ = image_.particleFilter(criteria);
 
             int numParticles = image_.getNumberParticles();
