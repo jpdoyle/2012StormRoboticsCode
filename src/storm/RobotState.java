@@ -87,6 +87,7 @@ public abstract class RobotState {
     public static final IShooter shooter;
     public static final I3BA threeBA;
     public static final ITargetTracker targetTracker;
+    public static final BallController ballController;
     
     static {
 	joystickDrive = new Joystick(PORT_JOYSTICK_DRIVE);
@@ -98,6 +99,7 @@ public abstract class RobotState {
 	shooter = new Shooter(PORT_MOTOR_SHOOTER_WHEEL, PORT_MOTOR_KANAYERBELT_TOP, PORT_IR_BALL_READY, PORT_ENCODER_SHOOTER_SPEED);
 	threeBA = new ThreeBA(PORT_MOTOR_3BA, PORT_LIMIT_SWITCH_3BA_FRONT, PORT_LIMIT_SWITCH_3BA_BACK);
 	targetTracker = new TargetTracker(driveTrain, PORT_GYRO_ROBOT_ROTATION);
+	ballController = new BallController(ballCollector, shooter);
     }
     
 }
