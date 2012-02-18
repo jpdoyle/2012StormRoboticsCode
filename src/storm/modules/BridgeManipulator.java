@@ -15,7 +15,7 @@ public class BridgeManipulator implements IBridgeManipulator {
     
     private final double MOTOR_SPEED = 1.0;
     private final double TOP_LIMIT = 1.523;
-    private final double BOTTOM_LIMIT = 3.7;
+    private final double BOTTOM_LIMIT = 3.35;
     
     public BridgeManipulator(int bridgeMotorPort, int rotarySensorPort) {
 	bridgeManipulatorMotor = new Jaguar(bridgeMotorPort);
