@@ -267,14 +267,16 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                     Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
 //                    Print.getInstance().setLine(4, mostExpensiveOp_);
 //                    Print.getInstance().setLine(5, mostExpensiveTime_/1000.0 + " seconds");
-                    netTable_.beginTransaction();
-                        netTable_.putInt("X", topTarget_.boundingRectLeft);
-                        netTable_.putInt("Y", topTarget_.boundingRectTop);
-                        netTable_.putInt("Width", topTarget_.boundingRectWidth);
-                        netTable_.putInt("Height", topTarget_.boundingRectHeight);
-                        netTable_.putBoolean("Aimed", isAimed());
-                        netTable_.putDouble("Z", zLoc_);
-                    netTable_.endTransaction();
+                    if(topTarget_ != null) {
+                        netTable_.beginTransaction();
+                            netTable_.putInt("X", topTarget_.boundingRectLeft);
+                            netTable_.putInt("Y", topTarget_.boundingRectTop);
+                            netTable_.putInt("Width", topTarget_.boundingRectWidth);
+                            netTable_.putInt("Height", topTarget_.boundingRectHeight);
+                            netTable_.putBoolean("Aimed", isAimed());
+                            netTable_.putDouble("Z", zLoc_);
+                        netTable_.endTransaction();
+                    }
                     prevTime = System.currentTimeMillis();
                 }
             }
