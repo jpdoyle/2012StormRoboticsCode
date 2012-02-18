@@ -68,38 +68,6 @@ public class Teleop implements IRobotLogic {
             setButtonState(RobotState.JOYSTICK_BUTTON_SHOOT, false);
         }
         
-        // Manually override collector - in
-        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN, true);
-            kanayerBelt.startCollecting(1);
-        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_IN, false);
-        }
-        
-        // Manually override collector - out
-        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT, true);
-            kanayerBelt.startCollecting(1);
-        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_START_OUT, false);
-        }
-        
-        // Manually override collector - stop
-        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP, true);
-            kanayerBelt.stopCollecting();
-        } else if (buttonReleased(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_STOP, false);
-        }
-        
-        // Manually override collector - return control
-        if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL, true);
-            kanayerBelt.returnControl();
-        } else if (buttonPressed(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL)) {
-            setButtonState(RobotState.JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL, false);
-        }
-        
         // Drive if robot is not aiming
         if (driveAllowed) {
             double leftYValue = driveJoystick.getRawAxis(RobotState.JOYSTICK_AXIS_DRIVE_LEFT);

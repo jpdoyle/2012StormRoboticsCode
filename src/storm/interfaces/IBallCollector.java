@@ -2,14 +2,13 @@ package storm.interfaces;
 
 public interface IBallCollector {
     
-    public static final double MOTOR_SPEED_IN = 1.0d;
-    public static final double MOTOR_SPEED_OUT = -1.0d;
+    public static final int DIRECTION_UP   = -1;
+    public static final int DIRECTION_DOWN = 1;
     
-    public void startCollecting(int direction);
-    public void stopCollecting();
-    public void returnControl();
+    public void start(int direction);
+    public void stop();
     
-    public int getNumBalls();
+    public boolean isRunning();
     
     public void run();
     

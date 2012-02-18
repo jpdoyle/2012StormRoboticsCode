@@ -84,14 +84,17 @@ public class Storm2729 extends IterativeRobot {
 
     public void disabledPeriodic() {
 	hybrid.doEnd();
+	teleop.doEnd();
     }
 
     public void disabledContinuous() {
 	hybrid.doEnd();
+	teleop.doEnd();
     }
 
     public void disabledInit() {
 	hybrid.doEnd();
+	teleop.doEnd();
     }
     
 }
