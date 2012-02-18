@@ -6,6 +6,8 @@ package storm.logic;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
 import storm.RobotState;
+import storm.interfaces.IBallCollector;
+import storm.interfaces.IBridgeManipulator;
 import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
 import storm.interfaces.IShooter;
@@ -14,23 +16,32 @@ import storm.utility.Queue;
 
 /**
  *
- * @author Developer
+ * @author Awesome
  */
 public class Hybrid implements IRobotLogic {
 
     IDriveTrain driveTrain;
     IShooter shooter;
     ITargetTracker targetTracker;
+    IBallCollector ballCollector;
+    IBridgeManipulator manipulator;
 
     AnalogChannel autoType;
 
     Queue Q = new Queue();
+
+    boolean isLoading = false;
+    boolean isManipulating = false;
+
+    int waitTimer = 0;
 
     public Hybrid(int port) {
 
         driveTrain = RobotState.driveTrain;
         shooter = RobotState.shooter;
         targetTracker = RobotState.targetTracker;
+        ballCollector = RobotState.ballCollector;
+        manipulator = RobotState.bridgeManipulator;
 
         autoType = new AnalogChannel(port);
 
@@ -38,23 +49,24 @@ public class Hybrid implements IRobotLogic {
 
     public void doInit() {
 
-        //1 - Straight    \\
-        //2 - Left        \\
-        //3 - Load        \\
-        //4 - Shoot       \\
-        //5 - Manipulator \\
+        Q.clear();
+        waitTimer = 0;
+
+        //1 - Straight     \\
+        //2 - Left         \\
+        //3 - Manipulate   \\
+        //4 - Shoot        \\
+        //5 - Start Load   \\
+        //6 - Stop Load    \\
+        //7 - Wait         \\
 
         switch (autoType.getValue()) {
             case 1: //Super Auto Mode
 
-                //Aim
-                //Shoot
-                Q.add(1, 60, -.5);
-                Q.add(5, 25, 1);
-                //Pick up
-                //Possibly move
-                //Aim
-                //Shoot
+                Q.add(4, 0, .8); //Shoot
+                Q.add(1, 60, -.5); //Move back
+                Q.add(5, 0, 0); //Start Loading
+                Q.add(3, 0, 0); //Manipulate
 
                 break;
             case 2: //Quick ninja
@@ -93,41 +105,65 @@ public class Hybrid implements IRobotLogic {
     }
 
     public void doContinuous() {
+        shooter.doShoot();
         //Eat a muffin.  please :)
     }
 
     public void doPeriodic() {
 
         if (Q.isRunning()) runQueue();
+
         if (Q.getType() == 1 || Q.getType() == 2) {
-            if (driveTrain.getDistance() >= Q.getDistance()) Q.next();
+            if (driveTrain.getDistance() >= Q.getDistance()) {
+                Q.next();
+                waitTimer = 0;
+            }
+        } else if (Q.getType() == 3) {
+            //Manipulate
+            Q.next();
+            waitTimer = 0;
         } else if (Q.getType() == 4) {
-            if (!shooter.isShooting()) Q.next();
-        } else if (Q.getType() == 5) {
-            
+            //if (!shooter.isShooting()) Q.next();
+            Q.next();
+            waitTimer = 0;
+        } else if (Q.getType() == 5 || Q.getType() == 6) {
+            Q.next();
+            waitTimer = 0;
         }
+
+        if (isLoading) ballCollector.start(IBallCollector.DIRECTION_UP);
+        if (isManipulating) manipulator.lower();
 
     }
 
     public void doEnd() {
+        Q.clear();
     }
 
     public void runQueue() {
 
         switch ((int)Q.getType()) {
-            case 1:
+            case 1: //Forward/Backward
                 driveTrain.drive(Q.getSpeed(), Q.getSpeed());
                 break;
-            case 2:
+            case 2: //Turning
                 driveTrain.drive(Q.getSpeed(), -Q.getSpeed());
                 break;
-            case 3:
+            case 3: //Manipulate
+                isManipulating = true;
                 break;
-            case 4:
+            case 4: //Shoot
                 if (!shooter.isShooting()) shooter.startShoot(targetTracker.getDistance());
-            case 5:
-                //Bridge Manipulator
+                //Make sure it's continuous
                 break;
+            case 5:
+                isLoading = true;
+                break;
+            case 6:
+                isLoading = false;
+                break;
+            case 7:
+                waitTimer++;
             default:
                 break;
         }
