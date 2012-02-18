@@ -41,7 +41,7 @@ public class Shooter implements IShooter {
        
     public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
         
-        shooterMotor = new Victor(shooterMotorChannel);
+        shooterMotor = new Jaguar(shooterMotorChannel);
         transferMotor = new Victor(transferMotorChannel);
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
@@ -75,13 +75,13 @@ public class Shooter implements IShooter {
 	    btn7 = false;
 	}
 	switch (state){
-	    case 0: wantedRPM = 2000;
+	    case 0: motorSpeed = getMotorSpeed(1);
 		break;
-	    case 1: wantedRPM = 3300;
+	    case 1: motorSpeed = getMotorSpeed(5);
 		break;
-	    case 2: wantedRPM = 2200;
+	    case 2: motorSpeed = getMotorSpeed(3);
 		break;
-	    case 3: wantedRPM = 3000;
+	    case 3: motorSpeed = getMotorSpeed(7);
 	}
 	Print.getInstance().setLine(2, "Motor Speed: " + motorSpeed);
 
