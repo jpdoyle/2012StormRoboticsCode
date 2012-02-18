@@ -18,10 +18,11 @@ import storm.utility.Print;
 
 public class Shooter implements IShooter {
 
-    Joystick shootJoystick;
+    //Joystick shootJoystick;
     SpeedController shooterMotor, transferMotor;
     DigitalInput ready, hallEffect;
     Counter counter;
+    Joystick shootJoystick;
     boolean shooting, readyTripped, closeEnough;
     boolean btn7;
     double motorSpeed, wantedRPM, period, RPM, RPMdifference, RPMthreshold;
@@ -62,7 +63,7 @@ public class Shooter implements IShooter {
     }
     
     public void startShoot(double velocity) {
-		shootJoystick = RobotState.joystickShoot;
+	shootJoystick = RobotState.joystickShoot;
 
 	motorSpeed = getMotorSpeed(velocity);
         //find out speed motor needs, move ball until ready to shoot,and start shooting process
@@ -74,8 +75,10 @@ public class Shooter implements IShooter {
     long startTime = -1;
 
     public void doShoot() {
+	if (!shooting) return;
 	checkRPM();
 	shooterMotor.set(motorSpeed);
+	transferMotor.set(-1);
 	if (shootJoystick.getRawButton(7) && !btn7) {
 	    btn7 = true;
 	    motorSpeed = motorSpeed + .1;
@@ -89,31 +92,34 @@ public class Shooter implements IShooter {
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
-		if (!ready.get() == true){
-		    transferMotor.set(0);
-		    shooterMotor.set(motorSpeed);
-		    startTime = System.currentTimeMillis();
-		    state ++;
-		}
+		shooterMotor.set(motorSpeed);
+		startTime = System.currentTimeMillis();
+		state ++;
+		
 		break;
 	    case 1:
+		if (!ready.get() == true){
+		    transferMotor.set(0);
+		    state ++;}
+		break ;
+	    case 2:
 		if (checkRPM() == true){
 		    state ++;
 		}
 		break;
-	    case 2:
+	    case 3:
 		transferMotor.set(-1);
 		if (!ready.get() == false) {
 		    startTime = System.currentTimeMillis();
 		    state ++;
 		}
 		break;
-	    case 3:
+	    case 4:
 		if ((System.currentTimeMillis() - startTime) >= 2000){
 		    state ++;
 		}
 		break;
-	    case 4:
+	    case 5:
 		transferMotor.set(0);
 		shooterMotor.set(0);
 		shooting = false;
@@ -145,8 +151,8 @@ public class Shooter implements IShooter {
 	RPMthreshold = wantedRPM / 10;	
 	Print.getInstance().setLine(1, "RPM: " + RPM);
 	return false;
-	/*
-	if ((System.currentTimeMillis() - startTime) >= 3000)
+	
+	/*if ((System.currentTimeMillis() - startTime) >= 3000)
 	{
 	    return true;
 	}else return false;*/
