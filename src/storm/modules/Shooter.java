@@ -149,7 +149,8 @@ public class Shooter implements IShooter {
         RPMcurrent = 60/period;
 	RPMdifference = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
-	RPMthreshold = wantedRPM / 25;	
+	RPMthreshold = wantedRPM / 25;
+	Print.getInstance().setLine(5, "Period: " + period);
 	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	
 	if ((System.currentTimeMillis() - startTime) >= 10000)
