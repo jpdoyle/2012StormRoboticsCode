@@ -145,18 +145,22 @@ public class Shooter implements IShooter {
     
     private boolean checkRPM(){
 	//check what the current RPM is
-	period = counter.getPeriod();
+	period = counter.getPeriod();	
+	Print.getInstance().setLine(5, "Period: " + period);
+	if ((System.currentTimeMillis() - startTime) >= 10000)
+	{
+	    return true;
+	}
+	if (period >= 1 || period <= 0){
+	    return false;
+	}
         RPMcurrent = 60/period;
 	RPMdifference = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
 	RPMthreshold = wantedRPM / 25;
-	Print.getInstance().setLine(5, "Period: " + period);
 	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	
-	if ((System.currentTimeMillis() - startTime) >= 10000)
-	{
-	    return true;
-	}	
+	
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
 
 	
@@ -167,6 +171,7 @@ public class Shooter implements IShooter {
 	    }else {
 		motorSpeed += .0003*RPMdifference;
 		shooterMotor.set(motorSpeed);
+		Print.getInstance().setLine(6, "change motor speed: " + motorSpeed);
 	    }
 	    
 	    
@@ -176,6 +181,7 @@ public class Shooter implements IShooter {
 	    }else {
 		motorSpeed += .0003*RPMdifference;
 		shooterMotor.set(motorSpeed);
+	    	Print.getInstance().setLine(6, "change motor speed: " + motorSpeed);
 	    }
 	}
 	
