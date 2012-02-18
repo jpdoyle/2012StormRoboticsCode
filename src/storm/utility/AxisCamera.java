@@ -278,7 +278,7 @@ public class AxisCamera implements ISensor {
         Pointer ptr = Pointer.createStringBuffer(IPAddress);
         cameraStartFn.call1(ptr);
     }
-    private static final TaskExecutor cameraTaskExecutor = new TaskExecutor("camera task executor");
+    private static final TaskExecutor cameraTaskExecutor = new TaskExecutor("Storm camera task executor");
     private static final BlockingFunction getImageFn = NativeLibrary.getDefaultInstance().getBlockingFunction("AxisCameraGetImage");
 
     static {
