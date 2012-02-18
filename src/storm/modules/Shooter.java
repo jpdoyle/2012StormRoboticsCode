@@ -133,6 +133,7 @@ public class Shooter implements IShooter {
         //convert distance into rpm into motor speed value
 	wantedRPM = 333.33*distance + 850.63 ;
 	calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
+	Print.getInstance().setLine(3, "Wanted RPM: " + wantedRPM);
 	return calculatedMotorSpeed;
     }
     
@@ -145,7 +146,7 @@ public class Shooter implements IShooter {
 	RPMthreshold = wantedRPM / 25;	
 	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	
-	if ((System.currentTimeMillis() - startTime) >= 3000)
+	if ((System.currentTimeMillis() - startTime) >= 10000)
 	{
 	    return true;
 	}	
