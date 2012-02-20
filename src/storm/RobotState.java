@@ -70,6 +70,10 @@ public abstract class RobotState {
     public static final int PORT_ENCODER_DRIVE_RIGHT_B_BACKUP = 7;
     public static final int PORT_ENCODER_SHOOTER_SPEED        = 5;
     public static final int PORT_ENCODER_BRIDGE_MANIPULATOR   = 2; // <-- ANALOG
+
+    // Solenoids
+    public static final int PORT_SOLENOID_HIGH_GEAR = 2;
+    public static final int PORT_SOLENOID_LOW_GEAR  = 1;
     
     // Global State
     public static int BALL_CONTAINMENT_COUNT = 0;

@@ -19,7 +19,12 @@ public class DriveTrain implements IDriveTrain {
 
     SpeedController leftMotor, rightMotor;
     RobotDrive drive;
+    Solenoid solenoidHigh;
+    Solenoid solenoidLow;
+
     boolean highgear = true;
+    boolean lowgear = false;
+
     Queue queue = new Queue();
     public static Encoder leftEncoder = new Encoder(1, 2);
     public static Encoder rightEncoder = new Encoder(3, 4);
@@ -33,13 +38,14 @@ public class DriveTrain implements IDriveTrain {
 
     Print printer = Print.getInstance();
     
-    public DriveTrain (int motorChannelL, int motorChannelR){
+    public DriveTrain (int motorChannelL, int motorChannelR, int solChannelH, int solChannelL){
         leftMotor = new Victor(motorChannelL);
         rightMotor = new Victor(motorChannelR);
 	drive = new RobotDrive(leftMotor, rightMotor);
 	drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
 	drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-
+        solenoidHigh = new Solenoid(solChannelH);
+        solenoidLow = new Solenoid(solChannelL);
     }
     
     public void drive(double leftSpeed, double rightSpeed) {
@@ -143,16 +149,37 @@ public class DriveTrain implements IDriveTrain {
     }
 
     public void switchGear() {
-        if (highgear) highgear = false;
-        else highgear = true;
+        if (highgear) {
+            highgear = false;
+            lowgear = true;
+        }
+        else {
+            highgear = true;
+            lowgear = false;
+        }
+        closeThePodBayDoors();
     }
 
     public void setHighGear() {
         highgear = true;
+        lowgear = false;
+        closeThePodBayDoors();
     }
 
     public void setLowGear() {
         highgear = false;
+        lowgear = true;
+        closeThePodBayDoors();
+    }
+
+    private void closeThePodBayDoors() {
+        if (highgear && !lowgear) {
+            solenoidHigh.set(true);
+            solenoidLow.set(false);
+        } else if (!highgear && lowgear) {
+            solenoidHigh.set(false);
+            solenoidLow.set(true);
+        }
     }
     
 }
