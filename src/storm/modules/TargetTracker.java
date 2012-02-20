@@ -4,6 +4,7 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
@@ -57,8 +58,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     public TargetTracker(IDriveTrain drive,int gyroChannel) {
         turner_ = new RobotTurner(drive,gyroChannel);
         netTable_.beginTransaction();
-            netTable_.putInt("X", camera_.getResolution().width/2);
-            netTable_.putInt("Y",camera_.getResolution().height/2);
+            netTable_.putInt("X",0);
+            netTable_.putInt("Y",0);
             netTable_.putInt("Width", 0);
             netTable_.putInt("Height", 0);
             netTable_.putBoolean("Aimed", false);
@@ -185,6 +186,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
  //       System.out.println("tracking target");
         String stateName = "";
         state_ = 0;
+        topTarget_ = null;
+        zLoc_ = 0;
         do {
 //            long startTime = System.currentTimeMillis();
             switch (state_) {
@@ -272,8 +275,18 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                             netTable_.putInt("Width", topTarget_.boundingRectWidth);
                             netTable_.putInt("Height", topTarget_.boundingRectHeight);
                             netTable_.putBoolean("Aimed", isAimed());
-                            netTable_.putDouble("Z", zLoc_);
                         netTable_.endTransaction();
+                        SmartDashboard.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
+                    } else {
+                        netTable_.beginTransaction();
+                            netTable_.putInt("X", 0);
+                            netTable_.putInt("Y", 0);
+                            netTable_.putInt("Width", 0);
+                            netTable_.putInt("Height", 0);
+                            netTable_.putBoolean("Aimed", false);
+                            netTable_.putDouble("Z", 0);
+                        netTable_.endTransaction();
+                        SmartDashboard.putDouble("target.distance", 0);
                     }
                     prevTime = System.currentTimeMillis();
                 }
