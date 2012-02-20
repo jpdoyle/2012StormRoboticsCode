@@ -15,7 +15,7 @@ import storm.interfaces.IDriveTrain;
 
 public class RobotTurner {
 
-    static final double PID_P = 1,PID_I = 0,PID_D = 0;
+    static final double PID_P = 10,PID_I = 0,PID_D = 0;
 
     Gyro gyro_;
     IDriveTrain drive_;
@@ -24,7 +24,7 @@ public class RobotTurner {
     PIDOutput turn_ = new PIDOutput() {
 	public void pidWrite(double output) {
             drive_.drive(output, -output);
-            Print.getInstance().setLine(0, "(" + output + "," + -output + ")");
+            Print.getInstance().setLine(0, "(" + ((int)(output*100))/100.0 + "," + -((int)(output*100))/100.0 + ")");
 	}
     };
     PIDSource source_ = /*gyro_;*/new PIDSource() {
@@ -48,7 +48,7 @@ public class RobotTurner {
     public void setAngle(double angle) {
         pid_.setSetpoint(angle/360);
         Print.getInstance().setLine(1, "Setpoint: " + angle);
-        Print.getInstance().setLine(2, "Gyro angle: " + getGyroAngle());
+        Print.getInstance().setLine(2, "Gyro: " + getGyroAngle());
     }
     
     public double getGyroAngle() {

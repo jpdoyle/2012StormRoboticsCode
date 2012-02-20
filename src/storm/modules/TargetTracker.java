@@ -86,10 +86,10 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             camera_.getImage(cameraImg_);
             ++state_;
         } catch (AxisCameraException ex) {
-            state_ = 0;
+            reset();
             //ex.printStackTrace();
         } catch (NIVisionException ex) {
-            state_ = 0;
+            reset();
             //ex.printStackTrace();
         }
     }
@@ -104,7 +104,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             ++state_;
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
-            state_ = 0;
+            reset();
         } //finally {
 //            try {
 //                cameraImg_.free();
@@ -122,7 +122,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             ++state_;
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
-            state_ = 0;
+            reset();
         }// finally {
 //            try {
 //                oldImage.free();
@@ -154,7 +154,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             ++state_;
         } catch (NIVisionException ex) {
 //            ex.printStackTrace();
-            state_ = 0;
+            reset();
         } //finally {
 //            try {
 //                image_.free();
@@ -182,13 +182,15 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         turner_.setAngle((angleRange_[0] + angleRange_[1]) / 2);
         state_ = 0;
     }
+    private synchronized void reset() {
+        state_ = 0;
+        topTarget_ = null;
+        zLoc_ = angleRange_[0] = angleRange_[1] = Double.NaN;
+    }
 
     private void doAim() {
  //       System.out.println("tracking target");
         String stateName = "";
-        state_ = 0;
-        topTarget_ = null;
-        zLoc_ = angleRange_[0] = angleRange_[1] = Double.NaN;
         do {
 //            long startTime = System.currentTimeMillis();
             switch (state_) {
