@@ -76,7 +76,7 @@ public class Shooter implements IShooter {
 	    state ++;
 	    if (state> 3) state = 0;
 	    switch (state){
-		case 0: motorSpeed = getMotorSpeed(1);		
+		case 0: motorSpeed = getMotorSpeed(2.5);		
 		    break;
 		case 1: motorSpeed = getMotorSpeed(5);
 		    break;
@@ -150,7 +150,7 @@ public class Shooter implements IShooter {
 	
 	period = counter.getPeriod();
 	Print.getInstance().setLine(5, "Ctr:" + counter.get() + "Prd:" + period);
-	System.out.println("Prd:" + period);
+	//System.out.println("Prd:" + period);
 	if ((System.currentTimeMillis() - startTime) >= 10000)
 	{
 	    return true;
@@ -199,10 +199,10 @@ public class Shooter implements IShooter {
 	if (Math.abs(RPMdifference) < RPMthreshold){
 	    goodRangeCount ++;
 	}else goodRangeCount = 0;
-	System.out.println("goodRangeCount:" + goodRangeCount);
-	System.out.println("RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " MTRSpd: " + motorSpeed);	
+	//System.out.println("goodRangeCount:" + goodRangeCount);
+	System.out.println("RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " MTRSpd: " + motorSpeed + " PRD: " + period);	
 
-	if(goodRangeCount > 3){
+	if(goodRangeCount > 10){
 	    return true;
 	}else return false;
     }
