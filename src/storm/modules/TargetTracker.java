@@ -48,8 +48,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private Image cameraImg_;
     private BinaryImage image_;
     private volatile ParticleAnalysisReport topTarget_ = null;
-    private double[] angleRange_ = {0,0};
-    private volatile double zLoc_ = 0;
+    private double[] angleRange_ = {Double.NaN,Double.NaN};
+    private volatile double zLoc_ = Double.NaN;
 //
 //    private String mostExpensiveOp_ = "";
 //    private long mostExpensiveTime_ = 0;
@@ -174,7 +174,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 
     private synchronized void findDetails() {
         // magnitude along an axis projecting directly from the center of the camera's lens
-        double cameraZ = (Z_BASE * topTarget_.imageWidth) / topTarget_.boundingRectWidth;
+        double cameraZ = (Z_BASE * topTarget_.imageHeight) / topTarget_.boundingRectHeight;
         // magnitude along an axis in the direction of the camera, but parallel to the ground
         zLoc_ = cameraZ * CAMERA_ANGLE_COS;
         angleRange_[0] = angle_ + topTarget_.boundingRectLeft / (double) topTarget_.imageWidth * FOV - FOV / 2;
@@ -188,7 +188,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         String stateName = "";
         state_ = 0;
         topTarget_ = null;
-        zLoc_ = 0;
+        zLoc_ = angleRange_[0] = angleRange_[1] = Double.NaN;
         do {
 //            long startTime = System.currentTimeMillis();
             switch (state_) {
@@ -264,8 +264,6 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                     }
                     doAim();
                     long currTime = System.currentTimeMillis();
-                    Print.getInstance().setLine(0,isAimed() ? "Aimed" : "Not Aimed");
-                    Print.getInstance().setLine(1,"Z: " + zLoc_);
                     Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
 //                    Print.getInstance().setLine(4, mostExpensiveOp_);
 //                    Print.getInstance().setLine(5, mostExpensiveTime_/1000.0 + " seconds");
@@ -285,9 +283,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                             netTable_.putInt("Width", 0);
                             netTable_.putInt("Height", 0);
                             netTable_.putBoolean("Aimed", false);
-                            netTable_.putDouble("Z", 0);
                         netTable_.endTransaction();
-                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
+                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", 0);
                     }
                     prevTime = System.currentTimeMillis();
                 }
@@ -312,6 +309,14 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         if (!locking)
             return;
         locking = false;
+        netTable_.beginTransaction();
+            netTable_.putInt("X", 0);
+            netTable_.putInt("Y", 0);
+            netTable_.putInt("Width", 0);
+            netTable_.putInt("Height", 0);
+            netTable_.putBoolean("Aimed", false);
+        netTable_.endTransaction();
+        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_ * 10 + 0.5) / 10);
         turner_.disable();
     }
 }
