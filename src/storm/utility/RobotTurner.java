@@ -25,6 +25,8 @@ public class RobotTurner {
 	public void pidWrite(double output) {
             drive_.directDrive(output, -output);
             Print.getInstance().setLine(0, "(" + ((int)(output*100))/100.0 + "," + -((int)(output*100))/100.0 + ")");
+            Print.getInstance().setLine(1, "Setpoint: " + pid_.getSetpoint()*360);
+            Print.getInstance().setLine(2, "Gyro: " + getGyroAngle());
 	}
     };
     PIDSource source_ = /*gyro_;*/new PIDSource() {
@@ -47,8 +49,6 @@ public class RobotTurner {
 
     public void setAngle(double angle) {
         pid_.setSetpoint(angle/360);
-        Print.getInstance().setLine(1, "Setpoint: " + angle);
-        Print.getInstance().setLine(2, "Gyro: " + getGyroAngle());
     }
     
     public double getGyroAngle() {

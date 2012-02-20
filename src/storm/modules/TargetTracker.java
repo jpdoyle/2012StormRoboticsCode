@@ -322,5 +322,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_ * 10 + 0.5) / 10);
         turner_.disable();
     }
+    public boolean isLocking() {
+        return locking;
+    }
 }
 
