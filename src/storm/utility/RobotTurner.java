@@ -24,6 +24,7 @@ public class RobotTurner {
     PIDOutput turn_ = new PIDOutput() {
 	public void pidWrite(double output) {
             drive_.drive(output, -output);
+            Print.getInstance().setLine(0, "(" + output + "," + -output + ")");
 	}
     };
     PIDSource source_ = /*gyro_;*/new PIDSource() {
@@ -48,7 +49,7 @@ public class RobotTurner {
     }
     
     public double getGyroAngle() {
-        return 0;//gyro_.getAngle();
+        return gyro_.getAngle();
     }
 
 }
