@@ -198,6 +198,7 @@ public class Shooter implements IShooter {
 	}*/
 	motorSpeed += .0003*RPMdifference;
 	if (motorSpeed <0) motorSpeed = 0;
+	if (motorSpeed >1) motorSpeed = 1;
 	shooterMotor.set(motorSpeed);
 	Print.getInstance().setLine(0, "motor speed-: " + motorSpeed);
 	    	
@@ -210,6 +211,14 @@ public class Shooter implements IShooter {
 	if(goodRangeCount > 10){
 	    return true;
 	}else return false;
+    }
+    
+    private void endShoot(){
+	shooterMotor.set(0);
+	transferMotor.set(0);
+	state = 0;
+	shooting = false;
+	
     }
 
     public boolean isShooting() {
