@@ -2,6 +2,7 @@ package storm;
 
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import storm.interfaces.*;
 import storm.modules.*;
 
@@ -72,6 +73,7 @@ public abstract class RobotState {
     
     // Global State
     public static int BALL_CONTAINMENT_COUNT = 0;
+    public static final NetworkTable DASHBOARD_FEEDBACK = NetworkTable.getTable("Feedback");
     
     
     //***** GLOBAL HARDWARE ****//
