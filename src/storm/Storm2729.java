@@ -35,7 +35,7 @@ public class Storm2729 extends IterativeRobot {
 	
 	//autonomous = new THING
         hybrid = new NullLogic();
-	teleop = new TeleopPractice();
+	teleop = new ShooterTest();
 	
 
     }
