@@ -14,5 +14,6 @@ public interface IDriveTrain {
     public void switchGear();
     public void setHighGear();
     public void setLowGear();
+    public boolean isHighGear();
 
 }
