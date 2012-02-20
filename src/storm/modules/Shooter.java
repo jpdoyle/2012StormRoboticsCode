@@ -20,6 +20,7 @@ public class Shooter implements IShooter {
 
     //Joystick shootJoystick;
     SpeedController shooterMotor, transferMotor;
+    PIDController motorController;
     DigitalInput ready, hallEffect;
     Counter counter;
     Joystick shootJoystick;
@@ -33,6 +34,7 @@ public class Shooter implements IShooter {
 	    RPMcurrent,
 	    RPMdifference,
 	    RPMthreshold,
+	    RPMchange,
 	    RPMold;
     int state,
 	    timeDifference,
@@ -116,6 +118,7 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 3:
+		checkRPM();
 		transferMotor.set(-1);
 		if (!ready.get() == false) {
 		    startTime = System.currentTimeMillis();
@@ -123,15 +126,13 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 4:
+		checkRPM();
 		if ((System.currentTimeMillis() - startTime) >= 3000){
 		    state ++;
 		}
 		break;
 	    case 5:
-		transferMotor.set(0);
-		shooterMotor.set(0);
-		shooting = false;
-		state = 0;
+		endShoot();
 		RobotState.BALL_CONTAINMENT_COUNT --;
 		break;
 	    default:
@@ -143,7 +144,6 @@ public class Shooter implements IShooter {
         //convert distance into rpm into motor speed value
 	wantedRPM = 333.33*distance + 850.63 ;
 	calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
-	Print.getInstance().setLine(3, "Wanted RPM: " + wantedRPM);
 	return calculatedMotorSpeed;
     }
     
@@ -151,8 +151,6 @@ public class Shooter implements IShooter {
 	//check what the current RPM is
 	
 	period = counter.getPeriod();
-	Print.getInstance().setLine(5, "Ctr:" + counter.get() + "Prd:" + period);
-	//System.out.println("Prd:" + period);
 	if ((System.currentTimeMillis() - startTime) >= 10000)
 	{
 	    return true;
@@ -173,9 +171,13 @@ public class Shooter implements IShooter {
 	if (RPMcurrent > 3500) return false;
 	if (RPMcurrent > 1200) modFactor = 5;
 	else modFactor = 10;
-	
 	RPMthreshold = wantedRPM / 50;
-	
+	RPMchange = RPMold - RPMcurrent;
+	RPMold = RPMcurrent;
+	if (Math.abs(RPMchange) > 100) {
+	    System.out.println(System.currentTimeMillis() + " RPMx:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period + " GRC: " + goodRangeCount + " RPMCge: " + RPMchange);	
+	    return false;
+	}
 	/*Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
 	Print.getInstance().setLine(0, "???????");*/
@@ -195,7 +197,7 @@ public class Shooter implements IShooter {
 	    goodRangeCount ++;
 	}else goodRangeCount = 0;
 	//System.out.println("goodRangeCount:" + goodRangeCount);
-	System.out.println(System.currentTimeMillis() + " RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period + " GRC: " + goodRangeCount);	
+	System.out.println(System.currentTimeMillis() + " RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period + " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);	
 
 	if(goodRangeCount > 15)
 	{
