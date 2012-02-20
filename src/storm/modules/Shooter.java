@@ -197,6 +197,7 @@ public class Shooter implements IShooter {
 	    }
 	}*/
 	motorSpeed += .0003*RPMdifference;
+	if (motorSpeed <0) motorSpeed = 0;
 	shooterMotor.set(motorSpeed);
 	Print.getInstance().setLine(0, "motor speed-: " + motorSpeed);
 	    	
