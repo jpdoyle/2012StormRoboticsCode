@@ -156,7 +156,7 @@ public class Shooter implements IShooter {
 	    return true;
 	}
 	debugCounter ++;
-	if (debugCounter % 10 != 0)
+	if (debugCounter % 5 != 0)
 	{
 	    return false;
 	}
@@ -176,7 +176,7 @@ public class Shooter implements IShooter {
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
 	Print.getInstance().setLine(0, "???????");
 	
-	if (RPMcurrent >= wantedRPM)
+	/*if (RPMcurrent >= wantedRPM)
 	{
 	    if (RPMdifference > 0){
 		//do nothing
@@ -195,8 +195,11 @@ public class Shooter implements IShooter {
 		shooterMotor.set(motorSpeed);
 	    	Print.getInstance().setLine(0, "motor speed+: " + motorSpeed);
 	    }
-	}
-	
+	}*/
+	motorSpeed += .0003*RPMdifference;
+	shooterMotor.set(motorSpeed);
+	Print.getInstance().setLine(0, "motor speed-: " + motorSpeed);
+	    	
 	if (Math.abs(RPMdifference) < RPMthreshold){
 	    goodRangeCount ++;
 	}else goodRangeCount = 0;
