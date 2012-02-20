@@ -195,9 +195,9 @@ public class Shooter implements IShooter {
 	    goodRangeCount ++;
 	}else goodRangeCount = 0;
 	//System.out.println("goodRangeCount:" + goodRangeCount);
-	System.out.println("RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period);	
+	System.out.println("RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period + " GRC: " + goodRangeCount);	
 
-	if(goodRangeCount > 30)
+	if(goodRangeCount > 15)
 	{
 	    return true;
 	}else return false;
