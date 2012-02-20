@@ -33,7 +33,7 @@ public class Hybrid implements IRobotLogic {
     boolean isLoading = false;
     boolean isManipulating = false;
 
-    int waitTimer = 0;
+    double endTime = 0;
 
     public Hybrid(int port) {
 
@@ -60,12 +60,15 @@ public class Hybrid implements IRobotLogic {
         //6 - Stop Load    \\
         //7 - Wait         \\
 
+        //System.currentTimeMillis();
+
         switch (autoType.getValue()) {
             case 1: //Super Auto Mode
 
                 Q.add(4, 0, .8); //Shoot
                 Q.add(1, 60, -.5); //Move back
                 Q.add(5, 0, 0); //Start Loading
+                Q.add(7, 3, 0); //Wait
                 Q.add(3, 0, 0); //Manipulate
 
                 break;
@@ -116,19 +119,20 @@ public class Hybrid implements IRobotLogic {
         if (Q.getType() == 1 || Q.getType() == 2) {
             if (driveTrain.getDistance() >= Q.getDistance()) {
                 Q.next();
-                waitTimer = 0;
             }
         } else if (Q.getType() == 3) {
             //Manipulate
             Q.next();
-            waitTimer = 0;
         } else if (Q.getType() == 4) {
             //if (!shooter.isShooting()) Q.next();
             Q.next();
-            waitTimer = 0;
         } else if (Q.getType() == 5 || Q.getType() == 6) {
             Q.next();
-            waitTimer = 0;
+        } else if (Q.getType() == 7) {
+            if (System.currentTimeMillis() >= endTime) {
+                endTime = 0;
+                Q.next();
+            }
         }
 
         if (isLoading) ballCollector.start(IBallCollector.DIRECTION_UP);
@@ -163,7 +167,10 @@ public class Hybrid implements IRobotLogic {
                 isLoading = false;
                 break;
             case 7:
-                waitTimer++;
+                if (endTime == 0) {
+                    endTime = System.currentTimeMillis() + Q.getDistance() * 1000;
+                }
+                break;
             default:
                 break;
         }
