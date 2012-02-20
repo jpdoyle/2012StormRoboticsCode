@@ -37,7 +37,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //    static final double CAMERA_FREQUENCY = 10;
     static final double ASPECT_RATIO = 24/18.0;
 
-//    private CriteriaCollection criteria = new CriteriaCollection();
+    private CriteriaCollection criteria = new CriteriaCollection();
 
     private AxisCamera camera_ = AxisCamera.getInstance();
     private RobotTurner turner_;
@@ -47,7 +47,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private BinaryImage image_;
     private volatile ParticleAnalysisReport topTarget_ = null;
     private double[] angleRange_ = {0,0};
-    private double zLoc_ = 0;
+    private volatile double zLoc_ = 0;
 //
 //    private String mostExpensiveOp_ = "";
 //    private long mostExpensiveTime_ = 0;
@@ -64,9 +64,10 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             netTable_.putBoolean("Aimed", false);
             netTable_.putDouble("Z", 0);
         netTable_.endTransaction();
-//        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_AREA, 0, 10, true);
+        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 40, true);
+        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 40, true);
         try {
-            cameraImg_ = new HSLImage();
+            cameraImg_ = new RGBImage();
             image_ = new FancyBinaryImage();
         } catch (NIVisionException ex) {
             throw new NullPointerException("Cannot track targets without valid images");
@@ -132,8 +133,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private void findParticles() {
 //        BinaryImage oldImage = image_;
         try {
-            NIVision.sizeFilter(image_.image, image_.image, false, 2, true);
-//            NIVision.particleFilter(image_.image, image_.image, criteria);
+//            NIVision.sizeFilter(image_.image, image_.image, false, 2, true);
+            NIVision.particleFilter(image_.image, image_.image, criteria);
 //            image_ = image_.particleFilter(criteria);
 
             int numParticles = image_.getNumberParticles();
