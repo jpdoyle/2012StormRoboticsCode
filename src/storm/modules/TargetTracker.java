@@ -136,7 +136,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //        BinaryImage oldImage = image_;
         try {
 //            NIVision.sizeFilter(image_.image, image_.image, false, 2, true);
-            NIVision.particleFilter(image_.image, image_.image, criteria);
+//            NIVision.particleFilter(image_.image, image_.image, criteria);
             NIVision.sizeFilter(image_.image, image_.image, true, 3, true);
 //            image_ = image_.particleFilter(criteria);
 
