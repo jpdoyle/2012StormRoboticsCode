@@ -38,7 +38,8 @@ public class Shooter implements IShooter {
 	    timeDifference,
 	    currentTime,
 	    goodRangeCount,
-	    debugCounter;
+	    debugCounter,
+	    modFactor;
        
     public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
         
@@ -61,6 +62,7 @@ public class Shooter implements IShooter {
 	debugCounter = 0;
         shooting = true;
 	goodRangeCount = 0;
+	modFactor = 10;
 	startTime = System.currentTimeMillis();
 
     }
@@ -156,7 +158,7 @@ public class Shooter implements IShooter {
 	    return true;
 	}
 	debugCounter ++;
-	if (debugCounter % 5 != 0)
+	if (debugCounter % modFactor != 0)
 	{
 	    return false;
 	}
@@ -168,7 +170,9 @@ public class Shooter implements IShooter {
 	}
 	
 	RPMcurrent = 60/period;
-	//RPMold = RPMcurrent;
+	if (RPMcurrent > 3500) return false;
+	if (RPMcurrent > 1200) modFactor = 5;
+	else modFactor = 10;
 	RPMthreshold = wantedRPM / 100;
 	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 		
