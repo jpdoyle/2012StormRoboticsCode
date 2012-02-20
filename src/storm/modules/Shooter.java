@@ -145,16 +145,17 @@ public class Shooter implements IShooter {
     
     private boolean checkRPM(){
 	//check what the current RPM is
+	
 	period = counter.getPeriod();	
 	Print.getInstance().setLine(5, "Period: " + period);
 	if ((System.currentTimeMillis() - startTime) >= 10000)
 	{
 	    return true;
 	}
-	if (period >= 1 || period <= 0){
+	if (Double.isInfinite(period)){
 	    return false;
-	}
-        RPMcurrent = 60/period;
+	}else RPMcurrent = 60/period;
+
 	RPMdifference = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
 	RPMthreshold = wantedRPM / 25;
