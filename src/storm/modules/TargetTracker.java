@@ -287,7 +287,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                             netTable_.putInt("Height", 0);
                             netTable_.putBoolean("Aimed", false);
                         netTable_.endTransaction();
-                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", 0);
+                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Double.NaN);
                     }
                     prevTime = System.currentTimeMillis();
                 }

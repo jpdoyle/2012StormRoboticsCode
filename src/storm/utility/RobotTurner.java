@@ -23,14 +23,14 @@ public class RobotTurner {
 
     PIDOutput turn_ = new PIDOutput() {
 	public void pidWrite(double output) {
-            drive_.drive(output, -output);
+            drive_.directDrive(output, -output);
             Print.getInstance().setLine(0, "(" + ((int)(output*100))/100.0 + "," + -((int)(output*100))/100.0 + ")");
 	}
     };
     PIDSource source_ = /*gyro_;*/new PIDSource() {
 	public double pidGet() { return gyro_.getAngle()/360.0; }
     };
-    PIDController pid_ = new PIDController(PID_P,PID_I,PID_D,source_, turn_);
+    PIDController pid_ = new PIDController(PID_P,PID_I,PID_D,source_, turn_,1000/45);
     
     public RobotTurner(IDriveTrain train,int gyroChannel) {
         gyro_ = new Gyro(gyroChannel);

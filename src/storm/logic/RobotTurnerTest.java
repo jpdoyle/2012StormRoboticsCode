@@ -26,8 +26,8 @@ public class RobotTurnerTest implements IRobotLogic {
     }
 
     public void doEnd() {
-        RobotState.targetTracker.stopTracking();
         RobotState.targetTracker.stopLocking();
+        RobotState.targetTracker.stopTracking();
     }
 
 }
