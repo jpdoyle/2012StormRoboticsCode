@@ -96,6 +96,10 @@ public class DriveTrain implements IDriveTrain {
 
     }
 
+    public void directDrive(double leftSpeed, double rightSpeed) {
+        drive.tankDrive(leftSpeed, rightSpeed);
+    }
+
     public void addToQueue(int type, double speed, double distance) {
         queue.add(type, speed, distance);
     }

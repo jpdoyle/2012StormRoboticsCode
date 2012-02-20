@@ -8,6 +8,7 @@ public interface IDriveTrain {
     public boolean isQueueFinished();
     
     public void drive(double leftSpeed, double rightSpeed);
+    public void directDrive(double leftSpeed, double rightSpeed);
     public void resetDistance();
     public double getDistance();
     
