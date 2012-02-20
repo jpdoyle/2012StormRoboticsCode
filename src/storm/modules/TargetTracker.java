@@ -142,7 +142,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 
             int numParticles = image_.getNumberParticles();
             if(numParticles <= 0) {
-                state_ = 0;
+                reset();
+                System.out.println("No particles");
                 return;
             }
             topTarget_ = image_.getParticleAnalysisReport(0);
