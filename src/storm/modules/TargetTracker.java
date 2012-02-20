@@ -154,7 +154,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             }
             ++state_;
         } catch (NIVisionException ex) {
-//            ex.printStackTrace();
+            ex.printStackTrace();
             reset();
         } //finally {
 //            try {
