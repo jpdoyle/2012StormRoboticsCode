@@ -224,7 +224,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //                mostExpensiveOp_ = stateName;
 //                mostExpensiveTime_ = endTime-startTime;
 //            }
-//	    Print.getInstance().setLine(4, stateName);
+	    Print.getInstance().setLine(4, stateName);
 //	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
 //            Thread.yield();
 //            System.out.println("begin debug output");
@@ -261,7 +261,11 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 long prevTime = System.currentTimeMillis();
                 for(;;) {
                     if(!tracking) {
-                        Thread.yield();
+                        try {
+                            Thread.sleep(1000 / 5);
+                        } catch (InterruptedException ex) {
+//                            ex.printStackTrace();
+                        }
                         prevTime = System.currentTimeMillis();
                         continue;
                     }
@@ -299,6 +303,14 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     }
     public void stopTracking() {
         tracking = false;
+        netTable_.beginTransaction();
+            netTable_.putInt("X", 0);
+            netTable_.putInt("Y", 0);
+            netTable_.putInt("Width", 0);
+            netTable_.putInt("Height", 0);
+            netTable_.putBoolean("Aimed", false);
+        netTable_.endTransaction();
+        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Double.NaN);
     }
 
     public void startLocking() {
@@ -312,18 +324,14 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         if (!locking)
             return;
         locking = false;
-        netTable_.beginTransaction();
-            netTable_.putInt("X", 0);
-            netTable_.putInt("Y", 0);
-            netTable_.putInt("Width", 0);
-            netTable_.putInt("Height", 0);
-            netTable_.putBoolean("Aimed", false);
-        netTable_.endTransaction();
-        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_ * 10 + 0.5) / 10);
         turner_.disable();
     }
     public boolean isLocking() {
         return locking;
+    }
+
+    public double getGyroAngle() {
+        return turner_.getGyroAngle();
     }
 }
 
