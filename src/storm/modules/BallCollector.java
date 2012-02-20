@@ -70,5 +70,7 @@ public class BallCollector implements IBallCollector {
 	   loopCounterSensor2 = -1;
 	}
 	
+	RobotState.DASHBOARD_FEEDBACK.putInt("ball.count", RobotState.BALL_CONTAINMENT_COUNT);
+	
     }
 }
