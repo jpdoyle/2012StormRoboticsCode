@@ -34,6 +34,7 @@ public class RobotTurner {
     
     public RobotTurner(IDriveTrain train,int gyroChannel) {
         gyro_ = new Gyro(gyroChannel);
+        drive_ = train;
     }
 
     public void enable() {
@@ -46,6 +47,7 @@ public class RobotTurner {
 
     public void setAngle(double angle) {
         pid_.setSetpoint(angle/360);
+        Print.getInstance().setLine(1, Double.toString(angle));
     }
     
     public double getGyroAngle() {
