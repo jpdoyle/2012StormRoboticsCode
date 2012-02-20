@@ -3,7 +3,6 @@ package storm.modules;
 import storm.RobotState;
 import storm.interfaces.IBallCollector;
 import storm.interfaces.IShooter;
-import storm.utility.Print;
 
 public class BallController {
     
@@ -21,20 +20,15 @@ public class BallController {
     
     public void runContinuous() {
 	ballCollector.run();
-//	shooter.doShoot();
+	shooter.doShoot();
     }
     
-    public void runPeriodic(double dPadValue, boolean overrideButton, boolean shootButton) {
-	if (overrideButton || shooter.isShooting()) {
-	    manual(dPadValue);
-	} else {
-	    automatic();
-	}
+    public void runPeriodic(double dPadValue, boolean shootButton, double distance) {
+	manual(dPadValue);
 	
 	if (shootButton && !shootTrigger) {
 	    shootTrigger = true;
-//	    shooter.startShoot(0.0);
-	    Print.getInstance().println("Shooting...");
+	    shooter.startShoot(distance);
 	} else if (!shootButton && shootTrigger) {
 	    shootTrigger = false;
 	}
@@ -48,16 +42,6 @@ public class BallController {
 	} else if (dPad < 0) {
 	    ballCollector.start(IBallCollector.DIRECTION_DOWN);
 	} else {
-	    ballCollector.stop();
-	}
-	
-    }
-    
-    private void automatic() {
-	
-	if (!ballCollector.isRunning() && RobotState.BALL_CONTAINMENT_COUNT < 3) {
-	    ballCollector.start(IBallCollector.DIRECTION_UP);
-	} else if (RobotState.BALL_CONTAINMENT_COUNT >= 3) {
 	    ballCollector.stop();
 	}
 	
