@@ -50,7 +50,7 @@ public class Hybrid implements IRobotLogic {
     public void doInit() {
 
         Q.clear();
-        waitTimer = 0;
+        endTime = 0;
 
         //1 - Straight     \\
         //2 - Left         \\
