@@ -47,7 +47,8 @@ public class RobotTurner {
 
     public void setAngle(double angle) {
         pid_.setSetpoint(angle/360);
-        Print.getInstance().setLine(1, Double.toString(angle));
+        Print.getInstance().setLine(1, "Setpoint: " + angle);
+        Print.getInstance().setLine(2, "Gyro angle: " + getGyroAngle());
     }
     
     public double getGyroAngle() {
