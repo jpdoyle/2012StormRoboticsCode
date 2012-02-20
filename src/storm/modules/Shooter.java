@@ -163,6 +163,7 @@ public class Shooter implements IShooter {
 	
 	if (Double.isInfinite(period) || period <= 0)
 	{
+	    System.out.println("Infinite, period: " + period);
 	    return false;
 	}
 	
