@@ -181,5 +181,9 @@ public class DriveTrain implements IDriveTrain {
             solenoidLow.set(true);
         }
     }
+
+    public boolean isHighGear() {
+        return(highgear);
+    }
     
 }
