@@ -165,7 +165,7 @@ public class Shooter implements IShooter {
 	
 	if (Double.isInfinite(period) || period <= 0)
 	{
-	    System.out.println("Infinite, period: " + period);
+	    //System.out.println("Infinite, period: " + period);
 	    return false;
 	}
 	
@@ -176,26 +176,26 @@ public class Shooter implements IShooter {
 	
 	RPMthreshold = wantedRPM / 50;
 	
-	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
+	/*Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
-	Print.getInstance().setLine(0, "???????");
+	Print.getInstance().setLine(0, "???????");*/
 	
 	RPMdifference = wantedRPM - RPMcurrent;
-	motorSpeed += .00003*RPMdifference;
+	motorSpeed += .00002*RPMdifference;
 	
 	if (motorSpeed <0) motorSpeed = 0;
 	if (motorSpeed >1) motorSpeed = 1;
 	
 	shooterMotor.set(motorSpeed);
 	
-	Print.getInstance().setLine(0, "motor speed-: " + motorSpeed);
+	//Print.getInstance().setLine(0, "motor speed-: " + motorSpeed);
 	    	
 	if (Math.abs(RPMdifference) < RPMthreshold)
 	{
 	    goodRangeCount ++;
 	}else goodRangeCount = 0;
 	//System.out.println("goodRangeCount:" + goodRangeCount);
-	System.out.println("RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period + " GRC: " + goodRangeCount);	
+	System.out.println(System.currentTimeMillis() + " RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period + " GRC: " + goodRangeCount);	
 
 	if(goodRangeCount > 15)
 	{
