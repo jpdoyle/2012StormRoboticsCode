@@ -174,7 +174,7 @@ public class Shooter implements IShooter {
 	if (RPMcurrent > 1200) modFactor = 5;
 	else modFactor = 10;
 	
-	RPMthreshold = wantedRPM / 100;
+	RPMthreshold = wantedRPM / 50;
 	
 	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
