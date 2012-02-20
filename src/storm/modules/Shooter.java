@@ -74,7 +74,7 @@ public class Shooter implements IShooter {
 	if (shootJoystick.getRawButton(7) && !btn7) {
 	    btn7 = true;
 	    state ++;
-	    
+	    if (state> 3) state = 0;
 	    switch (state){
 		case 0: motorSpeed = getMotorSpeed(1);		
 		    break;
@@ -149,7 +149,8 @@ public class Shooter implements IShooter {
 	//check what the current RPM is
 	
 	period = counter.getPeriod();
-	Print.getInstance().setLine(5, "Counter: " + counter.get() + "Period: " + period);
+	Print.getInstance().setLine(5, "Ctr:" + counter.get() + "Prd:" + period);
+	System.out.println("Prd:" + period);
 	if ((System.currentTimeMillis() - startTime) >= 10000)
 	{
 	    return true;
@@ -168,12 +169,11 @@ public class Shooter implements IShooter {
 	RPMcurrent = 60/period;
 	RPMdifference = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
-	RPMthreshold = wantedRPM / 25;
+	RPMthreshold = wantedRPM / 100;
 	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
-	
-	
+		
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
-
+	Print.getInstance().setLine(0, "???????");
 	
 	if (RPMcurrent >= wantedRPM)
 	{
@@ -182,7 +182,7 @@ public class Shooter implements IShooter {
 	    }else {
 		motorSpeed += .0003*RPMdifference;
 		shooterMotor.set(motorSpeed);
-		Print.getInstance().setLine(0, "change motor speed: " + motorSpeed);
+		Print.getInstance().setLine(0, "motor speed-: " + motorSpeed);
 	    }
 	    
 	    
@@ -192,14 +192,16 @@ public class Shooter implements IShooter {
 	    }else {
 		motorSpeed += .0003*RPMdifference;
 		shooterMotor.set(motorSpeed);
-	    	Print.getInstance().setLine(0, "change motor speed: " + motorSpeed);
+	    	Print.getInstance().setLine(0, "motor speed+: " + motorSpeed);
 	    }
 	}
 	
 	if (Math.abs(RPMdifference) < RPMthreshold){
 	    goodRangeCount ++;
 	}else goodRangeCount = 0;
-	
+	System.out.println("goodRangeCount:" + goodRangeCount);
+	System.out.println("RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " MTRSpd: " + motorSpeed);	
+
 	if(goodRangeCount > 3){
 	    return true;
 	}else return false;
