@@ -140,7 +140,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             NIVision.sizeFilter(image_.image, image_.image, true, 3, true);
 //            image_ = image_.particleFilter(criteria);
 
-            int numParticles = image_.getNumberParticles();
+            int numParticles = NIVision.countParticles(image_.image);
             if(numParticles <= 0) {
                 reset();
                 System.out.println("No particles");
