@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import storm.RobotState;
 import storm.interfaces.IDriveTrain;
 import storm.utility.AxisCamera;
 import storm.utility.Print;
@@ -276,7 +277,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                             netTable_.putInt("Height", topTarget_.boundingRectHeight);
                             netTable_.putBoolean("Aimed", isAimed());
                         netTable_.endTransaction();
-                        SmartDashboard.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
+                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
                     } else {
                         netTable_.beginTransaction();
                             netTable_.putInt("X", 0);
@@ -286,7 +287,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                             netTable_.putBoolean("Aimed", false);
                             netTable_.putDouble("Z", 0);
                         netTable_.endTransaction();
-                        SmartDashboard.putDouble("target.distance", 0);
+                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
                     }
                     prevTime = System.currentTimeMillis();
                 }
