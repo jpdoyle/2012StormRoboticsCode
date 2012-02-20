@@ -37,17 +37,21 @@ public abstract class RobotState {
     public static final int PORT_JOYSTICK_SHOOT = 2;
     
     // Joystick Axiseses
-    public static final int JOYSTICK_AXIS_DRIVE_LEFT  = 2;
-    public static final int JOYSTICK_AXIS_DRIVE_RIGHT = 4;
+    public static final int JOYSTICK_1_AXIS_DRIVE_LEFT         = 2;
+    public static final int JOYSTICK_1_AXIS_DRIVE_RIGHT        = 4;
+    public static final int JOYSTICK_1_AXIS_DRIVE_BOTH         = 6;
+    public static final int JOYSTICK_2_AXIS_3BA                = 2;
+    public static final int JOYSTICK_2_AXIS_BRIDGE_MANIPULATOR = 4;
+    public static final int JOYSTICK_2_AXIS_ELEVATOR           = 6;
     
     // Joystick Buttons
-    public static final int NUM_BUTTONS                              = 10;
-    public static final int JOYSTICK_BUTTON_AUTO_AIM                 = 1;
-    public static final int JOYSTICK_BUTTON_SHOOT                    = 2;
-    public static final int JOYSTICK_BUTTON_COLLECTOR_START_IN       = 3;
-    public static final int JOYSTICK_BUTTON_COLLECTOR_START_OUT      = 4;
-    public static final int JOYSTICK_BUTTON_COLLECTOR_STOP           = 5;
-    public static final int JOYSTICK_BUTTON_COLLECTOR_RETURN_CONTROL = 6;
+    public static final int JOYSTICK_1_BUTTON_SWITCH_GEARS    = 5;
+    public static final int JOYSTICK_1_BUTTON_SPEED_MODIFIER  = 6;
+    public static final int JOYSTICK_2_BUTTON_DECREASE_OFFSET = 1;
+    public static final int JOYSTICK_2_BUTTON_RESET_OFFSET    = 2;
+    public static final int JOYSTICK_2_BUTTON_INCREASE_OFFSET = 3;
+    public static final int JOYSTICK_2_BUTTON_SHOOT           = 6;
+    
     
     // Sensors
     public static final int PORT_IR_BALL_IN_1           = 6;
@@ -72,8 +76,12 @@ public abstract class RobotState {
     public static final int PORT_ENCODER_BRIDGE_MANIPULATOR   = 2; // <-- ANALOG
 
     // Solenoids
-    public static final int PORT_SOLENOID_HIGH_GEAR = 2;
-    public static final int PORT_SOLENOID_LOW_GEAR  = 1;
+    public static final int PORT_SOLENOID_HIGH_GEAR = 1;
+    public static final int PORT_SOLENOID_LOW_GEAR  = 2;
+    
+    // Info
+    public static final double DRIVE_SPEED_REDUCTION_VALUE = 0.65;
+    public static final double DRIVE_SPEED_NORMAL_VALUE    = 1.0;
     
     // Global State
     public static int BALL_CONTAINMENT_COUNT = 0;
