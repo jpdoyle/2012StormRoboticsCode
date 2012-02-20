@@ -168,7 +168,7 @@ public class Shooter implements IShooter {
 	}
 	
 	RPMcurrent = 60/period;
-	RPMold = RPMcurrent;
+	//RPMold = RPMcurrent;
 	RPMthreshold = wantedRPM / 100;
 	Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 		
@@ -196,7 +196,7 @@ public class Shooter implements IShooter {
 	    }
 	}*/
 	RPMdifference = wantedRPM - RPMcurrent;
-	motorSpeed += .0003*RPMdifference;
+	motorSpeed += .00003*RPMdifference;
 	if (motorSpeed <0) motorSpeed = 0;
 	if (motorSpeed >1) motorSpeed = 1;
 	shooterMotor.set(motorSpeed);
