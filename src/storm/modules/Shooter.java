@@ -37,7 +37,8 @@ public class Shooter implements IShooter {
     int state,
 	    timeDifference,
 	    currentTime,
-	    goodRangeCount;
+	    goodRangeCount,
+	    debugCounter;
        
     public Shooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
         
@@ -57,6 +58,7 @@ public class Shooter implements IShooter {
 	motorSpeed = getMotorSpeed(distance);
         counter.start();
         state = 0;
+	debugCounter = 0;
         shooting = true;
 	goodRangeCount = 0;
 	startTime = System.currentTimeMillis();
@@ -146,16 +148,24 @@ public class Shooter implements IShooter {
     private boolean checkRPM(){
 	//check what the current RPM is
 	
-	period = counter.getPeriod();	
-	Print.getInstance().setLine(5, "Period: " + period);
+	period = counter.getPeriod();
+	Print.getInstance().setLine(5, "Counter: " + counter.get() + "Period: " + period);
 	if ((System.currentTimeMillis() - startTime) >= 10000)
 	{
 	    return true;
 	}
-	if (Double.isInfinite(period)){
+	debugCounter ++;
+	if (debugCounter % 10 != 0)
+	{
 	    return false;
-	}else RPMcurrent = 60/period;
-
+	}
+	
+	if (Double.isInfinite(period) || period <= 0)
+	{
+	    return false;
+	}
+	
+	RPMcurrent = 60/period;
 	RPMdifference = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
 	RPMthreshold = wantedRPM / 25;
@@ -172,7 +182,7 @@ public class Shooter implements IShooter {
 	    }else {
 		motorSpeed += .0003*RPMdifference;
 		shooterMotor.set(motorSpeed);
-		Print.getInstance().setLine(6, "change motor speed: " + motorSpeed);
+		Print.getInstance().setLine(0, "change motor speed: " + motorSpeed);
 	    }
 	    
 	    
@@ -182,7 +192,7 @@ public class Shooter implements IShooter {
 	    }else {
 		motorSpeed += .0003*RPMdifference;
 		shooterMotor.set(motorSpeed);
-	    	Print.getInstance().setLine(6, "change motor speed: " + motorSpeed);
+	    	Print.getInstance().setLine(0, "change motor speed: " + motorSpeed);
 	    }
 	}
 	
