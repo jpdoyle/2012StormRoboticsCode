@@ -141,9 +141,13 @@ public class Shooter implements IShooter {
     }
 
     private double getMotorSpeed(double distance) {
-        //convert distance into rpm into motor speed value
+        //convert distance into rpm into motor speed value  
 	wantedRPM = 333.33*distance + 850.63 ;
 	calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
+        if (Double.isNaN(distance)){
+            wantedRPM = 3499;
+            return 1;
+        }
 	return calculatedMotorSpeed;
     }
     
@@ -151,7 +155,7 @@ public class Shooter implements IShooter {
 	//check what the current RPM is
 	
 	period = counter.getPeriod();
-	if ((System.currentTimeMillis() - startTime) >= 10000)
+	if ((System.currentTimeMillis() - startTime) >= 4000)
 	{
 	    return true;
 	}
@@ -215,6 +219,10 @@ public class Shooter implements IShooter {
 
     public boolean isShooting() {
         return shooting;
+    }
+
+    public double getRPM() {
+        return RPMcurrent;
     }
 
 }
