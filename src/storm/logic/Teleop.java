@@ -137,17 +137,17 @@ public class Teleop implements IRobotLogic {
 	led2.set(led2b);
 	led3.set(led3b);
 	
-	if (System.currentTimeMillis() - time1 >= 200) {
+	if (System.currentTimeMillis() - time1 >= 20) {
 	    led1b = !led1b;
 	    time1 = System.currentTimeMillis();
 	}
 	
-	if (System.currentTimeMillis() - time2 >= 500) {
+	if (System.currentTimeMillis() - time2 >= 25) {
 	    led2b = !led2b;
 	    time2 = System.currentTimeMillis();
 	}
 	
-	if (System.currentTimeMillis() - time3 >= 800) {
+	if (System.currentTimeMillis() - time3 >= 30) {
 	    led3b = !led3b;
 	    time3 = System.currentTimeMillis();
 	}
