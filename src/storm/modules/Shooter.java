@@ -98,7 +98,25 @@ public class Shooter implements IShooter {
 	Print.getInstance().setLine(2, "Motor Speed: " + motorSpeed);*/
 
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
-	if (!shooting) return;
+       
+	
+	if (!shooting) {
+            period = counter.getPeriod();
+            debugCounter ++;
+            if (debugCounter % modFactor != 0)
+            {
+                return;
+            }
+	
+            if (Double.isInfinite(period) || period <= 0)
+            {
+                return;
+            }
+            RPMcurrent = 60/period;
+            if (RPMcurrent > 1200) modFactor = 5;
+            else modFactor = 10;
+            return;
+        }
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
@@ -222,9 +240,6 @@ public class Shooter implements IShooter {
     }
 
     public double getRPM() {
-        if (shooting = false){
-            return 0;
-        }
         return RPMcurrent;
     }
 
