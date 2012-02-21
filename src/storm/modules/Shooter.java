@@ -222,6 +222,9 @@ public class Shooter implements IShooter {
     }
 
     public double getRPM() {
+        if (shooting = false){
+            return 0;
+        }
         return RPMcurrent;
     }
 
