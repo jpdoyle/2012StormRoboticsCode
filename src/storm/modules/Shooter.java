@@ -201,7 +201,7 @@ public class Shooter implements IShooter {
 	RPMchange = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
 	if (Math.abs(RPMchange) > 100) {
-	    System.out.println(System.currentTimeMillis() + " RPMx:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " PRD: " + period + " GRC: " + goodRangeCount + " RPMCge: " + RPMchange);	
+	    System.out.println(System.currentTimeMillis() + " RPMx:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " GRC: " + goodRangeCount + " RPMCge: " + RPMchange);
 	    return false;
 	}
 	/*Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
@@ -215,9 +215,7 @@ public class Shooter implements IShooter {
 	if (motorSpeed >1) motorSpeed = 1;
 	
 	shooterMotor.set(motorSpeed);
-	
-	//Print.getInstance().setLine(0, "motor speed-: " + motorSpeed);
-	    	
+		    	
 	if (Math.abs(RPMdifference) < RPMthreshold)
 	{
 	    goodRangeCount ++;
