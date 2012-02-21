@@ -52,6 +52,7 @@ public abstract class RobotState {
     public static final int JOYSTICK_2_BUTTON_INCREASE_OFFSET = 3;
     public static final int JOYSTICK_2_BUTTON_TOGGLE_DISTANCE = 5;
     public static final int JOYSTICK_2_BUTTON_SHOOT           = 6;
+    public static final int JOYSTICK_2_BUTTON_3BA_TOGGLE      = 7;
     
     
     // Sensors

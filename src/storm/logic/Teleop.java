@@ -33,9 +33,15 @@ public class Teleop implements IRobotLogic {
     
     boolean btnGearPressed;
     boolean btnToggleShootDistance;
+    boolean btnIncreaseOffset;
+    boolean btnDecreaseOffset;
+    boolean btnResetOffset;
     
     double[] distances;
     int distanceIndex;
+    
+    double distanceOffset;
+    final double DISTANCE_OFFSET_INCREMENT = 0.1;
 
     public void doInit() {
 	
@@ -54,6 +60,9 @@ public class Teleop implements IRobotLogic {
 	
 	btnGearPressed = false;
 	btnToggleShootDistance = false;
+	btnIncreaseOffset = false;
+	btnDecreaseOffset = false;
+	btnResetOffset = false;
 	
 	distances = new double[] {
 	    -1.0,
@@ -64,6 +73,8 @@ public class Teleop implements IRobotLogic {
 	    5.0
 	};
 	distanceIndex = 0;
+	
+	distanceOffset = 0.0;
 	
 	driveTrain.setLowGear();
 	
@@ -112,14 +123,41 @@ public class Teleop implements IRobotLogic {
 	String distanceString = (distances[distanceIndex] == -1.0) ? "Automatic" : distances[distanceIndex] + "m";
 	RobotState.DASHBOARD_FEEDBACK.putString("distance.mode", distanceString);
 	
+	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", ((int)(RobotState.shooter.getRPM())));
+	
+	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_INCREASE_OFFSET) && !btnIncreaseOffset) {
+	    btnIncreaseOffset = false;
+	    distanceOffset += DISTANCE_OFFSET_INCREMENT;
+	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_INCREASE_OFFSET) && btnIncreaseOffset) {
+	    btnIncreaseOffset = true;
+	}
+	
+	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_DECREASE_OFFSET) && !btnDecreaseOffset) {
+	    btnDecreaseOffset = false;
+	    distanceOffset -= DISTANCE_OFFSET_INCREMENT;
+	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_DECREASE_OFFSET) && btnDecreaseOffset) {
+	    btnDecreaseOffset = true;
+	}
+	
+	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_RESET_OFFSET) && !btnResetOffset) {
+	    btnResetOffset = false;
+	    distanceOffset = 0.0;
+	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_RESET_OFFSET) && btnResetOffset) {
+	    btnResetOffset = true;
+	}
+	
+	RobotState.DASHBOARD_FEEDBACK.putDouble("distance.offset", distanceOffset);
+	
 	ballController.runPeriodic(
 		-shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_ELEVATOR),
 		shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_SHOOT),
-		distance);
+		distance + distanceOffset);
 	
-	if (Utility.checkDeadZone(shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_3BA)) < 0.0) {
+	boolean threeBASafety = shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_3BA_SAFETY);
+	
+	if (Utility.checkDeadZone(shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_3BA)) < 0.0 && threeBASafety) {
 	    threeBA.extend();
-	} else if (Utility.checkDeadZone(shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_3BA)) > 0.0) {
+	} else if (Utility.checkDeadZone(shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_3BA)) > 0.0 && threeBASafety) {
 	    threeBA.retract();
 	} else {
 	    threeBA.stop();
