@@ -87,10 +87,10 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             ++state_;
         } catch (AxisCameraException ex) {
             reset();
-            //ex.printStackTrace();
+            ex.printStackTrace();
         } catch (NIVisionException ex) {
             reset();
-            //ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -103,7 +103,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             threshold(cameraImg_,image_);
             ++state_;
         } catch (NIVisionException ex) {
-//            ex.printStackTrace();
+            ex.printStackTrace();
             reset();
         } //finally {
 //            try {
@@ -121,7 +121,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //            image_ = oldImage.convexHull(false);
             ++state_;
         } catch (NIVisionException ex) {
-//            ex.printStackTrace();
+            ex.printStackTrace();
             reset();
         }// finally {
 //            try {
