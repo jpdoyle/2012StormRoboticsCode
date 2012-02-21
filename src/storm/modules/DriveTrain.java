@@ -96,7 +96,7 @@ public class DriveTrain implements IDriveTrain {
 
     }
 
-    public void directDrive(double leftSpeed, double rightSpeed) {
+    public void driveDirect(double leftSpeed, double rightSpeed) {
         drive.tankDrive(leftSpeed, rightSpeed);
     }
 
