@@ -21,8 +21,8 @@ import storm.utility.RobotTurner;
 public class TargetTracker implements storm.interfaces.ITargetTracker {
 
     static final int[][] THRESHOLD = {{0, 150},
-                                      {220, 255},
-                                      {200, 255}};
+                                      {200, 255},
+                                      {190, 255}};
     static final NIVision.Range[] ranges = { new NIVision.Range(THRESHOLD[0][0], THRESHOLD[0][1]),
                                              new NIVision.Range(THRESHOLD[1][0], THRESHOLD[1][1]),
                                              new NIVision.Range(THRESHOLD[2][0], THRESHOLD[2][1]) };
@@ -136,7 +136,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //        BinaryImage oldImage = image_;
         try {
 //            NIVision.sizeFilter(image_.image, image_.image, false, 2, true);
-//            NIVision.particleFilter(image_.image, image_.image, criteria);
+            NIVision.particleFilter(image_.image, image_.image, criteria);
             NIVision.sizeFilter(image_.image, image_.image, true, 3, true);
 //            image_ = image_.particleFilter(criteria);
 
