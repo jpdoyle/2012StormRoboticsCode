@@ -101,8 +101,10 @@ public class Shooter implements IShooter {
        
 	
 	if (!shooting) {
-            period = counter.getPeriod();
+           /* period = counter.getPeriod();
             debugCounter ++;
+            if (RPMcurrent > 1200) modFactor = 5;
+            else modFactor = 10;
             if (debugCounter % modFactor != 0)
             {
                 return;
@@ -112,9 +114,8 @@ public class Shooter implements IShooter {
             {
                 return;
             }
-            RPMcurrent = 60/period;
-            if (RPMcurrent > 1200) modFactor = 5;
-            else modFactor = 10;
+            RPMcurrent = 60/period;*/
+            
             return;
         }
 	switch (state){
