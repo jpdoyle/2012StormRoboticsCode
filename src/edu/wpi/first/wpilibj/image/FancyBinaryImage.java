@@ -21,7 +21,7 @@ public class FancyBinaryImage extends BinaryImage {
     }
 
     public ParticleAnalysisReport getParticleAnalysisReport(int index) throws NIVisionException{
-        if(index < numParticles) throw new IndexOutOfBoundsException("Invalid particle index");
+        if(index >= numParticles) throw new IndexOutOfBoundsException("Invalid particle index");
         return new ParticleAnalysisReport(this, index);
     }
 }
