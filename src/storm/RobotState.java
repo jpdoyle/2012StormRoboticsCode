@@ -47,12 +47,13 @@ public abstract class RobotState {
     // Joystick Buttons
     public static final int JOYSTICK_1_BUTTON_SWITCH_GEARS    = 5;
     public static final int JOYSTICK_1_BUTTON_SPEED_MODIFIER  = 6;
+    public static final int JOYSTICK_1_BUTTON_DIRECT_DRIVE    = 8;
     public static final int JOYSTICK_2_BUTTON_DECREASE_OFFSET = 1;
     public static final int JOYSTICK_2_BUTTON_RESET_OFFSET    = 2;
     public static final int JOYSTICK_2_BUTTON_INCREASE_OFFSET = 3;
     public static final int JOYSTICK_2_BUTTON_TOGGLE_DISTANCE = 5;
     public static final int JOYSTICK_2_BUTTON_SHOOT           = 6;
-    public static final int JOYSTICK_2_BUTTON_3BA_TOGGLE      = 7;
+    public static final int JOYSTICK_2_BUTTON_3BA_SAFETY      = 7;
     
     
     // Sensors

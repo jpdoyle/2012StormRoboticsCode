@@ -85,7 +85,11 @@ public class Teleop implements IRobotLogic {
     public void doContinuous() {
 	ballController.runContinuous();
 	
-	driveTrain.drive(driveLeft * driveModifier, driveRight * driveModifier);
+	if (driveJoystick.getRawButton(RobotState.JOYSTICK_1_BUTTON_DIRECT_DRIVE)) {
+	    driveTrain.driveDirect(driveLeft * driveModifier, driveRight * driveModifier);
+	} else {
+	    driveTrain.drive(driveLeft * driveModifier, driveRight * driveModifier);
+	}
     }
 
     public void doPeriodic() {
@@ -126,27 +130,27 @@ public class Teleop implements IRobotLogic {
 	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", ((int)(RobotState.shooter.getRPM())));
 	
 	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_INCREASE_OFFSET) && !btnIncreaseOffset) {
-	    btnIncreaseOffset = false;
+	    btnIncreaseOffset = true;
 	    distanceOffset += DISTANCE_OFFSET_INCREMENT;
 	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_INCREASE_OFFSET) && btnIncreaseOffset) {
-	    btnIncreaseOffset = true;
+	    btnIncreaseOffset = false;
 	}
 	
 	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_DECREASE_OFFSET) && !btnDecreaseOffset) {
-	    btnDecreaseOffset = false;
+	    btnDecreaseOffset = true;
 	    distanceOffset -= DISTANCE_OFFSET_INCREMENT;
 	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_DECREASE_OFFSET) && btnDecreaseOffset) {
-	    btnDecreaseOffset = true;
+	    btnDecreaseOffset = false;
 	}
 	
 	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_RESET_OFFSET) && !btnResetOffset) {
-	    btnResetOffset = false;
+	    btnResetOffset = true;
 	    distanceOffset = 0.0;
 	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_RESET_OFFSET) && btnResetOffset) {
-	    btnResetOffset = true;
+	    btnResetOffset = false;
 	}
 	
-	RobotState.DASHBOARD_FEEDBACK.putDouble("distance.offset", distanceOffset);
+	RobotState.DASHBOARD_FEEDBACK.putDouble("distance.offset", ((int)(distanceOffset * 10.0))/10.0);
 	
 	ballController.runPeriodic(
 		-shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_ELEVATOR),
