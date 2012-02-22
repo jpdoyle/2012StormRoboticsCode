@@ -183,7 +183,7 @@ public class Shooter implements IShooter {
 	{
             return true;
 	}
-        if(goodRangeCount > 15)
+        if (goodRangeCount > 15)
 	{
 	    return true;
 	}else return false;
@@ -193,7 +193,7 @@ public class Shooter implements IShooter {
     {            
         wantedRPM = 333.33*distance + 850.63 ;
         System.out.println(System.currentTimeMillis() + " RPMWZ:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
-
+        System.out.println("setRPM Distance: " + distance);
         if (distance == 0) {
             wantedRPM = 0;
             calculatedMotorSpeed = 0;
