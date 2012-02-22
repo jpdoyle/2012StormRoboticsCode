@@ -41,6 +41,7 @@ public class BallController {
 	    ballCollector.start(IBallCollector.DIRECTION_UP);
 	} else if (dPad < 0) {
 	    ballCollector.start(IBallCollector.DIRECTION_DOWN);
+	    shooter.endShoot();
 	} else {
 	    ballCollector.stop();
 	}

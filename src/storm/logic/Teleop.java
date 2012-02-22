@@ -22,11 +22,6 @@ public class Teleop implements IRobotLogic {
     Joystick driveJoystick;
     Joystick shootJoystick;
     
-    DigitalOutput led1 = new DigitalOutput(12);
-    DigitalOutput led2 = new DigitalOutput(13);
-    DigitalOutput led3 = new DigitalOutput(14);
-    boolean led1b = false, led2b = false, led3b = false;
-    
     double driveLeft;
     double driveRight;
     double driveModifier;
@@ -175,30 +170,7 @@ public class Teleop implements IRobotLogic {
 	    bridgeManipulator.stop();
 	}
 	
-	led1.set(led1b);
-	led2.set(led2b);
-	led3.set(led3b);
-	
-	if (System.currentTimeMillis() - time1 >= 20) {
-	    led1b = !led1b;
-	    time1 = System.currentTimeMillis();
-	}
-	
-	if (System.currentTimeMillis() - time2 >= 25) {
-	    led2b = !led2b;
-	    time2 = System.currentTimeMillis();
-	}
-	
-	if (System.currentTimeMillis() - time3 >= 30) {
-	    led3b = !led3b;
-	    time3 = System.currentTimeMillis();
-	}
-	
     }
-    
-    double time1 = System.currentTimeMillis();
-    double time2 = System.currentTimeMillis();
-    double time3 = System.currentTimeMillis();
 
     public void doEnd() {
 	if (targetTracker != null)
