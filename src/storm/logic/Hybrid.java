@@ -62,10 +62,10 @@ public class Hybrid implements IRobotLogic {
 
         //System.currentTimeMillis();
 
-        switch (autoType.getValue()) {
+        switch (1) {//autoType.getValue()) {
             case 1: //Super Auto Mode
 
-                Q.add(4, 0, .8); //Shoot
+                //Q.add(4, 0, .8); //Shoot
                 Q.add(1, 60, -.5); //Move back
                 Q.add(5, 0, 0); //Start Loading
                 Q.add(7, 3, 0); //Wait
@@ -113,11 +113,11 @@ public class Hybrid implements IRobotLogic {
     }
 
     public void doPeriodic() {
-
+	System.out.println(driveTrain.getDistance());
         if (Q.isRunning()) runQueue();
 
         if (Q.getType() == 1 || Q.getType() == 2) {
-            if (driveTrain.getDistance() >= Q.getDistance()) {
+            if (Math.abs(driveTrain.getDistance()) >= Q.getDistance()) {
                 Q.next();
             }
         } else if (Q.getType() == 3) {
