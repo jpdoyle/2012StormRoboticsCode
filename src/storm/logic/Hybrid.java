@@ -43,7 +43,7 @@ public class Hybrid implements IRobotLogic {
         ballCollector = RobotState.ballCollector;
         manipulator = RobotState.bridgeManipulator;
 
-        autoType = new AnalogChannel(RobotState.HYBRID_TYPE_ANALOG);
+        //autoType = new AnalogChannel(RobotState.HYBRID_TYPE_ANALOG);
 
     }
 
