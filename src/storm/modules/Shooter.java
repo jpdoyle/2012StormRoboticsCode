@@ -272,11 +272,13 @@ public class Shooter implements IShooter {
     }
 
     public void setContinuousShoot(boolean continuousShoot) {
+        if (preShooting) return;
         continuousShooting = continuousShoot;
         state = 0;
     }
 
     public void preShoot() {
+        if (continuousShooting) return;
         preShooting = true;
         state = 0;
         transferMotor.set(-1);
