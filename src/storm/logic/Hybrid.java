@@ -51,6 +51,7 @@ public class Hybrid implements IRobotLogic {
 
         Q.clear();
         endTime = 0;
+	driveTrain.setLowGear();
 
         //1 - Straight     \\
         //2 - Left         \\
