@@ -87,10 +87,10 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             ++state_;
         } catch (AxisCameraException ex) {
             reset();
-            ex.printStackTrace();
+//            ex.printStackTrace();
         } catch (NIVisionException ex) {
             reset();
-            ex.printStackTrace();
+//            ex.printStackTrace();
         }
     }
 
@@ -103,7 +103,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             threshold(cameraImg_,image_);
             ++state_;
         } catch (NIVisionException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             reset();
         } //finally {
 //            try {
@@ -121,7 +121,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //            image_ = oldImage.convexHull(false);
             ++state_;
         } catch (NIVisionException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             reset();
         }// finally {
 //            try {
@@ -143,7 +143,6 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             int numParticles = image_.getNumberParticles();
             if(numParticles <= 0) {
                 reset();
-                System.out.println("No particles");
                 return;
             }
             topTarget_ = image_.getParticleAnalysisReport(0);
@@ -155,7 +154,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             }
             ++state_;
         } catch (NIVisionException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             reset();
         } //finally {
 //            try {
@@ -225,7 +224,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
 //                mostExpensiveOp_ = stateName;
 //                mostExpensiveTime_ = endTime-startTime;
 //            }
-	    Print.getInstance().setLine(4, stateName);
+//	    Print.getInstance().setLine(4, stateName);
 //	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
 //            Thread.yield();
 //            System.out.println("begin debug output");
@@ -259,7 +258,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     boolean locking = false;
     Thread thread = new Thread() {
             public void run() {
-                long prevTime = System.currentTimeMillis();
+//                long prevTime = System.currentTimeMillis();
                 for(;;) {
                     if(!tracking) {
                         try {
@@ -267,12 +266,12 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                         } catch (InterruptedException ex) {
 //                            ex.printStackTrace();
                         }
-                        prevTime = System.currentTimeMillis();
+//                        prevTime = System.currentTimeMillis();
                         continue;
                     }
                     doAim();
-                    long currTime = System.currentTimeMillis();
-                    Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
+//                    long currTime = System.currentTimeMillis();
+//                    Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
 //                    Print.getInstance().setLine(4, mostExpensiveOp_);
 //                    Print.getInstance().setLine(5, mostExpensiveTime_/1000.0 + " seconds");
                     if(topTarget_ != null) {
@@ -294,7 +293,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                         netTable_.endTransaction();
                         RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Double.NaN);
                     }
-                    prevTime = System.currentTimeMillis();
+//                    prevTime = System.currentTimeMillis();
                 }
             }
         };
