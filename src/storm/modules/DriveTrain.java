@@ -26,7 +26,7 @@ public class DriveTrain implements IDriveTrain {
     boolean highgear = true;
     boolean lowgear = false;
 
-    Queue queue = new Queue();
+    Queue queue;
     public static Encoder leftEncoder;
     public static Encoder rightEncoder;
     
@@ -54,6 +54,8 @@ public class DriveTrain implements IDriveTrain {
 	rightEncoder = 
 	    new Encoder(RobotState.PORT_ENCODER_DRIVE_RIGHT_A, 
 	    RobotState.PORT_ENCODER_DRIVE_RIGHT_B);
+	
+	queue = new Queue();
 	
     }
     
