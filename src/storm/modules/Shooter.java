@@ -125,6 +125,7 @@ public class Shooter implements IShooter {
             
             return;
         }
+        System.out.println("State: " + state);
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
@@ -190,6 +191,8 @@ public class Shooter implements IShooter {
     private void setRPM(double distance) 
     {            
         wantedRPM = 333.33*distance + 850.63 ;
+        System.out.println(System.currentTimeMillis() + " RPMWZ:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
+
         if (distance == 0) {
             wantedRPM = 0;
             calculatedMotorSpeed = 0;
