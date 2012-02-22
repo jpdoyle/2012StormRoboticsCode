@@ -190,8 +190,12 @@ public class Shooter implements IShooter {
     private void setRPM(double distance) 
     {            
         wantedRPM = 333.33*distance + 850.63 ;
-
-        if (wantedRPMold != wantedRPM)
+        if (distance == 0) {
+            wantedRPM = 0;
+            calculatedMotorSpeed = 0;
+            motorSpeed = 0;
+        }
+        else if(wantedRPMold != wantedRPM)
         {
             wantedRPMold = wantedRPM;
             calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
