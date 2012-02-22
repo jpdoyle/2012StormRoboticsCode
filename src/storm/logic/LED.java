@@ -6,13 +6,12 @@
 package storm.logic;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
-import storm.interfaces.ILED;
 
 /**
  *
  * @author joe
  */
-public class LED implements ILED {
+public class LED {
     private DigitalOutput out;
     private boolean state = false;
 
