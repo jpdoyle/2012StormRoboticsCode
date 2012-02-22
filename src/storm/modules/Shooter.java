@@ -68,7 +68,7 @@ public class Shooter implements IShooter {
     
     public void startShoot(double distance) {
 	shootJoystick = RobotState.joystickShoot;
-
+        System.out.println("startShoot " + distance);
         counter.start();
         state = 0;
         shooting = true;
@@ -108,7 +108,7 @@ public class Shooter implements IShooter {
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
        
         setRPM(wantedDistance);
-        System.out.println("Debug 4");
+        System.out.println("Debug 4" + "Shoot: " + shooting + " PreShoot: " + preShooting);
 	if (!shooting && !preShooting) {
            /* period = counter.getPeriod();
             debugCounter ++;
