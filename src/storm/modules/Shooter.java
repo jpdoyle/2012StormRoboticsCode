@@ -258,6 +258,7 @@ public class Shooter implements IShooter {
         state = 0;
 	shooterMotor.set(0);
 	transferMotor.set(0);
+        wantedDistance = 0;
 	shooting = false;
 	preShooting = false;
         continuousShooting = false;
