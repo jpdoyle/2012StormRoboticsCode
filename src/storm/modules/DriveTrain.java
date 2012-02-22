@@ -5,6 +5,7 @@
 package storm.modules;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.util.AllocationException;
+import storm.RobotState;
 import storm.interfaces.IDriveTrain;
 import storm.utility.Print;
 import storm.utility.Queue;
@@ -26,8 +27,8 @@ public class DriveTrain implements IDriveTrain {
     boolean lowgear = false;
 
     Queue queue = new Queue();
-    public static Encoder leftEncoder = new Encoder(1, 2);
-    public static Encoder rightEncoder = new Encoder(3, 4);
+    public static Encoder leftEncoder = new Encoder(RobotState.PORT_ENCODER_DRIVE_LEFT_A, RobotState.PORT_ENCODER_DRIVE_LEFT_B);
+    public static Encoder rightEncoder = new Encoder(RobotState.PORT_ENCODER_DRIVE_RIGHT_A, RobotState.PORT_ENCODER_DRIVE_RIGHT_B);
     
     private final double deceleration = 0.005;
     private final double acceleration = 0.005;
