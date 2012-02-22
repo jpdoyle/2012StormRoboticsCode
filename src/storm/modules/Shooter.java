@@ -56,6 +56,9 @@ public class Shooter implements IShooter {
 	readyTripped = false;
         continuousShooting = false;
         wantedRPMold = -1;
+        wantedDistance = 0;
+        debugCounter = 0;
+        modFactor = 10;
         counter = new Counter(EncodingType.k1X, hallEffect, hallEffect, false);
         counter.clearDownSource();
         counter.setUpSourceEdge(true, false);
@@ -66,10 +69,8 @@ public class Shooter implements IShooter {
 
         counter.start();
         state = 0;
-	debugCounter = 0;
         shooting = true;
 	goodRangeCount = 0;
-	modFactor = 10;
 	startTime = System.currentTimeMillis();
         wantedDistance = distance;
     }
