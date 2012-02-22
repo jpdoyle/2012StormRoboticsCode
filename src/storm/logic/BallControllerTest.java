@@ -22,6 +22,7 @@ public class BallControllerTest implements IRobotLogic {
     public void doPeriodic() {
 	ballController.runPeriodic(
 		RobotState.joystickShoot.getRawAxis(6),
+		false,
 		RobotState.joystickShoot.getRawButton(6), 0);
     }
 
