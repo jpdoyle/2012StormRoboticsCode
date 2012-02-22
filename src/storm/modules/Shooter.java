@@ -108,8 +108,8 @@ public class Shooter implements IShooter {
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
        
         setRPM(wantedDistance);
-
-	if (!shooting) {
+        System.out.println("Debug 4");
+	if (!shooting && !preShooting) {
            /* period = counter.getPeriod();
             debugCounter ++;
             if (RPMcurrent > 1200) modFactor = 5;
@@ -212,7 +212,7 @@ public class Shooter implements IShooter {
             motorSpeed = calculatedMotorSpeed;
 
         }
-        
+        System.out.println("Debug 1");
         shooterMotor.set(motorSpeed);
 
 	period = counter.getPeriod();
@@ -246,7 +246,8 @@ public class Shooter implements IShooter {
 	/*Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
 	Print.getInstance().setLine(0, "???????");*/
-	
+        System.out.println("Debug 2");
+
 	RPMdifference = wantedRPM - RPMcurrent;
 	motorSpeed += .00002*RPMdifference;
 	
@@ -293,7 +294,8 @@ public class Shooter implements IShooter {
         preShooting = true;
         state = 0;
         transferMotor.set(-1);
-        wantedDistance = 0;      
+        wantedDistance = 0;
+
     }
 }
 
