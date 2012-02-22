@@ -160,7 +160,6 @@ public class Shooter implements IShooter {
 		break;
 	    case 5:
 		RobotState.BALL_CONTAINMENT_COUNT --;                
-                if (!continuousShooting) {}
                 endShoot();
 		break;
 	    default:
@@ -266,6 +265,7 @@ public class Shooter implements IShooter {
     }
     
     public void endShoot(){
+        System.out.println("endShoot");
         state = 0;
 	shooterMotor.set(0);
 	transferMotor.set(0);
@@ -284,12 +284,14 @@ public class Shooter implements IShooter {
     }
 
     public void setContinuousShoot(boolean continuousShoot) {
+        System.out.println("continuousShoot");
         if (preShooting) return;
         continuousShooting = continuousShoot;
         state = 0;
     }
 
     public void preShoot() {
+        System.out.println("preShoot");
         if (continuousShooting) return;
         preShooting = true;
         state = 0;
