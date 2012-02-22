@@ -35,7 +35,7 @@ public class Hybrid implements IRobotLogic {
 
     double endTime = 0;
 
-    public Hybrid(int port) {
+    public Hybrid() {
 
         driveTrain = RobotState.driveTrain;
         shooter = RobotState.shooter;
@@ -43,7 +43,7 @@ public class Hybrid implements IRobotLogic {
         ballCollector = RobotState.ballCollector;
         manipulator = RobotState.bridgeManipulator;
 
-        autoType = new AnalogChannel(port);
+        //autoType = new AnalogChannel(port);
 
     }
 
@@ -114,6 +114,7 @@ public class Hybrid implements IRobotLogic {
 
     public void doPeriodic() {
 	System.out.println(driveTrain.getDistance());
+	
         if (Q.isRunning()) runQueue();
 
         if (Q.getType() == 1 || Q.getType() == 2) {
