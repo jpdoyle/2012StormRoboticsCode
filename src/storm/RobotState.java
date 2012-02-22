@@ -68,12 +68,12 @@ public abstract class RobotState {
     public static final int PORT_GYRO_ROBOT_ROTATION = 1;
     
     // Encoders
-    public static final int PORT_ENCODER_DRIVE_LEFT_A         = 1;
-    public static final int PORT_ENCODER_DRIVE_LEFT_B         = 2;
+    public static final int PORT_ENCODER_DRIVE_LEFT_A         = 2;
+    public static final int PORT_ENCODER_DRIVE_LEFT_B         = 1;
     public static final int PORT_ENCODER_DRIVE_LEFT_A_BACKUP  = 1;
     public static final int PORT_ENCODER_DRIVE_LEFT_B_BACKUP  = 2;
-    public static final int PORT_ENCODER_DRIVE_RIGHT_A        = 3;
-    public static final int PORT_ENCODER_DRIVE_RIGHT_B        = 4;
+    public static final int PORT_ENCODER_DRIVE_RIGHT_A        = 4;
+    public static final int PORT_ENCODER_DRIVE_RIGHT_B        = 3;
     public static final int PORT_ENCODER_DRIVE_RIGHT_A_BACKUP = 3;
     public static final int PORT_ENCODER_DRIVE_RIGHT_B_BACKUP = 4;
     public static final int PORT_ENCODER_SHOOTER_SPEED        = 5;
