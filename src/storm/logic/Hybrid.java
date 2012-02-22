@@ -115,6 +115,7 @@ public class Hybrid implements IRobotLogic {
 
     public void doPeriodic() {
 	System.out.println(driveTrain.getDistance());
+	System.out.println(driveTrain.getRDistance());
 	
         if (Q.isRunning()) runQueue();
 

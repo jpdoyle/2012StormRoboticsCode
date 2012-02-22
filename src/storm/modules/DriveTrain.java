@@ -156,6 +156,10 @@ public class DriveTrain implements IDriveTrain {
     public double getDistance() {
         return leftEncoder.getDistance();
     }
+    
+    public double getRDistance() {
+        return rightEncoder.getDistance();
+    }
 
     public void switchGear() {
         if (highgear) {
