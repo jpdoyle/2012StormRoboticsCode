@@ -90,6 +90,8 @@ public abstract class RobotState {
     public static int BALL_CONTAINMENT_COUNT = 0;
     public static final NetworkTable DASHBOARD_FEEDBACK = NetworkTable.getTable("Feedback");
     
+    //Analog Channels
+    public static final int HYBRID_TYPE_ANALOG = 1337;
     
     //***** GLOBAL HARDWARE ****//
     
