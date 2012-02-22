@@ -193,7 +193,7 @@ public class Shooter implements IShooter {
     {            
         wantedRPM = 333.33*distance + 850.63 ;
         System.out.println(System.currentTimeMillis() + " RPMWZ:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
-        System.out.println("setRPM Distance: " + distance);
+        System.out.println("setRPM DDistance: " + distance);
         if (distance == 0) {
             wantedRPM = 0;
             calculatedMotorSpeed = 0;
@@ -201,7 +201,6 @@ public class Shooter implements IShooter {
         }
         else if(wantedRPMold != wantedRPM)
         {
-            wantedRPMold = wantedRPM;
             calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
             if (Double.isNaN(distance))
             {
@@ -211,10 +210,12 @@ public class Shooter implements IShooter {
             motorSpeed = calculatedMotorSpeed;
 
         }
+        wantedRPMold = wantedRPM;
         System.out.println("Debug 1");
         shooterMotor.set(motorSpeed);
 
 	period = counter.getPeriod();
+        System.out.println("Debug A 2");
 	
 	debugCounter ++;
 	if (debugCounter % modFactor != 0)
@@ -235,6 +236,7 @@ public class Shooter implements IShooter {
         if(RPMcurrent > 3200 && motorSpeed == 1){
             return;
         }
+        System.out.println("Debug B 2");
 	RPMthreshold = wantedRPM / 50;
 	RPMchange = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
