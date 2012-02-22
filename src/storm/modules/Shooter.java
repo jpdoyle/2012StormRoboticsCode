@@ -55,6 +55,8 @@ public class Shooter implements IShooter {
         hallEffect = new DigitalInput(hallEffectSensor);
 	readyTripped = false;
         continuousShooting = false;
+        preShooting = false;
+        shooting = false;
         wantedRPMold = -1;
         wantedDistance = 0;
         debugCounter = 0;
