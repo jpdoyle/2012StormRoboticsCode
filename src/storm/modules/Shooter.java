@@ -25,11 +25,15 @@ public class Shooter implements IShooter {
     Counter counter;
     Joystick shootJoystick;
     boolean shooting,
-	    readyTripped;
+	    readyTripped,
+            continuousShooting,
+            preShooting;
     boolean btn7;
     double motorSpeed,
 	    calculatedMotorSpeed,
 	    wantedRPM,
+            wantedRPMold,
+            wantedDistance,
 	    period,
 	    RPMcurrent,
 	    RPMdifference,
@@ -50,6 +54,8 @@ public class Shooter implements IShooter {
         ready = new DigitalInput(IRready);
         hallEffect = new DigitalInput(hallEffectSensor);
 	readyTripped = false;
+        continuousShooting = false;
+        wantedRPMold = -1;
         counter = new Counter(EncodingType.k1X, hallEffect, hallEffect, false);
         counter.clearDownSource();
         counter.setUpSourceEdge(true, false);
@@ -58,7 +64,6 @@ public class Shooter implements IShooter {
     public void startShoot(double distance) {
 	shootJoystick = RobotState.joystickShoot;
 
-	motorSpeed = getMotorSpeed(distance);
         counter.start();
         state = 0;
 	debugCounter = 0;
@@ -66,7 +71,7 @@ public class Shooter implements IShooter {
 	goodRangeCount = 0;
 	modFactor = 10;
 	startTime = System.currentTimeMillis();
-
+        wantedDistance = distance;
     }
     
     long startTime = -1;
@@ -99,7 +104,8 @@ public class Shooter implements IShooter {
 
         // set motor speed, check when ready, move ball into shooter, stop once IR sensor is clear
        
-	
+        setRPM(wantedDistance);
+
 	if (!shooting) {
            /* period = counter.getPeriod();
             debugCounter ++;
@@ -121,14 +127,14 @@ public class Shooter implements IShooter {
 	switch (state){
 	    case 0:
 		transferMotor.set(-1);
-		shooterMotor.set(motorSpeed);
 		startTime = System.currentTimeMillis();
-		state ++;
-		
+                if (continuousShooting) return;
+		state ++;		
 		break;
 	    case 1:
 		if (!ready.get() == true){
 		    transferMotor.set(0);
+                    if (preShooting) endShoot();
 		    state ++;}
 		break ;
 	    case 2:
@@ -137,7 +143,6 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 3:
-		checkRPM();
 		transferMotor.set(-1);
 		if (!ready.get() == false) {
 		    startTime = System.currentTimeMillis();
@@ -145,21 +150,21 @@ public class Shooter implements IShooter {
 		}
 		break;
 	    case 4:
-		checkRPM();
 		if ((System.currentTimeMillis() - startTime) >= 3000){
 		    state ++;
 		}
 		break;
 	    case 5:
-		endShoot();
-		RobotState.BALL_CONTAINMENT_COUNT --;
+		RobotState.BALL_CONTAINMENT_COUNT --;                
+                if (!continuousShooting) {}
+                endShoot();
 		break;
 	    default:
 		break;
 	}
     }
 
-    private double getMotorSpeed(double distance) {
+    private double setMotorSpeed(double distance) {
         //convert distance into rpm into motor speed value  
 	wantedRPM = 333.33*distance + 850.63 ;
 	calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
@@ -171,38 +176,62 @@ public class Shooter implements IShooter {
     }
     
     private boolean checkRPM(){
-	//check what the current RPM is
-	
-	period = counter.getPeriod();
-	if ((System.currentTimeMillis() - startTime) >= 3000)
+        if ((System.currentTimeMillis() - startTime) >= 3000)
+	{
+            return true;
+	}
+        if(goodRangeCount > 15)
 	{
 	    return true;
-	}
+	}else return false;
+    }
+
+    private void setRPM(double distance) 
+    {            
+        wantedRPM = 333.33*distance + 850.63 ;
+
+        if (wantedRPMold != wantedRPM)
+        {
+            wantedRPMold = wantedRPM;
+            calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
+            if (Double.isNaN(distance))
+            {
+                wantedRPM = 3181;
+                calculatedMotorSpeed = 1;
+            }        
+            motorSpeed = calculatedMotorSpeed;
+
+        }
+        
+        shooterMotor.set(motorSpeed);
+
+	period = counter.getPeriod();
+	
 	debugCounter ++;
 	if (debugCounter % modFactor != 0)
 	{
-	    return false;
+	    return;
 	}
 	
 	if (Double.isInfinite(period) || period <= 0)
 	{
 	    //System.out.println("Infinite, period: " + period);
-	    return false;
+	    return;
 	}
 	
 	RPMcurrent = 60/period;
-	if (RPMcurrent > 3500) return false;
+	if (RPMcurrent > 3500) return;
 	if (RPMcurrent > 1200) modFactor = 5;
 	else modFactor = 10;
         if(RPMcurrent > 3200 && motorSpeed == 1){
-            return true;
+            return;
         }
 	RPMthreshold = wantedRPM / 50;
 	RPMchange = RPMold - RPMcurrent;
 	RPMold = RPMcurrent;
 	if (Math.abs(RPMchange) > 100) {
 	    System.out.println(System.currentTimeMillis() + " RPMx:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed + " GRC: " + goodRangeCount + " RPMCge: " + RPMchange);
-	    return false;
+	    return;
 	}
 	/*Print.getInstance().setLine(1, "RPM: " + RPMcurrent);
 	Print.getInstance().setLine(4, "RPM difference: " + RPMdifference);
@@ -223,18 +252,15 @@ public class Shooter implements IShooter {
 	//System.out.println("goodRangeCount:" + goodRangeCount);
 	System.out.println(System.currentTimeMillis() + " RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);	
 
-	if(goodRangeCount > 15)
-	{
-	    return true;
-	}else return false;
     }
     
-    private void endShoot(){
+    public void endShoot(){
+        state = 0;
 	shooterMotor.set(0);
 	transferMotor.set(0);
-	state = 0;
 	shooting = false;
-	
+	preShooting = false;
+        continuousShooting = false;
     }
 
     public boolean isShooting() {
@@ -245,4 +271,17 @@ public class Shooter implements IShooter {
         return RPMcurrent;
     }
 
+    public void setContinuousShoot(boolean continuousShoot) {
+        continuousShooting = continuousShoot;
+        state = 0;
+    }
+
+    public void preShoot() {
+        preShooting = true;
+        state = 0;
+        transferMotor.set(-1);
+        wantedDistance = 0;      
+    }
 }
+
+
