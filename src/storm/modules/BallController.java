@@ -9,12 +9,14 @@ public class BallController {
     IBallCollector ballCollector;
     IShooter shooter;
     
+    boolean preShootTrigger;
     boolean shootTrigger;
     
     public BallController(IBallCollector ballCollector, IShooter shooter) {
 	this.ballCollector = ballCollector;
 	this.shooter = shooter;
 	
+	preShootTrigger = false;
 	shootTrigger = false;
     }
     
@@ -23,8 +25,15 @@ public class BallController {
 	shooter.doShoot();
     }
     
-    public void runPeriodic(double dPadValue, boolean shootButton, double distance) {
+    public void runPeriodic(double dPadValue, boolean preShoot, boolean shootButton, double distance) {
 	manual(dPadValue);
+	
+	if (preShoot && !preShootTrigger) {
+	    preShootTrigger = true;
+	    shooter.preShoot();
+	} else if (!preShoot && preShootTrigger) {
+	    preShootTrigger = false;
+	}
 	
 	if (shootButton && !shootTrigger) {
 	    shootTrigger = true;

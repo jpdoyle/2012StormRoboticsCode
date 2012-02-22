@@ -149,6 +149,7 @@ public class Teleop implements IRobotLogic {
 	
 	ballController.runPeriodic(
 		-shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_ELEVATOR),
+		shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_PRESHOOT),
 		shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_SHOOT),
 		distance + distanceOffset);
 	
