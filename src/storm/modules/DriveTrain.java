@@ -27,8 +27,12 @@ public class DriveTrain implements IDriveTrain {
     boolean lowgear = false;
 
     Queue queue = new Queue();
-    public static Encoder leftEncoder = new Encoder(RobotState.PORT_ENCODER_DRIVE_LEFT_A, RobotState.PORT_ENCODER_DRIVE_LEFT_B);
-    public static Encoder rightEncoder = new Encoder(RobotState.PORT_ENCODER_DRIVE_RIGHT_A, RobotState.PORT_ENCODER_DRIVE_RIGHT_B);
+    public static Encoder leftEncoder = 
+	    new Encoder(RobotState.PORT_ENCODER_DRIVE_LEFT_A, 
+	    RobotState.PORT_ENCODER_DRIVE_LEFT_B);
+    public static Encoder rightEncoder = 
+	    new Encoder(RobotState.PORT_ENCODER_DRIVE_RIGHT_A, 
+	    RobotState.PORT_ENCODER_DRIVE_RIGHT_B);
     
     private final double deceleration = 0.005;
     private final double acceleration = 0.005;
