@@ -26,16 +26,12 @@ public class DriveTrain implements IDriveTrain {
     boolean highgear = true;
     boolean lowgear = false;
 
-    Queue queue = new Queue();
-    public static Encoder leftEncoder = 
-	    new Encoder(RobotState.PORT_ENCODER_DRIVE_LEFT_A, 
-	    RobotState.PORT_ENCODER_DRIVE_LEFT_B);
-    public static Encoder rightEncoder = 
-	    new Encoder(RobotState.PORT_ENCODER_DRIVE_RIGHT_A, 
-	    RobotState.PORT_ENCODER_DRIVE_RIGHT_B);
+    Queue queue;
+    public static Encoder leftEncoder;
+    public static Encoder rightEncoder;
     
-    private final double deceleration = 0.005;
-    private final double acceleration = 0.005;
+    private final double deceleration = 0.008;
+    private final double acceleration = 0.008;
     private double lastLeftSpeed = 0.0;
     private double lastRightSpeed = 0.0;
     double driveLeft = 0.0;
@@ -51,6 +47,16 @@ public class DriveTrain implements IDriveTrain {
 	drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         solenoidHigh = new Solenoid(solChannelH);
         solenoidLow = new Solenoid(solChannelL);
+	
+	leftEncoder = 
+	    new Encoder(RobotState.PORT_ENCODER_DRIVE_LEFT_A, 
+	    RobotState.PORT_ENCODER_DRIVE_LEFT_B);
+	rightEncoder = 
+	    new Encoder(RobotState.PORT_ENCODER_DRIVE_RIGHT_A, 
+	    RobotState.PORT_ENCODER_DRIVE_RIGHT_B);
+	
+	queue = new Queue();
+	
     }
     
     public void drive(double leftSpeed, double rightSpeed) {
@@ -155,6 +161,10 @@ public class DriveTrain implements IDriveTrain {
 
     public double getDistance() {
         return leftEncoder.getDistance();
+    }
+    
+    public double getRDistance() {
+        return rightEncoder.getDistance();
     }
 
     public void switchGear() {

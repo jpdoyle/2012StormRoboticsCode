@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package storm.logic;
+package storm.modules;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
 

@@ -11,6 +11,7 @@ public interface IDriveTrain {
     public void driveDirect(double leftSpeed, double rightSpeed);
     public void resetDistance();
     public double getDistance();
+    public double getRDistance();
     
     public void switchGear();
     public void setHighGear();
