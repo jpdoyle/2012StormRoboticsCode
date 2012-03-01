@@ -35,6 +35,8 @@ public class Hybrid implements IRobotLogic {
 
     double endTime = 0;
 
+    int autoNum = 0;
+
     public Hybrid() {
 
         driveTrain = RobotState.driveTrain;
@@ -63,7 +65,7 @@ public class Hybrid implements IRobotLogic {
 
         //System.currentTimeMillis();
 
-        int autoNum = (int) Math.floor(autoType.getValue() + .5);
+        autoNum = (int) Math.floor(autoType.getValue() + .5);
 
         switch (autoNum) {//autoType.getValue()) {
             case 1: //Super Auto Mode
@@ -105,11 +107,12 @@ public class Hybrid implements IRobotLogic {
                 break;
         }
 
-        Q.start();
+        //Q.start();
 
     }
 
     public void doContinuous() {
+        System.out.println(autoNum);
         shooter.doShoot();
         //Eat a muffin.  please :)
     }
