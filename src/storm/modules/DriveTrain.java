@@ -27,8 +27,8 @@ public class DriveTrain implements IDriveTrain {
     boolean lowgear = false;
 
     Queue queue;
-    public static Encoder leftEncoder;
-    public static Encoder rightEncoder;
+    public Encoder leftEncoder;
+    public Encoder rightEncoder;
     
     private final double deceleration = 0.008;
     private final double acceleration = 0.008;
@@ -36,6 +36,8 @@ public class DriveTrain implements IDriveTrain {
     private double lastRightSpeed = 0.0;
     double driveLeft = 0.0;
     double driveRight = 0.0;
+    
+    private final double distancePerTick = .0736310778;
 
     Print printer = Print.getInstance();
     
@@ -51,9 +53,13 @@ public class DriveTrain implements IDriveTrain {
 	leftEncoder = 
 	    new Encoder(RobotState.PORT_ENCODER_DRIVE_LEFT_A, 
 	    RobotState.PORT_ENCODER_DRIVE_LEFT_B);
+	leftEncoder.setDistancePerPulse(distancePerTick);
+	leftEncoder.start();
 	rightEncoder = 
 	    new Encoder(RobotState.PORT_ENCODER_DRIVE_RIGHT_A, 
 	    RobotState.PORT_ENCODER_DRIVE_RIGHT_B);
+	rightEncoder.setDistancePerPulse(distancePerTick);
+	rightEncoder.start();
 	
 	queue = new Queue();
 	
@@ -157,6 +163,7 @@ public class DriveTrain implements IDriveTrain {
 
     public void resetDistance() {
        leftEncoder.reset();
+       rightEncoder.reset();
     }
 
     public double getDistance() {
