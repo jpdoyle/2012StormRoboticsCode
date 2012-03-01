@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import storm.RobotState;
 import storm.interfaces.IShooter;
-import storm.utility.Print;
+//import storm.utility.Print;
 /**
  *
  * @author Storm
