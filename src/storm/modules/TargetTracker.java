@@ -7,6 +7,8 @@ package storm.modules;
 import storm.utility.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import storm.RobotState;
 
 /**
  *
@@ -36,6 +38,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     private volatile ParticleAnalysisReport topTarget_ = null;
     private double[] angleRange_ = {Double.NaN,Double.NaN};
     private volatile double zLoc_ = Double.NaN;
+
+    private final NetworkTable netTable_ = NetworkTable.getTable("Target Tracker");
 
 
     private volatile boolean tracking_ = false;
@@ -120,6 +124,25 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         zLoc_ = angleRange_[0] = angleRange_[1] = Double.NaN;
     }
 
+    private void sendData() {
+        netTable_.beginTransaction();
+            if(topTarget_ != null) {
+                netTable_.putInt("X", topTarget_.boundingRectLeft);
+                netTable_.putInt("Y", topTarget_.boundingRectTop);
+                netTable_.putInt("Width", topTarget_.boundingRectWidth);
+                netTable_.putInt("Height", topTarget_.boundingRectHeight);
+                netTable_.putBoolean("Aimed", isAimed());
+            } else {
+                netTable_.putInt("X", 0);
+                netTable_.putInt("Y", 0);
+                netTable_.putInt("Width", 0);
+                netTable_.putInt("Height", 0);
+                netTable_.putBoolean("Aimed", false);
+            }
+        netTable_.endTransaction();
+        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
+    }
+
     private void doAim() {
         try {
             retrieveImage();
@@ -132,6 +155,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         } catch (AxisCameraException ex) {
             reset();
         }
+        sendData();
     }
 
     public synchronized double getDistance() {
