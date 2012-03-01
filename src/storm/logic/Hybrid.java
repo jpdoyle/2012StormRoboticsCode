@@ -66,7 +66,7 @@ public class Hybrid implements IRobotLogic {
 
         //System.currentTimeMillis();
 
-        autoNum = (int) Math.floor(autoType.getVoltage() + 0.5);
+        autoNum = (int) Math.floor(autoType.getVoltage() + 0.5) + 1;
 
         switch (autoNum) {//autoType.getValue()) {
             case 1: //Super Auto Mode
@@ -108,12 +108,12 @@ public class Hybrid implements IRobotLogic {
                 break;
         }
 
-        //Q.start();
+        Q.start();
 
     }
 
     public void doContinuous() {
-        autoNum = (int) Math.floor(autoType.getVoltage() + 0.5);
+        autoNum = (int) Math.floor(autoType.getVoltage() + 0.5) + 1;
         Print.getInstance().setLine(0, "" + autoNum);
         shooter.doShoot();
         //Eat a muffin.  please :)
