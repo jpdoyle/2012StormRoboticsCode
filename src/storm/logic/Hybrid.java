@@ -87,6 +87,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 3: //Shoot
 
+                Q.add(4, 0, 0); //Start Loading
                 Q.add(4, 0, 0); //Shoot
 
                 break;
@@ -142,7 +143,7 @@ public class Hybrid implements IRobotLogic {
             }
         }
 
-        if (isLoading) ballCollector.start(IBallCollector.DIRECTION_UP);
+        //if (isLoading) ballCollector.start(IBallCollector.DIRECTION_UP);
         if (isManipulating) manipulator.lower();
 
     }
@@ -171,9 +172,11 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 5:
                 isLoading = true;
+                ballCollector.start(IBallCollector.DIRECTION_UP);
                 break;
             case 6:
                 isLoading = false;
+                ballCollector.stop();
                 break;
             case 7:
                 if (endTime == 0) {
