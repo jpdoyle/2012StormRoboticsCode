@@ -54,7 +54,10 @@ public class Hybrid implements IRobotLogic {
 
         Q.clear();
         endTime = 0;
+        autoNum = 0;
 	driveTrain.setLowGear();
+        isManipulating = false;
+        isLoading = false;
 
         //1 - Straight     \\
         //2 - Left         \\
@@ -86,9 +89,10 @@ public class Hybrid implements IRobotLogic {
 
                 break;
             case 3: //Shoot
-
-                Q.add(4, 0, 0); //Start Loading
+                
                 Q.add(4, 0, 0); //Shoot
+                Q.add(7, 2, 0); //Wait
+                Q.add(4, 0, 0); //Start Loading
 
                 break;
             case 4: //Flee in terror to the left
