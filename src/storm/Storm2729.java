@@ -34,8 +34,8 @@ public class Storm2729 extends IterativeRobot {
 	watchdog = Watchdog.getInstance();
 	
 	//autonomous = new THING
-        hybrid = new EncoderTest();
-	teleop = new Teleop();
+        hybrid = new Hybrid();
+	teleop = new NullLogic();
 	
 
     }

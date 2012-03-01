@@ -92,7 +92,7 @@ public abstract class RobotState {
     public static final NetworkTable DASHBOARD_FEEDBACK = NetworkTable.getTable("Feedback");
     
     //Analog Channels
-    //public static final int HYBRID_TYPE_ANALOG = 1337;
+    public static final int PORT_SWITCH_HYBRID_TYPE = 3;
     
     //***** GLOBAL HARDWARE ****//
     

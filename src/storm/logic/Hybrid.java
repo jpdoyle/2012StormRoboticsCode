@@ -12,6 +12,7 @@ import storm.interfaces.IDriveTrain;
 import storm.interfaces.IRobotLogic;
 import storm.interfaces.IShooter;
 import storm.interfaces.ITargetTracker;
+import storm.utility.Print;
 import storm.utility.Queue;
 
 /**
@@ -45,7 +46,7 @@ public class Hybrid implements IRobotLogic {
         ballCollector = RobotState.ballCollector;
         manipulator = RobotState.bridgeManipulator;
 
-        //autoType = new AnalogChannel(RobotState.HYBRID_TYPE_ANALOG);
+        autoType = new AnalogChannel(RobotState.PORT_SWITCH_HYBRID_TYPE);
 
     }
 
@@ -65,7 +66,7 @@ public class Hybrid implements IRobotLogic {
 
         //System.currentTimeMillis();
 
-        autoNum = (int) Math.floor(autoType.getValue() + .5);
+        autoNum = (int) Math.floor(autoType.getVoltage() + 0.5);
 
         switch (autoNum) {//autoType.getValue()) {
             case 1: //Super Auto Mode
@@ -112,14 +113,13 @@ public class Hybrid implements IRobotLogic {
     }
 
     public void doContinuous() {
-        System.out.println(autoNum);
+        autoNum = (int) Math.floor(autoType.getVoltage() + 0.5);
+        Print.getInstance().setLine(0, "" + autoNum);
         shooter.doShoot();
         //Eat a muffin.  please :)
     }
 
     public void doPeriodic() {
-	System.out.println(driveTrain.getDistance());
-	System.out.println(driveTrain.getRDistance());
 
         if (Q.isRunning()) runQueue();
 
