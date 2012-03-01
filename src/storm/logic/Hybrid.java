@@ -166,7 +166,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 4: //Shoot
                 shooter.setContinuousShoot(true);
-                if (!shooter.isShooting()) shooter.startShoot(targetTracker.getDistance());
+                if (!shooter.isShooting()) shooter.startShoot(3.5);
                 //Make sure it's continuous
                 break;
             case 5:
