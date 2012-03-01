@@ -63,10 +63,12 @@ public class Hybrid implements IRobotLogic {
 
         //System.currentTimeMillis();
 
-        switch (1) {//autoType.getValue()) {
+        int autoNum = (int) Math.floor(autoType.getValue() + .5);
+
+        switch (autoNum) {//autoType.getValue()) {
             case 1: //Super Auto Mode
 
-                //Q.add(4, 0, .8); //Shoot
+                Q.add(4, 0, 0); //Shoot
                 Q.add(1, 60, -.5); //Move back
                 Q.add(5, 0, 0); //Start Loading
                 Q.add(7, 3, 0); //Wait
@@ -80,10 +82,9 @@ public class Hybrid implements IRobotLogic {
                 //Possibly do a shoot sequence
 
                 break;
-            case 3: //Hit and run
+            case 3: //Shoot
 
-                //Aim
-                //Shoot
+                Q.add(4, 0, 0); //Shoot
 
                 break;
             case 4: //Flee in terror to the left
@@ -116,7 +117,7 @@ public class Hybrid implements IRobotLogic {
     public void doPeriodic() {
 	System.out.println(driveTrain.getDistance());
 	System.out.println(driveTrain.getRDistance());
-	
+
         if (Q.isRunning()) runQueue();
 
         if (Q.getType() == 1 || Q.getType() == 2) {
@@ -144,6 +145,7 @@ public class Hybrid implements IRobotLogic {
     }
 
     public void doEnd() {
+        shooter.endShoot();
         Q.clear();
     }
 
@@ -160,6 +162,7 @@ public class Hybrid implements IRobotLogic {
                 isManipulating = true;
                 break;
             case 4: //Shoot
+                shooter.setContinuousShoot(true);
                 if (!shooter.isShooting()) shooter.startShoot(targetTracker.getDistance());
                 //Make sure it's continuous
                 break;
@@ -179,5 +182,5 @@ public class Hybrid implements IRobotLogic {
         }
 
     }
-    
+
 }
