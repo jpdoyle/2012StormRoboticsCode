@@ -107,9 +107,6 @@ public class Teleop implements IRobotLogic {
 	    btnGearPressed = false;
 	}
 	
-	String gear = (driveTrain.isHighGear()) ? "High Gear" : "Low Gear";
-	RobotState.DASHBOARD_FEEDBACK.putString("gear", gear);
-	
 	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_DISTANCE) && !btnToggleShootDistance) {
 	    btnToggleShootDistance = true;
 	    distanceIndex++;
@@ -121,8 +118,6 @@ public class Teleop implements IRobotLogic {
 	double distance = (distances[distanceIndex] == -1.0) ? targetTracker.getDistance() : distances[distanceIndex];
 	String distanceString = (distances[distanceIndex] == -1.0) ? "Automatic" : distances[distanceIndex] + "m";
 	RobotState.DASHBOARD_FEEDBACK.putString("distance.mode", distanceString);
-	
-	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", ((int)(RobotState.shooter.getRPM())));
 	
 	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_INCREASE_OFFSET) && !btnIncreaseOffset) {
 	    btnIncreaseOffset = true;
