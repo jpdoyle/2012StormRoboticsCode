@@ -5,6 +5,7 @@
 package storm.logic;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.Preferences;
 import storm.RobotState;
 import storm.interfaces.IBallCollector;
 import storm.interfaces.IBridgeManipulator;
@@ -171,7 +172,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 4: //Shoot
                 shooter.setContinuousShoot(true);
-                if (!shooter.isShooting()) shooter.startShoot(3.5);
+                if (!shooter.isShooting()) shooter.startShoot(Preferences.getInstance().getDouble("Distance", 1.0));
                 //Make sure it's continuous
                 break;
             case 5:
