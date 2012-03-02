@@ -91,14 +91,13 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         NIVision.convexHull(binImage_.image, binImage_.image, 1);
     }
 
-    private void findParticles() throws NIVisionException {
+    private void findParticles() throws Exception {
         NIVision.particleFilter(binImage_.image, binImage_.image, criteria);
         NIVision.sizeFilter(binImage_.image, binImage_.image, true, 3, true);
 
         int numParticles = binImage_.getNumberParticles();
         if(numParticles <= 0) {
-            reset();
-            return;
+            throw new Exception("No particles");
         }
         topTarget_ = binImage_.getParticleAnalysisReport(0);
         for (int i = 1; i < numParticles; ++i) {
@@ -127,15 +126,17 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         zLoc_ = angleRange_[0] = angleRange_[1] = Double.NaN;
     }
 
-    private void sendData() {
+    private synchronized void sendData() {
         netTable_.beginTransaction();
             if(topTarget_ != null) {
+                Print.getInstance().setLine(5, "Sending good data");
                 netTable_.putInt("X", topTarget_.boundingRectLeft);
                 netTable_.putInt("Y", topTarget_.boundingRectTop);
                 netTable_.putInt("Width", topTarget_.boundingRectWidth);
                 netTable_.putInt("Height", topTarget_.boundingRectHeight);
                 netTable_.putBoolean("Aimed", isAimed());
             } else {
+                Print.getInstance().setLine(5, "Sending bad data");
                 netTable_.putInt("X", 0);
                 netTable_.putInt("Y", 0);
                 netTable_.putInt("Width", 0);
@@ -147,20 +148,16 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     }
 
     private void doAim() {
-        Print.getInstance().setLine(5, "Processing");
         try {
             retrieveImage();
             matchThreshold();
             convexHull();
             findParticles();
             findDetails();
-        } catch (NIVisionException ex) {
-            reset();
-        } catch (AxisCameraException ex) {
+        } catch (Exception ex) {
             reset();
         }
         sendData();
-        Print.getInstance().setLine(5, "Processed");
     }
 
     public synchronized double getDistance() {
