@@ -95,9 +95,8 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 3: //Shoot
 
-                Q.add(7, 0.5, 0); //Wait
                 Q.add(4, 0, 0); //Shoot
-                Q.add(7, 2, 0); //Wait
+                Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
 
                 break;
