@@ -4,19 +4,22 @@ package storm.modules;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-import storm.utility.AxisCamera;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import storm.RobotState;
+import storm.interfaces.IDriveTrain;
+import storm.utility.AxisCamera;
 import storm.utility.Print;
+import storm.utility.RobotTurner;
 
 /**
  *
  * @author joe
  */
 public class TargetTracker implements storm.interfaces.ITargetTracker {
-    // RGB threshold for the image
+
     static final int[][] THRESHOLD = {{0, 150},
                                       {200, 255},
                                       {190, 255}};
@@ -24,93 +27,150 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                                              new NIVision.Range(THRESHOLD[1][0], THRESHOLD[1][1]),
                                              new NIVision.Range(THRESHOLD[2][0], THRESHOLD[2][1]) };
     static final double FOV = 47;
-    // z value (in meters) required for vision target rectangle fill the view vertically
+    // z value required for vision target rectangle fill the view vertically
     static final double Z_BASE = .77;
+    // offset of camera lens from center of robot
+    //static final double CAMERA_OFFSET = .165;
     // angle between horizontal and the camera's view
     static final double CAMERA_ANGLE = 23;
-    static final double CAMERA_ANGLE_COS = Math.cos(CAMERA_ANGLE/180*Math.PI);
+    static final double CAMERA_ANGLE_COS = storm.utility.TrigLUT.cos(CAMERA_ANGLE/180*Math.PI);
+    // frequency to update camera calculations (in iterations per second)
+    // note that this is the upper bound for the frequency, not necessarily the actual frequency
+//    static final double CAMERA_FREQUENCY = 10;
+    static final double ASPECT_RATIO = 24/18.0;
 
     private CriteriaCollection criteria = new CriteriaCollection();
 
     private AxisCamera camera_ = AxisCamera.getInstance();
+    private RobotTurner turner_;
+    private double angle_ = 0;
+    private int state_ = 0;
     private Image cameraImg_;
-    private BinaryImage binImage_;
-    // the target we like
+    private BinaryImage image_;
     private volatile ParticleAnalysisReport topTarget_ = null;
     private double[] angleRange_ = {Double.NaN,Double.NaN};
     private volatile double zLoc_ = Double.NaN;
+//
+//    private String mostExpensiveOp_ = "";
+//    private long mostExpensiveTime_ = 0;
 
     private final NetworkTable netTable_ = NetworkTable.getTable("Target Tracker");
 
-
-    private volatile boolean tracking_ = false;
-    private Thread thread_ = new Thread() {
-            public void run() {
-                // run forever
-                for(;;) {
-                    if(!tracking_) {
-                        Print.getInstance().setLine(4, "Not Tracking");
-                        // if it isn't tracking, wait a bit before checking again
-                        try {
-                            Thread.sleep(1000 / 5);
-                        } catch (InterruptedException ex) {}
-                        continue;
-                    }
-                    Print.getInstance().setLine(4, "Tracking");
-                    doAim();
-                }
-            }
-        };
-
-    public TargetTracker() {
-        // generally initialize stuff
-
+    public TargetTracker(IDriveTrain drive,int gyroChannel) {
+        turner_ = new RobotTurner(drive,gyroChannel);
+        netTable_.beginTransaction();
+            netTable_.putInt("X",0);
+            netTable_.putInt("Y",0);
+            netTable_.putInt("Width", 0);
+            netTable_.putInt("Height", 0);
+            netTable_.putBoolean("Aimed", false);
+            netTable_.putDouble("Z", 0);
+        netTable_.endTransaction();
         criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 40, true);
         criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 40, true);
         try {
             cameraImg_ = new RGBImage();
-            binImage_ = new FancyBinaryImage();
+            image_ = new FancyBinaryImage();
         } catch (NIVisionException ex) {
             throw new NullPointerException("Cannot track targets without valid images");
         }
-        thread_.start();
+        thread.start();
     }
 
-    private void retrieveImage() throws NIVisionException, AxisCameraException {
-        if (!camera_.freshImage()) {
-            return;
-        }
-        camera_.getImage(cameraImg_);
-    }
-
-    private void matchThreshold() throws NIVisionException {
-        NIVision.colorThreshold(cameraImg_.image, binImage_.image, NIVision.ColorMode.IMAQ_RGB, ranges[0].getPointer(), ranges[1].getPointer(), ranges[2].getPointer());
-    }
-
-    private void convexHull() throws NIVisionException {
-        NIVision.convexHull(binImage_.image, binImage_.image, 1);
-    }
-
-    private void findParticles() throws Exception {
-        NIVision.particleFilter(binImage_.image, binImage_.image, criteria);
-        NIVision.sizeFilter(binImage_.image, binImage_.image, true, 3, true);
-
-        int numParticles = binImage_.getNumberParticles();
-        if(numParticles <= 0) {
-            throw new Exception("No particles");
-        }
-        topTarget_ = binImage_.getParticleAnalysisReport(0);
-        for (int i = 1; i < numParticles; ++i) {
-            ParticleAnalysisReport report = binImage_.getParticleAnalysisReport(i);
-            if(report.center_mass_y < topTarget_.center_mass_y) {
-                topTarget_ = report;
+    private void retrieveImage() {
+        try {
+            angle_ = turner_.getGyroAngle();
+            if (!camera_.freshImage()) {
+                return;
             }
+            camera_.getImage(cameraImg_);
+            ++state_;
+        } catch (AxisCameraException ex) {
+            reset();
+//            ex.printStackTrace();
+        } catch (NIVisionException ex) {
+            reset();
+//            ex.printStackTrace();
         }
     }
+
+    private void threshold(Image in,Image out) throws NIVisionException {
+        NIVision.colorThreshold(out.image, in.image, NIVision.ColorMode.IMAQ_RGB, ranges[0].getPointer(), ranges[1].getPointer(), ranges[2].getPointer());
+    }
+
+    private void matchThreshold() {
+        try {
+            threshold(cameraImg_,image_);
+            ++state_;
+        } catch (NIVisionException ex) {
+//            ex.printStackTrace();
+            reset();
+        } //finally {
+//            try {
+//                cameraImg_.free();
+//            } catch (NIVisionException ex) {
+//                //ex.printStackTrace();
+//            }
+//        }
+    }
+
+    private void convexHull() {
+//        BinaryImage oldImage = image_;
+        try {
+            NIVision.convexHull(image_.image, image_.image, 1);
+//            image_ = oldImage.convexHull(false);
+            ++state_;
+        } catch (NIVisionException ex) {
+//            ex.printStackTrace();
+            reset();
+        }// finally {
+//            try {
+//                oldImage.free();
+//            } catch (NIVisionException ex) {
+//               // ex.printStackTrace();
+//            }
+//        }
+    }
+
+    private void findParticles() {
+//        BinaryImage oldImage = image_;
+        try {
+//            NIVision.sizeFilter(image_.image, image_.image, false, 2, true);
+            NIVision.particleFilter(image_.image, image_.image, criteria);
+            NIVision.sizeFilter(image_.image, image_.image, true, 3, true);
+//            image_ = image_.particleFilter(criteria);
+
+            int numParticles = image_.getNumberParticles();
+            if(numParticles <= 0) {
+                reset();
+                return;
+            }
+            topTarget_ = image_.getParticleAnalysisReport(0);
+            for (int i = 1; i < numParticles; ++i) {
+                ParticleAnalysisReport report = image_.getParticleAnalysisReport(i);
+                if(report.center_mass_y < topTarget_.center_mass_y) {
+                    topTarget_ = report;
+                }
+            }
+            ++state_;
+        } catch (NIVisionException ex) {
+//            ex.printStackTrace();
+            reset();
+        } //finally {
+//            try {
+//                image_.free();
+//                oldImage.free();
+//            } catch (NIVisionException ex1) {
+//                //ex1.printStackTrace();
+//            }
+//        }
+    }
+
 
 
     public synchronized boolean isAimed() {
-        return 0 >= angleRange_[0] && 0 <= angleRange_[1];
+        double angle = turner_.getGyroAngle();
+        return angle >= angleRange_[0] && angle <= angleRange_[1];
     }
 
     private synchronized void findDetails() {
@@ -118,57 +178,160 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
         double cameraZ = (Z_BASE * topTarget_.imageHeight) / topTarget_.boundingRectHeight;
         // magnitude along an axis in the direction of the camera, but parallel to the ground
         zLoc_ = cameraZ * CAMERA_ANGLE_COS;
-        angleRange_[0] = topTarget_.boundingRectLeft / (double) topTarget_.imageWidth * FOV - FOV / 2;
-        angleRange_[1] =  (topTarget_.boundingRectLeft + topTarget_.boundingRectWidth) / (double) topTarget_.imageWidth * FOV - FOV / 2;
+        angleRange_[0] = angle_ + topTarget_.boundingRectLeft / (double) topTarget_.imageWidth * FOV - FOV / 2;
+        angleRange_[1] = angle_ + (topTarget_.boundingRectLeft + topTarget_.boundingRectWidth) / (double) topTarget_.imageWidth * FOV - FOV / 2;
+        turner_.setAngle((angleRange_[0] + angleRange_[1]) / 2);
+        state_ = 0;
     }
     private synchronized void reset() {
+        state_ = 0;
         topTarget_ = null;
         zLoc_ = angleRange_[0] = angleRange_[1] = Double.NaN;
     }
 
-    private synchronized void sendData() {
-        netTable_.beginTransaction();
-            if(topTarget_ != null) {
-                Print.getInstance().setLine(5, "Sending good data");
-                netTable_.putInt("X", topTarget_.boundingRectLeft);
-                netTable_.putInt("Y", topTarget_.boundingRectTop);
-                netTable_.putInt("Width", topTarget_.boundingRectWidth);
-                netTable_.putInt("Height", topTarget_.boundingRectHeight);
-                netTable_.putBoolean("Aimed", isAimed());
-            } else {
-                Print.getInstance().setLine(5, "Sending bad data");
-                netTable_.putInt("X", 0);
-                netTable_.putInt("Y", 0);
-                netTable_.putInt("Width", 0);
-                netTable_.putInt("Height", 0);
-                netTable_.putBoolean("Aimed", false);
-            }
-        netTable_.endTransaction();
-        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
-    }
-
     private void doAim() {
-        try {
-            retrieveImage();
-            matchThreshold();
-            convexHull();
-            findParticles();
-            findDetails();
-        } catch (Exception ex) {
-            reset();
-        }
-        sendData();
+ //       System.out.println("tracking target");
+        String stateName = "";
+        do {
+//            long startTime = System.currentTimeMillis();
+            switch (state_) {
+                case 0:
+                    stateName = "Retrieving image";
+                    retrieveImage();
+                    break;
+                case 1:
+                    stateName = "Matching threshold";
+                    matchThreshold();
+                    break;
+                case 2:
+                    stateName = "Performing convex hull";
+                    convexHull();
+                    break;
+                case 3:
+                    stateName = "Finding particles";
+                    findParticles();
+                    break;
+                case 4:
+                    stateName = "Finding angle & location";
+                    findDetails();
+                    break;
+                default:
+                    return;
+            }
+//            long endTime = System.currentTimeMillis();
+//
+//            if(endTime-startTime > mostExpensiveTime_) {
+//                mostExpensiveOp_ = stateName;
+//                mostExpensiveTime_ = endTime-startTime;
+//            }
+//	    Print.getInstance().setLine(4, stateName);
+//	    Print.getInstance().setLine(5, "Aimed: " + isAimed());
+//            Thread.yield();
+//            System.out.println("begin debug output");
+//            String line1 = "Angle: " + turner_.getGyroAngle(),
+//                   line2 = stateName,
+//                   line3 = "Location: (?,?," + zLoc_ + ")",
+//                   line4 = "";
+//            DriverStationLCD lcd = DriverStationLCD.getInstance();
+//
+//            lcd.println(DriverStationLCD.Line.kMain6, 1, "                     ");
+//            lcd.println(DriverStationLCD.Line.kMain6, 1, line1);
+//            System.out.println(line1);
+//
+//            lcd.println(DriverStationLCD.Line.kUser2, 1, "                     ");
+//            lcd.println(DriverStationLCD.Line.kUser2, 1, line2);
+//            System.out.println(line2);
+//
+//            lcd.println(DriverStationLCD.Line.kUser3, 1, "                     ");
+//            lcd.println(DriverStationLCD.Line.kUser3, 1, line3);
+//            System.out.println(line3);
+//
+//            lcd.updateLCD();
+        } while(state_ != 0);
     }
 
     public synchronized double getDistance() {
         return zLoc_;
     }
+//    long period = (long)(1000.0/CAMERA_FREQUENCY);
+    volatile boolean tracking = false;
+    boolean locking = false;
+    Thread thread = new Thread() {
+            public void run() {
+//                long prevTime = System.currentTimeMillis();
+                for(;;) {
+                    if(!tracking) {
+                        try {
+                            Thread.sleep(1000 / 5);
+                        } catch (InterruptedException ex) {
+//                            ex.printStackTrace();
+                        }
+//                        prevTime = System.currentTimeMillis();
+                        continue;
+                    }
+                    doAim();
+//                    long currTime = System.currentTimeMillis();
+//                    Print.getInstance().setLine(3, (currTime-prevTime)/1000.0 + " seconds");
+//                    Print.getInstance().setLine(4, mostExpensiveOp_);
+//                    Print.getInstance().setLine(5, mostExpensiveTime_/1000.0 + " seconds");
+                    if(topTarget_ != null) {
+                        netTable_.beginTransaction();
+                            netTable_.putInt("X", topTarget_.boundingRectLeft);
+                            netTable_.putInt("Y", topTarget_.boundingRectTop);
+                            netTable_.putInt("Width", topTarget_.boundingRectWidth);
+                            netTable_.putInt("Height", topTarget_.boundingRectHeight);
+                            netTable_.putBoolean("Aimed", isAimed());
+                        netTable_.endTransaction();
+                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Math.floor(zLoc_*10+0.5)/10);
+                    } else {
+                        netTable_.beginTransaction();
+                            netTable_.putInt("X", 0);
+                            netTable_.putInt("Y", 0);
+                            netTable_.putInt("Width", 0);
+                            netTable_.putInt("Height", 0);
+                            netTable_.putBoolean("Aimed", false);
+                        netTable_.endTransaction();
+                        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Double.NaN);
+                    }
+//                    prevTime = System.currentTimeMillis();
+                }
+            }
+        };
 
     public void startTracking() {
-        tracking_ = true;
+        tracking = true;
     }
     public void stopTracking() {
-        tracking_ = false;
+        tracking = false;
+        netTable_.beginTransaction();
+            netTable_.putInt("X", 0);
+            netTable_.putInt("Y", 0);
+            netTable_.putInt("Width", 0);
+            netTable_.putInt("Height", 0);
+            netTable_.putBoolean("Aimed", false);
+        netTable_.endTransaction();
+        RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Double.NaN);
+    }
+
+    public void startLocking() {
+        if (locking)
+            return;
+        locking = true;
+        turner_.enable();
+    }
+
+    public void stopLocking() {
+        if (!locking)
+            return;
+        locking = false;
+        turner_.disable();
+    }
+    public boolean isLocking() {
+        return locking;
+    }
+
+    public double getGyroAngle() {
+        return turner_.getGyroAngle();
     }
 }
 

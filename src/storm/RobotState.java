@@ -118,7 +118,7 @@ public abstract class RobotState {
 	bridgeManipulator = new BridgeManipulator(PORT_MOTOR_BRIDGE_MANIPULATOR, PORT_ENCODER_BRIDGE_MANIPULATOR);
 	shooter = new Shooter(PORT_MOTOR_SHOOTER_WHEEL, PORT_MOTOR_KANAYERBELT_TOP, PORT_IR_BALL_READY, PORT_ENCODER_SHOOTER_SPEED);
 	threeBA = new ThreeBA(PORT_MOTOR_3BA, PORT_LIMIT_SWITCH_3BA_FRONT, PORT_LIMIT_SWITCH_3BA_BACK);
-	targetTracker = new TargetTracker();
+	targetTracker = new TargetTracker(driveTrain,PORT_GYRO_ROBOT_ROTATION);
 	ballController = new BallController(ballCollector, shooter);
     }
     
