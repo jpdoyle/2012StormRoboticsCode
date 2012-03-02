@@ -119,8 +119,9 @@ public class Hybrid implements IRobotLogic {
     }
 
     public void doContinuous() {
-        autoNum = (int) Math.floor(autoType.getVoltage() + 0.5) + 1;
-        Print.getInstance().setLine(0, "" + autoNum);
+        //autoNum = (int) Math.floor(autoType.getVoltage() + 0.5) + 1;
+        Print.getInstance().setLine(0, "End Time: " + endTime);
+        Print.getInstance().setLine(0, "Current Time: " + System.currentTimeMillis());
         shooter.doShoot();
         //Eat a muffin.  please :)
     }
@@ -173,7 +174,6 @@ public class Hybrid implements IRobotLogic {
             case 4: //Shoot
                 shooter.setContinuousShoot(true);
                 if (!shooter.isShooting()) shooter.startShoot(Preferences.getInstance().getDouble("Distance", 1.0));
-                //Make sure it's continuous
                 break;
             case 5:
                 isLoading = true;
