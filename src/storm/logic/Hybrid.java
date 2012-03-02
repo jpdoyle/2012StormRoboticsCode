@@ -36,6 +36,7 @@ public class Hybrid implements IRobotLogic {
     boolean isManipulating = false;
 
     double endTime = 0;
+    double startTime = 0;
 
     int autoNum = 0;
 
@@ -55,6 +56,7 @@ public class Hybrid implements IRobotLogic {
 
         Q.clear();
         endTime = 0;
+        startTime = System.currentTimeMillis();
         autoNum = 0;
 	driveTrain.setLowGear();
         isManipulating = false;
@@ -119,9 +121,9 @@ public class Hybrid implements IRobotLogic {
     }
 
     public void doContinuous() {
-        //autoNum = (int) Math.floor(autoType.getVoltage() + 0.5) + 1;
+        Print.getInstance().setLine(0, "Queue Part: " + Q.getPart());
         Print.getInstance().setLine(0, "End Time: " + endTime);
-        Print.getInstance().setLine(0, "Current Time: " + System.currentTimeMillis());
+        Print.getInstance().setLine(1, "Current Time: " + (System.currentTimeMillis()-startTime));
         shooter.doShoot();
         //Eat a muffin.  please :)
     }
@@ -143,7 +145,7 @@ public class Hybrid implements IRobotLogic {
         } else if (Q.getType() == 5 || Q.getType() == 6) {
             Q.next();
         } else if (Q.getType() == 7) {
-            if (System.currentTimeMillis() >= endTime) {
+            if ((System.currentTimeMillis()-startTime) >= endTime) {
                 endTime = 0;
                 Q.next();
             }
@@ -185,7 +187,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 7:
                 if (endTime == 0) {
-                    endTime = System.currentTimeMillis() + Q.getDistance() * 1000;
+                    endTime = System.currentTimeMillis() - startTime + Q.getDistance() * 1000;
                 }
                 break;
             default:
