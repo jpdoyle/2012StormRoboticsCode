@@ -37,6 +37,8 @@ public class Storm2729 extends IterativeRobot {
         hybrid = new Hybrid();
 	teleop = new NullLogic();
 	
+	sendDefaultDashboardInfo();
+	
 
     }
     
@@ -58,6 +60,7 @@ public class Storm2729 extends IterativeRobot {
     public void autonomousPeriodic() {
 	watchdog.feed();
 	hybrid.doPeriodic();
+	sendDashboardInfo();
     }
     
     //***** TELEOP FUNCTIONS *****//
@@ -78,6 +81,7 @@ public class Storm2729 extends IterativeRobot {
     public void teleopPeriodic() {
 	watchdog.feed();
         teleop.doPeriodic();
+	sendDashboardInfo();
     }
     
     // End Functions
@@ -85,6 +89,7 @@ public class Storm2729 extends IterativeRobot {
     public void disabledPeriodic() {
 	hybrid.doEnd();
 	teleop.doEnd();
+	sendDashboardInfo();
     }
 
     public void disabledContinuous() {
@@ -95,6 +100,23 @@ public class Storm2729 extends IterativeRobot {
     public void disabledInit() {
 	hybrid.doEnd();
 	teleop.doEnd();
+    }
+    
+    private void sendDefaultDashboardInfo() {
+	RobotState.DASHBOARD_FEEDBACK.putString("gear", "Unknown");
+	RobotState.DASHBOARD_FEEDBACK.putString("distance.mode", "Unknown");
+	RobotState.DASHBOARD_FEEDBACK.putDouble("distance.offset", Double.NaN);
+	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", -1);
+	RobotState.DASHBOARD_FEEDBACK.putInt("ball.count", -1);
+    }
+    
+    private void sendDashboardInfo() {
+	String gear = (RobotState.driveTrain.isHighGear()) ? "High Gear" : "Low Gear";
+	RobotState.DASHBOARD_FEEDBACK.putString("gear", gear);
+	
+	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", ((int)(RobotState.shooter.getRPM())));
+	
+	RobotState.DASHBOARD_FEEDBACK.putInt("ball.count", RobotState.BALL_CONTAINMENT_COUNT);
     }
     
 }
