@@ -35,7 +35,7 @@ public class Storm2729 extends IterativeRobot {
 	
 	//autonomous = new THING
         hybrid = new Hybrid();
-	teleop = new NullLogic();
+	teleop = new TrackerTest();
 	
 	sendDefaultDashboardInfo();
 	
@@ -108,6 +108,7 @@ public class Storm2729 extends IterativeRobot {
 	RobotState.DASHBOARD_FEEDBACK.putDouble("distance.offset", Double.NaN);
 	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", -1);
 	RobotState.DASHBOARD_FEEDBACK.putInt("ball.count", -1);
+	RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Double.NaN);
     }
     
     private void sendDashboardInfo() {

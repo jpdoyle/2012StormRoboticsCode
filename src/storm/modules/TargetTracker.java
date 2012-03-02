@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.image.*;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import storm.RobotState;
+import storm.utility.Print;
 
 /**
  *
@@ -48,12 +49,14 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 // run forever
                 for(;;) {
                     if(!tracking_) {
+                        Print.getInstance().setLine(4, "Not Tracking");
                         // if it isn't tracking, wait a bit before checking again
                         try {
                             Thread.sleep(1000 / 5);
                         } catch (InterruptedException ex) {}
                         continue;
                     }
+                    Print.getInstance().setLine(4, "Tracking");
                     doAim();
                 }
             }
@@ -144,6 +147,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
     }
 
     private void doAim() {
+        Print.getInstance().setLine(5, "Processing");
         try {
             retrieveImage();
             matchThreshold();
@@ -156,6 +160,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             reset();
         }
         sendData();
+        Print.getInstance().setLine(5, "Processed");
     }
 
     public synchronized double getDistance() {
