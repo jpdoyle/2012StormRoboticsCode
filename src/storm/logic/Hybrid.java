@@ -61,6 +61,8 @@ public class Hybrid implements IRobotLogic {
 	driveTrain.setLowGear();
         isManipulating = false;
         isLoading = false;
+        shooter.endShoot();
+        ballCollector.stop();
 
         //1 - Straight     \\
         //2 - Left         \\
@@ -158,6 +160,7 @@ public class Hybrid implements IRobotLogic {
 
     public void doEnd() {
         shooter.endShoot();
+        ballCollector.stop();
         Q.clear();
     }
 
