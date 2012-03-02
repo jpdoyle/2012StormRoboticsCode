@@ -55,6 +55,7 @@ public class Hybrid implements IRobotLogic {
     public void doInit() {
 
         Q.clear();
+	driveTrain.resetDistance();
         endTime = 0;
         startTime = System.currentTimeMillis();
         autoNum = 0;
@@ -79,39 +80,30 @@ public class Hybrid implements IRobotLogic {
         switch (autoNum) {//autoType.getValue()) {
             case 1: //Super Auto Mode
 
-
-                Q.add(4, 3.5, 0); //Shoot
+                
+                Q.add(4, 3.66, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
-//                Q.add(4, 0, 0); //Shoot
-//                Q.add(1, 60, -.5); //Move back
-//                Q.add(5, 0, 0); //Start Loading
-//                Q.add(7, 3, 0); //Wait
-//                Q.add(3, 0, 0); //Manipulate
 
                 break;
             case 2: //Quick ninja
 
 
-                Q.add(4, 4.0, 0); //Shoot
+                Q.add(4, 4.66, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
-//                Q.add(1, 60, -.5);
-//                Q.add(5, 25, 1);
-                //Possibly do a shoot sequence
 
                 break;
             case 3: //Shoot
-
-                Q.add(4, 4.5, 0); //Shoot
-                Q.add(7, 2.5, 0); //Wait
-                Q.add(5, 0, 0); //Start Loading
+		
+		Q.add(1, 57.45, -0.4); //Move
+		Q.add(3, 0, 0);
 
                 break;
             case 4: //Flee in terror to the left
 
 
-                Q.add(4, 5.0, 0); //Shoot
+                Q.add(4, 6.0, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
 
@@ -119,7 +111,7 @@ public class Hybrid implements IRobotLogic {
             case 5: //Flee in terror to the right
 
 
-                Q.add(4, 5.5, 0); //Shoot
+                Q.add(4, 6.5, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
 
@@ -131,6 +123,8 @@ public class Hybrid implements IRobotLogic {
         }
 
         Q.start();
+	
+	driveTrain.resetDistance();
 
     }
 
@@ -143,6 +137,8 @@ public class Hybrid implements IRobotLogic {
     }
 
     public void doPeriodic() {
+	
+	Print.getInstance().setLine(5, "D: " + driveTrain.getDistance());
 
         if (Q.isRunning()) runQueue();
 

@@ -180,7 +180,8 @@ public class Shooter implements IShooter
 
     private double setMotorSpeed(double distance) {
         //convert distance into rpm into motor speed value  
-	wantedRPM = 333.33*distance + 850.63 ;
+	//wantedRPM = 333.33*distance + 850.63 ;
+	wantedRPM = 46.209*distance*distance - 190.39*distance + 2469.3;
 	calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
         if (Double.isNaN(distance))
 	    {
@@ -204,7 +205,9 @@ public class Shooter implements IShooter
 
     private void setRPM(double distance) 
     {            
-        wantedRPM = 333.33*distance + 850.63 ;
+        //wantedRPM = 333.33*distance + 850.63 ;
+	wantedRPM = 46.209*distance*distance - 190.39*distance + 2469.3;
+
        // System.out.println(System.currentTimeMillis() + " RPMWZ:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
         //System.out.println("setRPM DDistance: " + distance);
         if (distance == 0) 
