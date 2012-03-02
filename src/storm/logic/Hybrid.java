@@ -79,37 +79,49 @@ public class Hybrid implements IRobotLogic {
         switch (autoNum) {//autoType.getValue()) {
             case 1: //Super Auto Mode
 
-                Q.add(4, 0, 0); //Shoot
-                Q.add(1, 60, -.5); //Move back
+
+                Q.add(4, 3.5, 0); //Shoot
+                Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
-                Q.add(7, 3, 0); //Wait
-                Q.add(3, 0, 0); //Manipulate
+//                Q.add(4, 0, 0); //Shoot
+//                Q.add(1, 60, -.5); //Move back
+//                Q.add(5, 0, 0); //Start Loading
+//                Q.add(7, 3, 0); //Wait
+//                Q.add(3, 0, 0); //Manipulate
 
                 break;
             case 2: //Quick ninja
 
-                Q.add(1, 60, -.5);
-                Q.add(5, 25, 1);
+
+                Q.add(4, 4.0, 0); //Shoot
+                Q.add(7, 2.5, 0); //Wait
+                Q.add(5, 0, 0); //Start Loading
+//                Q.add(1, 60, -.5);
+//                Q.add(5, 25, 1);
                 //Possibly do a shoot sequence
 
                 break;
             case 3: //Shoot
 
-                Q.add(4, 0, 0); //Shoot
+                Q.add(4, 4.5, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
 
                 break;
             case 4: //Flee in terror to the left
 
-                Q.add(2, 50, .8);
-                Q.add(1, 50, .5);
+
+                Q.add(4, 5.0, 0); //Shoot
+                Q.add(7, 2.5, 0); //Wait
+                Q.add(5, 0, 0); //Start Loading
 
                 break;
             case 5: //Flee in terror to the right
 
-                Q.add(2, 50, -.8);
-                Q.add(1, 50, .5);
+
+                Q.add(4, 5.5, 0); //Shoot
+                Q.add(7, 2.5, 0); //Wait
+                Q.add(5, 0, 0); //Start Loading
 
                 break;
             case 6: //Sitting duck
@@ -178,7 +190,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 4: //Shoot
                 shooter.setContinuousShoot(true);
-                if (!shooter.isShooting()) shooter.startShoot(3.5);
+                if (!shooter.isShooting()) shooter.startShoot(Q.getDistance());
                 break;
             case 5:
                 isLoading = true;
