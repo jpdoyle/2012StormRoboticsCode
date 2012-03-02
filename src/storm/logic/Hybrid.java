@@ -122,8 +122,8 @@ public class Hybrid implements IRobotLogic {
 
     public void doContinuous() {
         Print.getInstance().setLine(0, "Queue Part: " + Q.getPart());
-        Print.getInstance().setLine(0, "End Time: " + endTime);
-        Print.getInstance().setLine(1, "Current Time: " + (System.currentTimeMillis()-startTime));
+        Print.getInstance().setLine(2, "End Time: " + endTime);
+        Print.getInstance().setLine(3, "Current Time: " + (System.currentTimeMillis()-startTime));
         shooter.doShoot();
         //Eat a muffin.  please :)
     }
