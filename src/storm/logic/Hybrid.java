@@ -94,7 +94,8 @@ public class Hybrid implements IRobotLogic {
 
                 break;
             case 3: //Shoot
-                
+
+                Q.add(7, 0.5, 0); //Wait
                 Q.add(4, 0, 0); //Shoot
                 Q.add(7, 2, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
@@ -178,7 +179,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 4: //Shoot
                 shooter.setContinuousShoot(true);
-                if (!shooter.isShooting()) shooter.startShoot(Preferences.getInstance().getDouble("Distance", 1.0));
+                if (!shooter.isShooting()) shooter.startShoot(3.5);
                 break;
             case 5:
                 isLoading = true;
