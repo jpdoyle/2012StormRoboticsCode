@@ -40,8 +40,6 @@ public class Teleop implements IRobotLogic {
 
     public void doInit() {
 	
-	RobotState.compressor.start();
-	
 	driveTrain = RobotState.driveTrain;
 	ballController = RobotState.ballController;
 	threeBA = RobotState.threeBA;
