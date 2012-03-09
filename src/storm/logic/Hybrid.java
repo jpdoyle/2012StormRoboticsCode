@@ -78,11 +78,7 @@ public class Hybrid implements IRobotLogic {
         autoNum = (int) Math.floor(autoType.getVoltage() + 0.5) + 1;
 
         switch (autoNum) {//autoType.getValue()) {
-            case 1: //Super Auto Mode
-
-                Q.add(4, 3.66, 0); //Shoot
-                Q.add(7, 2.5, 0); //Wait
-                Q.add(5, 0, 0); //Start Loading
+            case 1: //Hmmmm
 
                 break;
             case 2: //Quick ninja
@@ -99,7 +95,7 @@ public class Hybrid implements IRobotLogic {
 		
 
                 break;
-            case 4: //Stand and shoot 1
+            case 4: //Stand and shoot 1 (Front of key)
 
 
                 Q.add(4, 3.66, 0); //Shoot
@@ -107,7 +103,7 @@ public class Hybrid implements IRobotLogic {
                 Q.add(5, 0, 0); //Start Loading
 
                 break;
-            case 5: //Stand and shoot 2
+            case 5: //Stand and shoot 2 (Back of key)
 
 
                 Q.add(4, 4.66, 0); //Shoot
