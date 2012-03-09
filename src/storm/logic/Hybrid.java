@@ -80,7 +80,6 @@ public class Hybrid implements IRobotLogic {
         switch (autoNum) {//autoType.getValue()) {
             case 1: //Super Auto Mode
 
-                
                 Q.add(4, 3.66, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
@@ -88,30 +87,30 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 2: //Quick ninja
 
+                Q.add(1, 57.45, -0.4); //Move
+		Q.add(3, 0, 0); //Manipulate
+                Q.add(4, 4.66/*shoot from bridge distance*/, 0); //Shoot
+                Q.add(7, 2.5, 0); //Wait
+                Q.add(5, 0, 0); //Start Loading
+
+                break;
+            case 3: //Nuttin'
+		
+		
+
+                break;
+            case 4: //Stand and shoot 1
+
+
+                Q.add(4, 3.66, 0); //Shoot
+                Q.add(7, 2.5, 0); //Wait
+                Q.add(5, 0, 0); //Start Loading
+
+                break;
+            case 5: //Stand and shoot 2
+
 
                 Q.add(4, 4.66, 0); //Shoot
-                Q.add(7, 2.5, 0); //Wait
-                Q.add(5, 0, 0); //Start Loading
-
-                break;
-            case 3: //Shoot
-		
-		Q.add(1, 57.45, -0.4); //Move
-		Q.add(3, 0, 0);
-
-                break;
-            case 4: //Flee in terror to the left
-
-
-                Q.add(4, 6.0, 0); //Shoot
-                Q.add(7, 2.5, 0); //Wait
-                Q.add(5, 0, 0); //Start Loading
-
-                break;
-            case 5: //Flee in terror to the right
-
-
-                Q.add(4, 6.5, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
 
@@ -143,7 +142,7 @@ public class Hybrid implements IRobotLogic {
         if (Q.isRunning()) runQueue();
 
         if (Q.getType() == 1 || Q.getType() == 2) {
-            if (Math.abs(driveTrain.getDistance()) >= Q.getDistance()) {
+            if (Math.abs(driveTrain.getDistance()) >= Q.getDistance() && Math.abs(driveTrain.getRDistance()) >= Q.getDistance()) {
                 Q.next();
             }
         } else if (Q.getType() == 3) {
@@ -176,7 +175,12 @@ public class Hybrid implements IRobotLogic {
 
         switch ((int)Q.getType()) {
             case 1: //Forward/Backward
-                driveTrain.drive(Q.getSpeed(), Q.getSpeed());
+                if (Math.abs(driveTrain.getDistance()) < Q.getDistance() && Math.abs(driveTrain.getRDistance()) < Q.getDistance())
+                    driveTrain.drive(Q.getSpeed(), Q.getSpeed());
+                if (Math.abs(driveTrain.getDistance()) >= Q.getDistance() && Math.abs(driveTrain.getRDistance()) < Q.getDistance())
+                    driveTrain.drive(0, Q.getSpeed());
+                if (Math.abs(driveTrain.getDistance()) < Q.getDistance() && Math.abs(driveTrain.getRDistance()) >= Q.getDistance())
+                    driveTrain.drive(Q.getSpeed(), 0);
                 break;
             case 2: //Turning
                 driveTrain.drive(Q.getSpeed(), -Q.getSpeed());
