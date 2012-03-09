@@ -211,5 +211,13 @@ public class DriveTrain implements IDriveTrain {
     public boolean isHighGear() {
         return(highgear);
     }
+
+    public SpeedController getLeftMotor() {
+	return leftMotor;
+    }
+
+    public SpeedController getRightMotor() {
+	return rightMotor;
+    }
     
 }

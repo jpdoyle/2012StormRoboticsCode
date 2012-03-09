@@ -1,5 +1,7 @@
 package storm.interfaces;
 
+import edu.wpi.first.wpilibj.SpeedController;
+
 public interface IDriveTrain {
     
     public void addToQueue(int type, double speed, double distance);
@@ -17,5 +19,8 @@ public interface IDriveTrain {
     public void setHighGear();
     public void setLowGear();
     public boolean isHighGear();
+    
+    public SpeedController getLeftMotor();
+    public SpeedController getRightMotor();
 
 }
