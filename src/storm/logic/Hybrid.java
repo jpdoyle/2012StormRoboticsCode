@@ -83,7 +83,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 2: //Quick ninja
 
-                Q.add(4, 7.0/*Update the distance here*/, 0); //Shoot
+                Q.add(4, 7.0, 0); //Shoot
                 Q.add(1, 57.45, -0.75); //Move
 		Q.add(1, 2.0, 0.4); //Move
 		Q.add(3, 0, 0); //Manipulate
