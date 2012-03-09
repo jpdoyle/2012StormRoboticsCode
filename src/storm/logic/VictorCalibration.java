@@ -16,9 +16,9 @@ public class VictorCalibration implements IRobotLogic {
     }
 
     public void doPeriodic() {
-	driveTrain.driveDirect(
-		-RobotState.joystickDrive.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_BOTH),
-		-RobotState.joystickDrive.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_BOTH));
+	double joystickValue = -RobotState.joystickDrive.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_BOTH);
+	driveTrain.getLeftMotor().set(joystickValue);
+	driveTrain.getRightMotor().set(joystickValue);
     }
 
     public void doEnd() {

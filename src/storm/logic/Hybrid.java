@@ -177,9 +177,9 @@ public class Hybrid implements IRobotLogic {
             case 1: //Forward/Backward
                 if (Math.abs(driveTrain.getDistance()) < Q.getDistance() && Math.abs(driveTrain.getRDistance()) < Q.getDistance())
                     driveTrain.drive(Q.getSpeed(), Q.getSpeed());
-                if (Math.abs(driveTrain.getDistance()) >= Q.getDistance() && Math.abs(driveTrain.getRDistance()) < Q.getDistance())
+		else if (Math.abs(driveTrain.getDistance()) >= Q.getDistance() && Math.abs(driveTrain.getRDistance()) < Q.getDistance())
                     driveTrain.drive(0, Q.getSpeed());
-                if (Math.abs(driveTrain.getDistance()) < Q.getDistance() && Math.abs(driveTrain.getRDistance()) >= Q.getDistance())
+		else if (Math.abs(driveTrain.getDistance()) < Q.getDistance() && Math.abs(driveTrain.getRDistance()) >= Q.getDistance())
                     driveTrain.drive(Q.getSpeed(), 0);
                 break;
             case 2: //Turning
