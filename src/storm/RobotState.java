@@ -1,6 +1,7 @@
 package storm;
 
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import storm.interfaces.*;
@@ -94,6 +95,10 @@ public abstract class RobotState {
     //Analog Channels
     public static final int PORT_SWITCH_HYBRID_TYPE = 3;
     
+    //Compressor Info
+    public static final int PORT_COMPRESSOR_RELAY           = 1;
+    public static final int PORT_COMPRESSOR_PRESSURE_SWITCH = 14;
+    
     //***** GLOBAL HARDWARE ****//
     
     // Joysticks
@@ -108,6 +113,7 @@ public abstract class RobotState {
     public static final I3BA threeBA;
     public static final ITargetTracker targetTracker;
     public static final BallController ballController;
+    public static final Compressor compressor;
     
     static {
 	joystickDrive = new Joystick(PORT_JOYSTICK_DRIVE);
@@ -120,6 +126,7 @@ public abstract class RobotState {
 	threeBA = new ThreeBA(PORT_MOTOR_3BA, PORT_LIMIT_SWITCH_3BA_TOP, PORT_LIMIT_SWITCH_3BA_BOTTOM);
 	targetTracker = new TargetTracker(driveTrain,PORT_GYRO_ROBOT_ROTATION);
 	ballController = new BallController(ballCollector, shooter);
+	compressor = new Compressor(PORT_COMPRESSOR_PRESSURE_SWITCH, PORT_COMPRESSOR_RELAY);
     }
     
 }
