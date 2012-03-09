@@ -78,19 +78,22 @@ public class Hybrid implements IRobotLogic {
         autoNum = (int) Math.floor(autoType.getVoltage() + 0.5) + 1;
 
         switch (autoNum) {//autoType.getValue()) {
-            case 1: //Hmmmm
+            case 1: //Nuttin'
 
                 break;
             case 2: //Quick ninja
 
-                Q.add(1, 57.45, -0.4); //Move
-		Q.add(3, 0, 0); //Manipulate
                 Q.add(4, 4.66/*shoot from bridge distance*/, 0); //Shoot
+                Q.add(1, 57.45, -0.75); //Move
+		Q.add(3, 0, 0); //Manipulate
+                Q.add(5, 0, 0); //Start Loading
+                Q.add(7, 2.5, 0); //Wait
+                Q.add(6, 0, 0); //Stop Loading
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
 
                 break;
-            case 3: //Nuttin'
+            case 3: //Nuttin' again
 		
 		
 
