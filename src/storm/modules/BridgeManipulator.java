@@ -15,7 +15,7 @@ public class BridgeManipulator implements IBridgeManipulator {
     
     private final double MOTOR_SPEED = 1.0;
     private final double TOP_LIMIT = 1.523;
-    private final double BOTTOM_LIMIT = 3.4 ;
+    private final double BOTTOM_LIMIT = 3.4;
     
     public BridgeManipulator(int bridgeMotorPort, int rotarySensorPort) {
 	bridgeManipulatorMotor = new Jaguar(bridgeMotorPort);
@@ -24,18 +24,18 @@ public class BridgeManipulator implements IBridgeManipulator {
 
     public void raise() {
 //	double rotaryVoltage = getRoundedVoltage();
-	if (rotarySensor.getVoltage() >= TOP_LIMIT)
+//	if (rotarySensor.getVoltage() >= TOP_LIMIT)
 	    bridgeManipulatorMotor.set(MOTOR_SPEED);
-	else
-	    stop();
+//	else
+//	    stop();
     }
 
     public void lower() {
 //	double rotaryVoltage = getRoundedVoltage();
-	if (rotarySensor.getVoltage() <= BOTTOM_LIMIT)
+//	if (rotarySensor.getVoltage() <= BOTTOM_LIMIT)
 	    bridgeManipulatorMotor.set(-MOTOR_SPEED);
-	else
-	    stop();
+//	else
+//	    stop();
     }
     
     public void stop() {
