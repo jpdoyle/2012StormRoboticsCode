@@ -151,9 +151,9 @@ public class Teleop implements IRobotLogic {
 	boolean threeBASafety = shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_3BA_SAFETY);
 	
 	if (Utility.checkDeadZone(shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_3BA)) < 0.0 && threeBASafety) {
-	    threeBA.extend();
+	    threeBA.raise();
 	} else if (Utility.checkDeadZone(shootJoystick.getRawAxis(RobotState.JOYSTICK_2_AXIS_3BA)) > 0.0 && threeBASafety) {
-	    threeBA.retract();
+	    threeBA.lower();
 	} else {
 	    threeBA.stop();
 	}

@@ -12,20 +12,21 @@ import storm.interfaces.I3BA;
 public class ThreeBA implements I3BA {
     
     SpeedController wormDrive;
-    DigitalInput limitSwitchBack;
-    DigitalInput limitSwitchFront;
+    DigitalInput limitSwitchBottom;
+    DigitalInput limitSwitchTop;
     
-    private final double MOTOR_SPEED = 0.2;
+    private final double MOTOR_SPEED_DOWN = 0.35;
+    private final double MOTOR_SPEED_UP   = 0.45;
     
-    public ThreeBA(int motorChannel, int limitSwitchFrontChannel, int limitSwitchBackChannel) {
+    public ThreeBA(int motorChannel, int limitSwitchTopChannel, int limitSwitchBottomChannel) {
 	wormDrive = new Victor(motorChannel);
-	limitSwitchBack = new DigitalInput(limitSwitchBackChannel);
-	limitSwitchFront = new DigitalInput(limitSwitchFrontChannel);
+	limitSwitchBottom = new DigitalInput(limitSwitchBottomChannel);
+	limitSwitchTop = new DigitalInput(limitSwitchTopChannel);
     }
 
-    public void extend() {
-        if (limitSwitchFront.get() == false)
-            wormDrive.set(MOTOR_SPEED);
+    public void raise() {
+        if (limitSwitchTop.get() == false)
+            wormDrive.set(MOTOR_SPEED_UP);
 	else
             stop();
     }
@@ -34,9 +35,9 @@ public class ThreeBA implements I3BA {
         wormDrive.set(0.0);
     }
 
-    public void retract() {
-        if (limitSwitchBack.get() == false)
-	    wormDrive.set(-MOTOR_SPEED);
+    public void lower() {
+        if (limitSwitchBottom.get() == false)
+	    wormDrive.set(-MOTOR_SPEED_DOWN);
 	else
             stop();
     }
