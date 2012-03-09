@@ -30,8 +30,8 @@ public class DriveTrain implements IDriveTrain {
     public Encoder leftEncoder;
     public Encoder rightEncoder;
     
-    private final double deceleration = 0.0085;
-    private final double acceleration = 0.0085;
+    private final double deceleration = 0.01;
+    private final double acceleration = 0.01;
     private double lastLeftSpeed = 0.0;
     private double lastRightSpeed = 0.0;
     double driveLeft = 0.0;

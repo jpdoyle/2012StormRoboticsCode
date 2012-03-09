@@ -22,10 +22,6 @@ public class Teleop implements IRobotLogic {
     Joystick driveJoystick;
     Joystick shootJoystick;
     
-    double driveLeft;
-    double driveRight;
-    double driveModifier;
-    
     boolean btnGearPressed;
     boolean btnToggleShootDistance;
     boolean btnIncreaseOffset;
@@ -48,10 +44,6 @@ public class Teleop implements IRobotLogic {
 	
 	driveJoystick = RobotState.joystickDrive;
 	shootJoystick = RobotState.joystickShoot;
-	
-	driveLeft = 0.0;
-	driveRight = 0.0;
-	driveModifier = 0.0;
 	
 	btnGearPressed = false;
 	btnToggleShootDistance = false;
@@ -80,6 +72,17 @@ public class Teleop implements IRobotLogic {
     public void doContinuous() {
 	ballController.runContinuous();
 	
+	double jsLeft = driveJoystick.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_LEFT);
+	double jsRight = driveJoystick.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_RIGHT);
+	double jsBoth = driveJoystick.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_BOTH);
+	
+	double driveModifier = (driveJoystick.getRawButton(RobotState.JOYSTICK_1_BUTTON_SPEED_MODIFIER)) ? 
+										RobotState.DRIVE_SPEED_REDUCTION_VALUE : 
+										RobotState.DRIVE_SPEED_NORMAL_VALUE;
+	
+	double driveLeft = -Utility.checkDeadZone((Math.abs(jsBoth) > 0) ? jsBoth : jsLeft);
+	double driveRight = -Utility.checkDeadZone((Math.abs(jsBoth) > 0) ? jsBoth : jsRight);
+	
 	if (driveJoystick.getRawButton(RobotState.JOYSTICK_1_BUTTON_DIRECT_DRIVE)) {
 	    driveTrain.driveDirect(driveLeft * driveModifier, driveRight * driveModifier);
 	} else {
@@ -88,17 +91,6 @@ public class Teleop implements IRobotLogic {
     }
 
     public void doPeriodic() {
-	
-	double jsLeft = driveJoystick.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_LEFT);
-	double jsRight = driveJoystick.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_RIGHT);
-	double jsBoth = driveJoystick.getRawAxis(RobotState.JOYSTICK_1_AXIS_DRIVE_BOTH);
-	
-	driveModifier = (driveJoystick.getRawButton(RobotState.JOYSTICK_1_BUTTON_SPEED_MODIFIER)) ? 
-										RobotState.DRIVE_SPEED_REDUCTION_VALUE : 
-										RobotState.DRIVE_SPEED_NORMAL_VALUE;
-	
-	driveLeft = -Utility.checkDeadZone((Math.abs(jsBoth) > 0) ? jsBoth : jsLeft);
-	driveRight = -Utility.checkDeadZone((Math.abs(jsBoth) > 0) ? jsBoth : jsRight);
 	
 	if (driveJoystick.getRawButton(RobotState.JOYSTICK_1_BUTTON_SWITCH_GEARS) && !btnGearPressed) {
 	    btnGearPressed = true;
