@@ -66,8 +66,8 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
             netTable_.putBoolean("Aimed", false);
             netTable_.putDouble("Z", 0);
         netTable_.endTransaction();
-        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 40, true);
-        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 40, true);
+        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 0, 20, true);
+        criteria.addCriteria(NIVision.MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 0, 20, true);
         try {
             cameraImg_ = new RGBImage();
             image_ = new FancyBinaryImage();
@@ -84,6 +84,7 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 return;
             }
             camera_.getImage(cameraImg_);
+            Print.getInstance().setLine(0, cameraImg_.getWidth() + "x" + cameraImg_.getHeight());
             ++state_;
         } catch (AxisCameraException ex) {
             reset();
@@ -262,6 +263,14 @@ public class TargetTracker implements storm.interfaces.ITargetTracker {
                 for(;;) {
                     if(!tracking) {
                         try {
+
+                            netTable_.beginTransaction();
+                                netTable_.putInt("X", 0);
+                                netTable_.putInt("Y", 0);
+                                netTable_.putInt("Width", 0);
+                                netTable_.putInt("Height", 0);
+                                netTable_.putBoolean("Aimed", false);
+                            netTable_.endTransaction();
                             Thread.sleep(1000 / 5);
                         } catch (InterruptedException ex) {
 //                            ex.printStackTrace();
