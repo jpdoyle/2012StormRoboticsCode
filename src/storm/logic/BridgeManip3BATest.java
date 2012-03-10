@@ -27,9 +27,9 @@ public class BridgeManip3BATest implements IRobotLogic {
 
     public void doPeriodic() {
 	if (shootJoystick.getRawButton(4)) {
-	    threeBA.raise();
+	    threeBA.raise(0.0);
 	} else if (shootJoystick.getRawButton(2)) {
-	    threeBA.lower();
+	    threeBA.lower(0.0);
 	} else {
 	    threeBA.stop();
 	}

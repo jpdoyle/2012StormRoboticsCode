@@ -2,8 +2,8 @@ package storm.interfaces;
 
 public interface I3BA {
 
-    public void raise();
-    public void lower();
+    public void raise(double absValJoystick);
+    public void lower(double absValJoystick);
     public void stop();
 
 }

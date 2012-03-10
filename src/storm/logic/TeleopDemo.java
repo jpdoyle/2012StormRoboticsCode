@@ -60,9 +60,9 @@ public class TeleopDemo implements IRobotLogic {
 	}
 	
 	if (shootJoystick.getRawButton(4)) {
-	    threeBA.raise();
+	    threeBA.raise(0.0);
 	} else if (shootJoystick.getRawButton(1)) {
-	    threeBA.lower();
+	    threeBA.lower(0.0);
 	} else {
 	    threeBA.stop();
 	}

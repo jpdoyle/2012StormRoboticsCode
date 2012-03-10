@@ -64,9 +64,9 @@ public class TeleopPractice implements IRobotLogic {
 	double shootLeftStick = checkDeadZone(shootJoystick.getRawAxis(2));
 	
 	if (shootLeftStick < 0) {
-	    threeBA.raise();
+	    threeBA.raise(0.0);
 	} else if (shootLeftStick > 0) {
-	    threeBA.lower();
+	    threeBA.lower(0.0);
 	} else {
 	    threeBA.stop();
 	}
