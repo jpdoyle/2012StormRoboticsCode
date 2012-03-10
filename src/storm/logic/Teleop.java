@@ -62,8 +62,8 @@ public class Teleop implements IRobotLogic {
 	
 	driveTrain.setLowGear();
 	
-	RobotState.TARGET_TRACKER_IS_TRACKING = true;
-	targetTracker.startTracking();
+	RobotState.TARGET_TRACKER_IS_TRACKING = false;
+	targetTracker.stopTracking();
 	
     }
 
