@@ -46,16 +46,17 @@ public abstract class RobotState {
     public static final int JOYSTICK_2_AXIS_ELEVATOR           = 6;
     
     // Joystick Buttons
-    public static final int JOYSTICK_1_BUTTON_SWITCH_GEARS    = 5;
-    public static final int JOYSTICK_1_BUTTON_SPEED_MODIFIER  = 6;
-    public static final int JOYSTICK_1_BUTTON_DIRECT_DRIVE    = 8;
-    public static final int JOYSTICK_2_BUTTON_DECREASE_OFFSET = 1;
-    public static final int JOYSTICK_2_BUTTON_RESET_OFFSET    = 2;
-    public static final int JOYSTICK_2_BUTTON_INCREASE_OFFSET = 3;
-    public static final int JOYSTICK_2_BUTTON_TOGGLE_DISTANCE = 5;
-    public static final int JOYSTICK_2_BUTTON_SHOOT           = 6;
-    public static final int JOYSTICK_2_BUTTON_3BA_SAFETY      = 7;
-    public static final int JOYSTICK_2_BUTTON_PRESHOOT        = 8;
+    public static final int JOYSTICK_1_BUTTON_SWITCH_GEARS          = 5;
+    public static final int JOYSTICK_1_BUTTON_SPEED_MODIFIER        = 6;
+    public static final int JOYSTICK_1_BUTTON_DIRECT_DRIVE          = 8;
+    public static final int JOYSTICK_2_BUTTON_DECREASE_OFFSET       = 1;
+    public static final int JOYSTICK_2_BUTTON_RESET_OFFSET          = 2;
+    public static final int JOYSTICK_2_BUTTON_INCREASE_OFFSET       = 3;
+    public static final int JOYSTICK_2_BUTTON_TOGGLE_DISTANCE       = 5;
+    public static final int JOYSTICK_2_BUTTON_SHOOT                 = 6;
+    public static final int JOYSTICK_2_BUTTON_3BA_SAFETY            = 7;
+    public static final int JOYSTICK_2_BUTTON_PRESHOOT              = 8;
+    public static final int JOYSTICK_2_BUTTON_TOGGLE_TARGET_TRACKER = 4;
     
     
     // Sensors
@@ -91,6 +92,7 @@ public abstract class RobotState {
     // Global State
     public static int BALL_CONTAINMENT_COUNT = 0;
     public static final NetworkTable DASHBOARD_FEEDBACK = NetworkTable.getTable("Feedback");
+    public static boolean TARGET_TRACKER_IS_TRACKING = false;
     
     //Analog Channels
     public static final int PORT_SWITCH_HYBRID_TYPE = 3;

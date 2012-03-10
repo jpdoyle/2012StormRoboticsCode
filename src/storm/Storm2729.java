@@ -111,6 +111,7 @@ public class Storm2729 extends IterativeRobot {
 	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", -1);
 	RobotState.DASHBOARD_FEEDBACK.putInt("ball.count", -1);
 	RobotState.DASHBOARD_FEEDBACK.putDouble("target.distance", Double.NaN);
+	RobotState.DASHBOARD_FEEDBACK.putString("tracker.state", "Unknown");
     }
     
     private void sendDashboardInfo() {
@@ -120,6 +121,9 @@ public class Storm2729 extends IterativeRobot {
 	RobotState.DASHBOARD_FEEDBACK.putInt("shooter.rpm", ((int)(RobotState.shooter.getRPM())));
 	
 	RobotState.DASHBOARD_FEEDBACK.putInt("ball.count", RobotState.BALL_CONTAINMENT_COUNT);
+	
+	String trackerState = (RobotState.TARGET_TRACKER_IS_TRACKING) ? "On" : "Off";
+	RobotState.DASHBOARD_FEEDBACK.putString("tracker.state", trackerState);
     }
     
 }

@@ -1,13 +1,8 @@
 package storm.logic;
 
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.Joystick;
 import storm.RobotState;
-import storm.interfaces.I3BA;
-import storm.interfaces.IBridgeManipulator;
-import storm.interfaces.IDriveTrain;
-import storm.interfaces.IRobotLogic;
-import storm.interfaces.ITargetTracker;
+import storm.interfaces.*;
 import storm.modules.BallController;
 import storm.utility.Utility;
 
@@ -27,6 +22,7 @@ public class Teleop implements IRobotLogic {
     boolean btnIncreaseOffset;
     boolean btnDecreaseOffset;
     boolean btnResetOffset;
+    boolean btnToggleTracker;
     
     double[] distances;
     int distanceIndex;
@@ -50,6 +46,7 @@ public class Teleop implements IRobotLogic {
 	btnIncreaseOffset = false;
 	btnDecreaseOffset = false;
 	btnResetOffset = false;
+	btnToggleTracker = false;
 	
 	distances = new double[] {
 	    -1.0,
@@ -65,6 +62,7 @@ public class Teleop implements IRobotLogic {
 	
 	driveTrain.setLowGear();
 	
+	RobotState.TARGET_TRACKER_IS_TRACKING = true;
 	targetTracker.startTracking();
 	
     }
@@ -158,6 +156,18 @@ public class Teleop implements IRobotLogic {
 	    bridgeManipulator.stop();
 	}
 	
+	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_TARGET_TRACKER) && !btnToggleTracker) {
+	    btnToggleTracker = true;
+	    if (RobotState.TARGET_TRACKER_IS_TRACKING) {
+		targetTracker.stopTracking();
+		RobotState.TARGET_TRACKER_IS_TRACKING = false;
+	    } else if (!RobotState.TARGET_TRACKER_IS_TRACKING) {
+		targetTracker.startTracking();
+		RobotState.TARGET_TRACKER_IS_TRACKING = true;
+	    }
+	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_TARGET_TRACKER) && btnToggleTracker) {
+	    btnToggleTracker = false;
+	}
     }
 
     public void doEnd() {
