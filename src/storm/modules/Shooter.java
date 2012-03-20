@@ -69,7 +69,7 @@ public class Shooter implements IShooter
         counter.setUpSourceEdge(true, false);
     }
     
-    public void startShoot(double distance)
+    public void startShoot(boolean useTable, double distance)
     {
 	shootJoystick = RobotState.joystickShoot;
 //        System.out.println("startShoot " + distance);
@@ -313,6 +313,11 @@ public class Shooter implements IShooter
         state = 0;
         transferMotor.set(-1);
         wantedDistance = 0;
+    }
+
+    public void warmUp() {
+	wantedDistance = 8;
+	wantedRPM = 3000;
     }
 }
 
