@@ -70,7 +70,7 @@ public class JeffShooter implements IShooter {
 	if (useTable) {
 	    roundDistance(inputDistance);
 	} else {
-	    calculateDistance(inputDistance);
+	    calculateRPM(inputDistance);
 	}
 	
 	state = 0;
@@ -82,7 +82,6 @@ public class JeffShooter implements IShooter {
 
     public void doShoot() {
 	
-	getRPM();
 	RPM = counter.getPeriod() / 60;
 	
 	if (state == 0 && RPM >= targetRPM) {
@@ -92,7 +91,7 @@ public class JeffShooter implements IShooter {
 	    state = 2;
 	}
 	
-	setRPM(distance);
+	setRPM();
 	
     }
 
@@ -100,9 +99,9 @@ public class JeffShooter implements IShooter {
 	return shooting;
     }
     
-    void setRPM(double trueDistance) {
+    void setRPM() {
 	
-	double distance = Math.floor(trueDistance * 100 + 5) / 100;
+	//double distance = Math.floor(trueDistance * 100 + 5) / 100;
 	RPM = counter.getPeriod() / 60;
 	
 	//shooterMotor.set(shooterMotor.get()+(targetRPM-RPM));
@@ -119,6 +118,7 @@ public class JeffShooter implements IShooter {
 		state = 3;
 	    }
 	} else if (state == 3) {
+	    transferMotor.set(-1);
 	    shooterMotor.set(correctPower);
 	}
 	
@@ -169,8 +169,8 @@ public class JeffShooter implements IShooter {
 	
     }
     
-    public void calculateDistance(double inputDistance) {
-	
+    public void calculateRPM(double inputDistance) {
+	targetRPM = 333.33*inputDistance + 850.63;
     }
 
     public void warmUp() {
