@@ -32,6 +32,7 @@ public class JeffShooter implements IShooter {
 	   targetRPM,
 	   period,
 	   shooterAcel,
+	   Timer,
 	   state;
     
     double[] table;
@@ -78,6 +79,9 @@ public class JeffShooter implements IShooter {
 	
 	if (state == 0 && RPM >= targetRPM) {
 	    state = 1;
+	    Timer = System.currentTimeMillis();
+	} else if (state == 1 && Timer + 1000 <= System.currentTimeMillis()) {
+	    state = 2;
 	}
 	
 	setRPM(distance);
@@ -97,6 +101,8 @@ public class JeffShooter implements IShooter {
 	
 	if (state == 0) {
 	    shooterMotor.set(shooterMotor.get()+shooterAcel);
+	} else if (state == 1) {
+	    if (Timer + 1000 <= System.currentTimeMillis());
 	}
 	
     }
