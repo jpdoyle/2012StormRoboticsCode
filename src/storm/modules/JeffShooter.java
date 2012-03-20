@@ -30,13 +30,19 @@ public class JeffShooter implements IShooter {
 	   RPM_SCALE,
 	   distance,
 	   targetRPM,
-	   period;
+	   period,
+	   shooterAcel,
+	   state;
     
     double[] table;
     
     public JeffShooter() {
 	
 	table = new double[42];
+	
+	shooterAcel = .0123456789;
+	
+	state = 0;
 	
 	RPM = 0;
 	shooting = false;
@@ -51,16 +57,28 @@ public class JeffShooter implements IShooter {
     public void preShoot() {
     }
 
-    public void startShoot(double inputDistance) {
+    public void startShoot(boolean useTable, double inputDistance) {
 	
-	roundDistance(inputDistance);
+	if (useTable) {
+	    roundDistance(inputDistance);
+	} else {
+	    calculateDistance(inputDistance);
+	}
 	
+	state = 0;
 	shooting = true;
 	counter.start();
 	
     }
 
     public void doShoot() {
+	
+	getRPM();
+	RPM = counter.getPeriod() / 60;
+	
+	if (state == 0 && RPM >= targetRPM) {
+	    state = 1;
+	}
 	
 	setRPM(distance);
 	
@@ -75,7 +93,11 @@ public class JeffShooter implements IShooter {
 	double distance = Math.floor(trueDistance * 100 + 5) / 100;
 	RPM = counter.getPeriod() / 60;
 	
-	shooterMotor.set(shooterMotor.get()+(targetRPM-RPM));
+	//shooterMotor.set(shooterMotor.get()+(targetRPM-RPM));
+	
+	if (state == 0) {
+	    shooterMotor.set(shooterMotor.get()+shooterAcel);
+	}
 	
     }
 
@@ -122,6 +144,13 @@ public class JeffShooter implements IShooter {
 	
 	distance /= 10;
 	
+    }
+    
+    public void calculateDistance(double inputDistance) {
+	
+    }
+
+    public void warmUp() {
     }
     
 }
