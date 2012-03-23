@@ -40,7 +40,12 @@ public class JeffShooter implements IShooter {
     
     double[] table;
     
-    public JeffShooter() {
+    public JeffShooter(int shooterMotorChannel,int transferMotorChannel, int IRready, int hallEffectSensor) {
+	
+        shooterMotor = new Jaguar(shooterMotorChannel);
+        transferMotor = new Victor(transferMotorChannel);
+        ready = new DigitalInput(IRready);
+        hallEffect = new DigitalInput(hallEffectSensor);
 	
 	table = new double[42];
 	

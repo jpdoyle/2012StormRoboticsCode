@@ -105,7 +105,7 @@ public class Teleop implements IRobotLogic {
 	    btnToggleShootDistance = false;
 	}
 	
-	double distance = (distances[distanceIndex] == -1.0) ? targetTracker.getDistance() : distances[distanceIndex];
+	double distance = (distances[distanceIndex] == -1.0) ? RobotState.DASHBOARD_FEEDBACK.getDouble("trackerExtension.z", 1.0) : distances[distanceIndex];
 	String distanceString = (distances[distanceIndex] == -1.0) ? "Automatic" : distances[distanceIndex] + "m";
 	RobotState.DASHBOARD_FEEDBACK.putString("distance.mode", distanceString);
 	

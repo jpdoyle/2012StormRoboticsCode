@@ -61,7 +61,7 @@ public class ShooterTest implements IRobotLogic {
 //	Print.getInstance().setLine(0, "Number of balls: " + ballCollector.getNumBalls());
 	if (shootJoystick.getRawButton(6) && !btn6) {
 	    btn6 = true;
-	    shooter.startShoot(5.0);
+	    shooter.startShoot(false, 5.0);
 	} else if (!shootJoystick.getRawButton(6) && btn6) {
 	    btn6 = false;
 	}

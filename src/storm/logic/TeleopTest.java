@@ -31,7 +31,7 @@ public class TeleopTest implements IRobotLogic {
 	
 	if (shootJoystick.getRawButton(6) && !btn6) {
 	    btn6 = true;
-	    shooter.startShoot(1.0);
+	    shooter.startShoot(false, 1.0);
 	} else if (!shootJoystick.getRawButton(6) && btn6) {
 	    btn6 = false;
 	}

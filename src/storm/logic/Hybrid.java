@@ -190,7 +190,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 4: //Shoot
                 shooter.setContinuousShoot(true);
-                if (!shooter.isShooting()) shooter.startShoot(Q.getDistance());
+                if (!shooter.isShooting()) shooter.startShoot(false, Q.getDistance());
                 break;
             case 5:
                 isLoading = true;

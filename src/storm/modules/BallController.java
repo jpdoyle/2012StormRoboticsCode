@@ -37,7 +37,7 @@ public class BallController {
 	
 	if (shootButton && !shootTrigger) {
 	    shootTrigger = true;
-	    shooter.startShoot(distance);
+	    shooter.startShoot(false, distance);
 	} else if (!shootButton && shootTrigger) {
 	    shootTrigger = false;
 	}
