@@ -44,6 +44,10 @@ public class BallController {
 	
     }
     
+    public void warmupShooter() {
+	shooter.warmUp();
+    }
+    
     private void manual(double dPad) {
 	
 	if (dPad > 0) {

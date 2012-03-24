@@ -22,7 +22,7 @@ public class Teleop implements IRobotLogic {
     boolean btnIncreaseOffset;
     boolean btnDecreaseOffset;
     boolean btnResetOffset;
-    boolean btnToggleTracker;
+    boolean btnWarmupShooter;
     
     double[] distances;
     int distanceIndex;
@@ -46,7 +46,7 @@ public class Teleop implements IRobotLogic {
 	btnIncreaseOffset = false;
 	btnDecreaseOffset = false;
 	btnResetOffset = false;
-	btnToggleTracker = false;
+	btnWarmupShooter = false;
 	
 	distances = new double[] {
 	    -1.0,
@@ -95,11 +95,11 @@ public class Teleop implements IRobotLogic {
 	    btnGearPressed = false;
 	}
 	
-	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_DISTANCE) && !btnToggleShootDistance) {
+	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_SHOOTER) && !btnToggleShootDistance) {
 	    btnToggleShootDistance = true;
 	    distanceIndex++;
 	    if (distanceIndex == distances.length) distanceIndex = 0;
-	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_DISTANCE) && btnToggleShootDistance) {
+	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_SHOOTER) && btnToggleShootDistance) {
 	    btnToggleShootDistance = false;
 	}
 	
@@ -155,17 +155,11 @@ public class Teleop implements IRobotLogic {
 	    bridgeManipulator.stop();
 	}
 	
-	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_TARGET_TRACKER) && !btnToggleTracker) {
-	    btnToggleTracker = true;
-	    if (RobotState.TARGET_TRACKER_IS_TRACKING) {
-		targetTracker.stopTracking();
-		RobotState.TARGET_TRACKER_IS_TRACKING = false;
-	    } else if (!RobotState.TARGET_TRACKER_IS_TRACKING) {
-		targetTracker.startTracking();
-		RobotState.TARGET_TRACKER_IS_TRACKING = true;
-	    }
-	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_TOGGLE_TARGET_TRACKER) && btnToggleTracker) {
-	    btnToggleTracker = false;
+	if (shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_WARMUP_SHOOTER) && !btnWarmupShooter) {
+	    btnWarmupShooter = true;
+	    ballController.warmupShooter();
+	} else if (!shootJoystick.getRawButton(RobotState.JOYSTICK_2_BUTTON_WARMUP_SHOOTER) && btnWarmupShooter) {
+	    btnWarmupShooter = false;
 	}
     }
 
