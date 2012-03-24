@@ -68,9 +68,13 @@ public class JeffShooter implements IShooter {
     }
 
     public void preShoot() {
+	if (ready.get()) transferMotor.set(-1);
+	else transferMotor.set(0);
     }
 
     public void startShoot(boolean useTable, double inputDistance) {
+	
+	endShoot();
 	
 	if (useTable) {
 	    roundDistance(inputDistance);
