@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package storm.modules;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import storm.RobotState;
 import storm.interfaces.IShooter;
+import storm.utility.Print;
 
 /**
  *
@@ -74,37 +71,30 @@ public class JeffShooter implements IShooter {
     }
 
     public void startShoot(boolean useTable, double inputDistance) {
-	
 	endShoot();
-	
 	if (useTable) {
 	    roundDistance(inputDistance);
 	} else {
 	    calculateRPM(inputDistance);
 	}
-	
 	state = 0;
 	correctPower = 0;
 	shooting = true;
 	counter.start();
-	
     }
 
     public void doShoot() {
-	
 	RPM = counter.getPeriod() / 60;
-	
 	setRPMandOtherStuff();
-	
+	Print.getInstance().setLine(0, "   RPM:" + RPM);
+	Print.getInstance().setLine(0, "Target:" + targetRPM);
+	Print.getInstance().setLine(1, " State:" + state);
     }
 
-    public boolean isShooting() {
-	return shooting;
-    }
+    public boolean isShooting() { return shooting; }
     
     void setRPMandOtherStuff() {
 	RPM = counter.getPeriod() / 60;
-	
 	if (!Continuous) {
 	    if (state == 0) {
 		shooterMotor.set(shooterMotor.get()+shooterMaxAcel);
@@ -152,7 +142,6 @@ public class JeffShooter implements IShooter {
 		shooterMotor.set(correctPower);
 	    }
 	}
-	
     }
 
     public double getRPM() {
@@ -169,20 +158,14 @@ public class JeffShooter implements IShooter {
     }
     
     public void roundDistance(double inputDistance) {
-	
 	distance = inputDistance;
-	
 	double Place2 = 0;
 	double Place3 = 0;
-	
 	boolean upper1 = false;
 	boolean upper2 = false;
-	
 	Place2 = Math.floor(distance * 100 + 0.5) / 100.0 - Math.floor(distance);
 	Place3 = Math.floor(distance * 1000 + 0.5) / 1000.0 - Math.floor(distance);
-	
 	if (Math.floor(Place3 * 10 + .5) >= Place3 * 10) upper1 = true;
-	
 	if (upper1) {
 	    if (Math.floor(Place3 * 10 + .25) > Place3 * 10) upper2 = true;
 	    else upper2 = false;
@@ -190,24 +173,18 @@ public class JeffShooter implements IShooter {
 	    if (Math.ceil(Place3 * 10 - .25) > Place3 * 10) upper2 = true;
 	    else upper2 = false;
 	}
-	
 	if (upper1 && upper2) distance = Math.floor(distance * 10) + 1;
 	else if ((upper1 && !upper2) || (!upper1 && upper2)) distance = Math.floor(distance * 10) + .5;
 	else if (!upper1 && !upper2) distance = Math.floor(distance * 10);
-	
 	distance /= 10;
-	
     }
     
     public void calculateRPM(double inputDistance) {
 	targetRPM = 333.33*inputDistance + 850.63;
 	//targetRPM = 46.209*inputDistance*inputDistance - 190.39*inputDistance + 2469.3;
     }
-
-    public void warmUp() {
-	
-	shooterMotor.set(.3);
-	
-    }
     
+    public void warmUp() {
+	shooterMotor.set(.3);
+    }
 }
