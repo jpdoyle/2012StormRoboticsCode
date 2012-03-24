@@ -24,6 +24,7 @@ public class JeffShooter implements IShooter {
     Counter counter;
     
     boolean shooting,
+	    Continuous,
 	    isReady;
 	
     double RPM,
@@ -104,33 +105,52 @@ public class JeffShooter implements IShooter {
     void setRPMandOtherStuff() {
 	RPM = counter.getPeriod() / 60;
 	
-	if (state == 0) {
-	    shooterMotor.set(shooterMotor.get()+shooterMaxAcel);
-	    if (RPM >= targetRPM) state++;
-	    if (ready.get()) transferMotor.set(-1);
-	    else transferMotor.set(0);
-	} else if (state == 1) {
-	    if (ready.get()) transferMotor.set(-1);
-	    else {
-		transferMotor.set(0);
-		state++;
+	if (!Continuous) {
+	    if (state == 0) {
+		shooterMotor.set(shooterMotor.get()+shooterMaxAcel);
+		if (ready.get()) transferMotor.set(-1);
+		else transferMotor.set(0);
+		if (RPM >= targetRPM) state++;
+	    } else if (state == 1) {
+		if (ready.get()) transferMotor.set(-1);
+		else {
+		    transferMotor.set(0);
+		    state++;
+		}
+	    } else if (state == 2) {
+		if (RPM > targetRPM + Accuracy/2) shooterMotor.set(shooterMotor.get()-shooterSlowAcel);
+		else if (RPM < targetRPM - Accuracy/2) shooterMotor.set(shooterMotor.get()+shooterSlowAcel);
+		else {
+		    correctPower = shooterMotor.get();
+		    state = 3;
+		}
+	    } else if (state == 3) {
+		transferMotor.set(-1);
+		shooterMotor.set(correctPower);
+		if (ready.get()) {
+		    Timer = System.currentTimeMillis();
+		    state++;
+		}
+	    } else if (state == 4) {
+		if (Timer + 3000 <= System.currentTimeMillis()) endShoot();
 	    }
-	} else if (state == 2) {
-	    if (RPM > targetRPM + Accuracy/2) shooterMotor.set(shooterMotor.get()-shooterSlowAcel);
-	    else if (RPM < targetRPM - Accuracy/2) shooterMotor.set(shooterMotor.get()+shooterSlowAcel);
-	    else {
-		correctPower = shooterMotor.get();
-		state = 3;
-	    }
-	} else if (state == 3) {
+	} else {
 	    transferMotor.set(-1);
-	    shooterMotor.set(correctPower);
-	    if (ready.get()) {
-		Timer = System.currentTimeMillis();
-		state++;
+	    if (state == 0) {
+		shooterMotor.set(shooterMotor.get()+shooterMaxAcel);
+		if (ready.get()) transferMotor.set(-1);
+		else transferMotor.set(0);
+		if (RPM >= targetRPM) state++;
+	    } else if (state == 1) {
+		if (RPM > targetRPM + Accuracy/2) shooterMotor.set(shooterMotor.get()-shooterSlowAcel);
+		else if (RPM < targetRPM - Accuracy/2) shooterMotor.set(shooterMotor.get()+shooterSlowAcel);
+		else {
+		    correctPower = shooterMotor.get();
+		    state = 2;
+		}
+	    } else if (state == 2) {
+		shooterMotor.set(correctPower);
 	    }
-	} else if (state == 4) {
-	    if (Timer + 3000 <= System.currentTimeMillis()) endShoot();
 	}
 	
     }
@@ -145,6 +165,7 @@ public class JeffShooter implements IShooter {
     }
 
     public void setContinuousShoot(boolean continuousShoot) {
+	Continuous = continuousShoot;
     }
     
     public void roundDistance(double inputDistance) {
@@ -159,8 +180,6 @@ public class JeffShooter implements IShooter {
 	
 	Place2 = Math.floor(distance * 100 + 0.5) / 100.0 - Math.floor(distance);
 	Place3 = Math.floor(distance * 1000 + 0.5) / 1000.0 - Math.floor(distance);
-	
-	double difference = Math.abs(Place2 - Place3);
 	
 	if (Math.floor(Place3 * 10 + .5) >= Place3 * 10) upper1 = true;
 	
@@ -182,6 +201,7 @@ public class JeffShooter implements IShooter {
     
     public void calculateRPM(double inputDistance) {
 	targetRPM = 333.33*inputDistance + 850.63;
+	//targetRPM = 46.209*inputDistance*inputDistance - 190.39*inputDistance + 2469.3;
     }
 
     public void warmUp() {
