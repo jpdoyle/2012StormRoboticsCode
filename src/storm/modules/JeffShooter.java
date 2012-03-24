@@ -22,6 +22,7 @@ public class JeffShooter implements IShooter {
     
     boolean shooting,
 	    Continuous,
+	    ballDetected,
 	    isReady;
 	
     double RPM,
@@ -80,6 +81,7 @@ public class JeffShooter implements IShooter {
 	state = 0;
 	correctPower = 0;
 	shooting = true;
+	ballDetected = false;
 	counter.start();
     }
 
@@ -99,14 +101,11 @@ public class JeffShooter implements IShooter {
 	    if (state == 0) {
 		shooterMotor.set(shooterMotor.get()+shooterMaxAcel);
 		if (ready.get()) transferMotor.set(-1);
-		else transferMotor.set(0);
-		if (RPM >= targetRPM) state++;
-	    } else if (state == 1) {
-		if (ready.get()) transferMotor.set(-1);
 		else {
 		    transferMotor.set(0);
-		    state++;
+		    ballDetected = true;
 		}
+		if (RPM >= targetRPM) state = 2;
 	    } else if (state == 2) {
 		if (RPM > targetRPM + Accuracy/2) shooterMotor.set(shooterMotor.get()-shooterSlowAcel);
 		else if (RPM < targetRPM - Accuracy/2) shooterMotor.set(shooterMotor.get()+shooterSlowAcel);
@@ -114,14 +113,22 @@ public class JeffShooter implements IShooter {
 		    correctPower = shooterMotor.get();
 		    state = 3;
 		}
+		if (ready.get()) transferMotor.set(-1);
+		else {
+		    transferMotor.set(0);
+		    ballDetected = true;
+		}
 	    } else if (state == 3) {
 		transferMotor.set(-1);
+		if (!ready.get()) ballDetected = true;
 		shooterMotor.set(correctPower);
-		if (ready.get()) {
+		if (ready.get() && ballDetected) {
 		    Timer = System.currentTimeMillis();
 		    state++;
 		}
 	    } else if (state == 4) {
+		transferMotor.set(-1);
+		shooterMotor.set(correctPower);
 		if (Timer + 3000 <= System.currentTimeMillis()) endShoot();
 	    }
 	} else {
