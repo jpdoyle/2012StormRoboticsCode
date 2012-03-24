@@ -194,7 +194,7 @@ public class Hybrid implements IRobotLogic {
                 break;
             case 5:
                 isLoading = true;
-                ballCollector.start(IBallCollector.DIRECTION_UP);
+                ballCollector.start(IBallCollector.DIRECTION_UP_HYBRID);
                 break;
             case 6:
                 isLoading = false;

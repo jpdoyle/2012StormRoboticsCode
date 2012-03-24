@@ -34,7 +34,7 @@ public class BallCollector implements IBallCollector {
 	in2 = new DigitalInput(bottomIR2Channel);
     }
 
-    public void start(int direction) {
+    public void start(double direction) {
 	feederMotor.set(direction * MOTOR_SPEED * BOTTOM_FEEDER_MODIFIER);
 	kanayerBeltMotor.set(direction * MOTOR_SPEED);
 	isRunning = true;

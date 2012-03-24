@@ -2,10 +2,11 @@ package storm.interfaces;
 
 public interface IBallCollector {
     
-    public static final int DIRECTION_UP   = -1;
-    public static final int DIRECTION_DOWN = 1;
+    public static final double DIRECTION_UP   = -1.0;
+    public static final double DIRECTION_UP_HYBRID = -0.5;
+    public static final double DIRECTION_DOWN = 1.0;
     
-    public void start(int direction);
+    public void start(double direction);
     public void stop();
     
     public boolean isRunning();
