@@ -316,8 +316,8 @@ public class Shooter implements IShooter
     }
 
     public void warmUp() {
-	wantedDistance = 8;
-	wantedRPM = 3000;
+	wantedDistance = 3.8;
+	wantedRPM = 2400;
     }
 }
 
