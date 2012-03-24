@@ -50,13 +50,11 @@ public class Teleop implements IRobotLogic {
 	
 	distances = new double[] {
 	    -1.0,
-	    1.0,
-	    2.0,
-	    3.0,
-	    4.0,
-	    5.0
+	    3.7,
+	    4.3,
+	    4.9
 	};
-	distanceIndex = 0;
+	distanceIndex = 1;
 	
 	distanceOffset = 0.0;
 	
