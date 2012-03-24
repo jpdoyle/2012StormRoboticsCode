@@ -89,14 +89,7 @@ public class JeffShooter implements IShooter {
 	
 	RPM = counter.getPeriod() / 60;
 	
-	if (state == 0 && RPM >= targetRPM) {
-	    state = 1;
-	    Timer = System.currentTimeMillis();
-	} else if (state == 1 && Timer + 500 <= System.currentTimeMillis()) {
-	    state = 2;
-	}
-	
-	setRPM();
+	setRPMandOtherStuff();
 	
     }
 
@@ -104,17 +97,20 @@ public class JeffShooter implements IShooter {
 	return shooting;
     }
     
-    void setRPM() {
-	
-	//double distance = Math.floor(trueDistance * 100 + 5) / 100;
+    void setRPMandOtherStuff() {
 	RPM = counter.getPeriod() / 60;
-	
-	//shooterMotor.set(shooterMotor.get()+(targetRPM-RPM));
 	
 	if (state == 0) {
 	    shooterMotor.set(shooterMotor.get()+shooterMaxAcel);
+	    if (RPM >= targetRPM) state++;
+	    if (ready.get()) transferMotor.set(-1);
+	    else transferMotor.set(0);
 	} else if (state == 1) {
-	    
+	    if (ready.get()) transferMotor.set(-1);
+	    else {
+		transferMotor.set(0);
+		state++;
+	    }
 	} else if (state == 2) {
 	    if (RPM > targetRPM + Accuracy/2) shooterMotor.set(shooterMotor.get()-shooterSlowAcel);
 	    else if (RPM < targetRPM - Accuracy/2) shooterMotor.set(shooterMotor.get()+shooterSlowAcel);
@@ -125,6 +121,12 @@ public class JeffShooter implements IShooter {
 	} else if (state == 3) {
 	    transferMotor.set(-1);
 	    shooterMotor.set(correctPower);
+	    if (ready.get()) {
+		Timer = System.currentTimeMillis();
+		state++;
+	    }
+	} else if (state == 4) {
+	    if (Timer + 3000 <= System.currentTimeMillis()) endShoot();
 	}
 	
     }
