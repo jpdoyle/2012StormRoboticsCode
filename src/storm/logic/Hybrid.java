@@ -65,13 +65,14 @@ public class Hybrid implements IRobotLogic {
         shooter.endShoot();
         ballCollector.stop();
 
-        //1 - Straight     \\
-        //2 - Left         \\
-        //3 - Manipulate   \\
-        //4 - Shoot        \\
-        //5 - Start Load   \\
-        //6 - Stop Load    \\
-        //7 - Wait         \\
+        //1 - Straight           \\
+        //2 - Left               \\
+        //3 - Start Manipulate   \\
+        //4 - Shoot              \\
+        //5 - Start Load         \\
+        //6 - Stop Load          \\
+        //7 - Wait               \\
+	//8 - Stop Manipulate    \\
 
         //System.currentTimeMillis();
 
@@ -86,10 +87,11 @@ public class Hybrid implements IRobotLogic {
                 Q.add(4, 7.0, 0); //Shoot
                 Q.add(1, 57.45, -0.75); //Move
 		Q.add(1, 2.0, 0.4); //Move
-		Q.add(3, 0, 0); //Manipulate
+		Q.add(3, 0, 0); //Start Manipulate
                 Q.add(5, 0, 0); //Start Loading
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(6, 0, 0); //Stop Loading
+		Q.add(8, 0, 0); //Stop Manipulate
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
 
@@ -155,7 +157,6 @@ public class Hybrid implements IRobotLogic {
                 Q.next();
             }
         } else if (Q.getType() == 3) {
-            //Manipulate
             Q.next();
         } else if (Q.getType() == 4) {
             //if (!shooter.isShooting()) Q.next();
@@ -167,6 +168,8 @@ public class Hybrid implements IRobotLogic {
                 endTime = 0;
                 Q.next();
             }
+        } else if (Q.getType() == 8) {
+            Q.next();
         }
 
         //if (isLoading) ballCollector.start(IBallCollector.DIRECTION_UP);
@@ -213,6 +216,9 @@ public class Hybrid implements IRobotLogic {
                 if (endTime == 0) {
                     endTime = System.currentTimeMillis() - startTime + Q.getDistance() * 1000;
                 }
+                break;
+	    case 8:
+                isManipulating = false;
                 break;
             default:
                 break;
