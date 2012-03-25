@@ -25,10 +25,10 @@ public class ThreeBA implements I3BA {
     }
 
     public void raise(double absValJoystick) {
-        if (limitSwitchTop.get() == false)
+//        if (limitSwitchTop.get() == false)
             wormDrive.set(absValJoystick * MOTOR_SPEED_UP);
-	else
-            stop();
+//	else
+//            stop();
     }
 
     public void stop() {
@@ -36,10 +36,10 @@ public class ThreeBA implements I3BA {
     }
 
     public void lower(double absValJoystick) {
-        if (limitSwitchBottom.get() == false)
+//        if (limitSwitchBottom.get() == false)
 	    wormDrive.set(-MOTOR_SPEED_DOWN);
-	else
-            stop();
+//	else
+//            stop();
     }
 
 }
