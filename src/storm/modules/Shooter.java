@@ -208,30 +208,30 @@ public class Shooter implements IShooter
         //wantedRPM = 333.33*distance + 850.63 ;
 	wantedRPM = 46.209*distance*distance - 190.39*distance + 2469.3;
 
-       // System.out.println(System.currentTimeMillis() + " RPMWZ:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
+        // System.out.println(System.currentTimeMillis() + " RPMWZ:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
         //System.out.println("setRPM DDistance: " + distance);
         if (distance == 0) 
 	{
+	    goodRangeCount = 0;
             wantedRPM = 0;
             calculatedMotorSpeed = 0;
             motorSpeed = 0;
         }
         else if(wantedRPMold != wantedRPM)
         {
+	    goodRangeCount = 0;
             calculatedMotorSpeed = .0003*wantedRPM + 0.0457;
             if (Double.isNaN(distance))
             {
-                wantedRPM = 3181;
+                wantedRPM = 2500;
                 calculatedMotorSpeed = 1;
             }        
             motorSpeed = calculatedMotorSpeed;
         }
-	if (state >= 3) return;
+	if( goodRangeCount >= 50) return;
         wantedRPMold = wantedRPM;
-        //System.out.println("Debug 1");
         shooterMotor.set(motorSpeed);
 	period = counter.getPeriod();
-        //System.out.println("Debug A 2");	
 	debugCounter ++;
 	if (debugCounter % modFactor != 0)
 	{
@@ -268,12 +268,11 @@ public class Shooter implements IShooter
 	if (motorSpeed <0) motorSpeed = 0;
 	if (motorSpeed >1) motorSpeed = 1;
 	shooterMotor.set(motorSpeed);
-	if (Math.abs(RPMdifference) < RPMthreshold)
+	if (Math.abs(RPMdifference) < RPMthreshold )
 	{
 	    goodRangeCount ++;
 	}else goodRangeCount = 0;
 	//System.out.println("goodRangeCount:" + goodRangeCount);
-//	System.out.println(System.currentTimeMillis() + " RPMW:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
     }
     
     public void endShoot()
