@@ -226,6 +226,7 @@ public class Shooter implements IShooter
             }        
             motorSpeed = calculatedMotorSpeed;
         }
+	if (state >= 3) return;
         wantedRPMold = wantedRPM;
         //System.out.println("Debug 1");
         shooterMotor.set(motorSpeed);
