@@ -104,7 +104,7 @@ public class Hybrid implements IRobotLogic {
             case 4: //Stand and shoot 1 (Front of key)
 
 
-                Q.add(4, 3.66, 0); //Shoot
+                Q.add(4, 4.16, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
                 Q.add(7, 2.5, 0); //Wait
@@ -117,7 +117,7 @@ public class Hybrid implements IRobotLogic {
             case 5: //Stand and shoot 2 (Back of key)
 
 
-                Q.add(4, 4.66, 0); //Shoot
+                Q.add(4, 5.16, 0); //Shoot
                 Q.add(7, 2.5, 0); //Wait
                 Q.add(5, 0, 0); //Start Loading
                 Q.add(7, 2.5, 0); //Wait
