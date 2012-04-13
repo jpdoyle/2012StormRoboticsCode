@@ -227,7 +227,7 @@ public class Shooter implements IShooter
                 calculatedMotorSpeed = 1;
             }        
             motorSpeed = calculatedMotorSpeed;
-        }	
+        }
 	if( goodRangeCount >= 50){
 	    period = counter.getPeriod();
 	    RPMcurrent = 60/period;
