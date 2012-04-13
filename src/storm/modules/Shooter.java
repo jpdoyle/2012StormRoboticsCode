@@ -197,7 +197,7 @@ public class Shooter implements IShooter
 	{
             return true;
 	}
-        if (goodRangeCount > 15)
+        if (goodRangeCount > 30)
 	{
 	    return true;
 	}else return false;
@@ -243,7 +243,6 @@ public class Shooter implements IShooter
 	}	
 	if (Double.isInfinite(period) || period <= 0)
 	{
-	    //System.out.println("Infinite, period: " + period);
 	    return;
 	}	
 	RPMcurrent = 60/period;
