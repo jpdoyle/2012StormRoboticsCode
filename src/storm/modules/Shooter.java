@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import storm.RobotState;
 import storm.interfaces.IShooter;
+import storm.utility.Print;
 //import storm.utility.Print;
 /**
  *
@@ -207,6 +208,7 @@ public class Shooter implements IShooter
     {            
         //wantedRPM = 333.33*distance + 850.63 ;
 	wantedRPM = 46.209*distance*distance - 190.39*distance + 2469.3;
+	Print.getInstance().setLine(0, ""+wantedRPM);
 
         // System.out.println(System.currentTimeMillis() + " RPMWZ:" + wantedRPM + " RPMC: " + RPMcurrent + " RPMD: " + RPMdifference + " MTRSpd: " + motorSpeed +  " GRC: " + goodRangeCount+ " RPMCge: " + RPMchange);
         //System.out.println("setRPM DDistance: " + distance);
@@ -228,11 +230,11 @@ public class Shooter implements IShooter
             }        
             motorSpeed = calculatedMotorSpeed;
         }
-	if( goodRangeCount >= 50){
-	    period = counter.getPeriod();
-	    RPMcurrent = 60/period;
-	    return;
-	}
+//	if( goodRangeCount >= 50){
+//	    period = counter.getPeriod();
+//	    RPMcurrent = 60/period;
+//	    return;
+//	}
         wantedRPMold = wantedRPM;
         shooterMotor.set(motorSpeed);
 	period = counter.getPeriod();
